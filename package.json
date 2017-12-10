@@ -1,0 +1,24 @@
+{
+  "name": "strontium",
+  "version": "0.0.1-aplha.1",
+  "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
+  "main": "build/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StrontiumJS/Framework.git"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "saas"
+  ],
+  "author": "Alexander Christie <alexanderchristie@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StrontiumJS/Framework/issues"
+  },
+  "homepage": "https://github.com/StrontiumJS/Framework#readme"
+}
