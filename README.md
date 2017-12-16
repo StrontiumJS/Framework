@@ -4,5 +4,5 @@
 
 > ### A TypeScript based NodeJS Framework to build Backend APIs for SaaS Applications.
 
-**Placeholder for Status Badges**
-
+[![Travis Status](https://img.shields.io/travis/strontiumjs/framework.svg)]()
+[![Coveralls github](https://img.shields.io/coveralls/github/strontium/framework.svg)]()
