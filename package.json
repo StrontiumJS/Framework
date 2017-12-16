@@ -2,9 +2,16 @@
   "name": "strontium",
   "version": "0.0.1-aplha.1",
   "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
-  "main": "build/index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./node_modules/.bin/tsc",
+    "test": "npx nyc --reporter=html --reporter=text -x lib/tests/**/*.js mocha -u tdd 'lib/tests/**/*.test.js '",
+    "report-coverage": "npx nyc report --reporter=text-lcov | npx coveralls",
+    "lint": "./node_modules/.bin/prettier --config ./prettier.json --write src/**/*.ts tests/**/*.ts && tslint --project ./tsconfig.json src/**/*.ts"
+  },
+  "engines": {
+    "node": ">8.0.0"
   },
   "repository": {
     "type": "git",
@@ -20,5 +27,16 @@
   "bugs": {
     "url": "https://github.com/StrontiumJS/Framework/issues"
   },
-  "homepage": "https://github.com/StrontiumJS/Framework#readme"
+  "homepage": "https://github.com/StrontiumJS/Framework#readme",
+  "devDependencies": {
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.57",
+    "coveralls": "3.0.0",
+    "mocha": "4.0.1",
+    "nyc": "11.3.0",
+    "prettier": "1.9.2",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {}
 }
