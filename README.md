@@ -6,3 +6,4 @@
 
 [![Travis Status](https://img.shields.io/travis/strontiumjs/framework.svg)]()
 [![Coveralls github](https://img.shields.io/coveralls/github/strontium/framework.svg)]()
+[![Greenkeeper badge](https://badges.greenkeeper.io/StrontiumJS/Framework.svg)](https://greenkeeper.io/)
