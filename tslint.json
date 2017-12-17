@@ -9,7 +9,7 @@
         "promise-function-async": true,
         "await-promise": true,
         "unified-signatures": true,
-        "no-implicit-dependencies": true,
+        "no-implicit-dependencies": [true, "dev"],
         "no-construct": true
     }
 }

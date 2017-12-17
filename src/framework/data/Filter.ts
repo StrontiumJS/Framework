@@ -1,3 +1,3 @@
 export type Filter = Array<
-    [string, string, any] | [string, string, any, string]
+    [string, string, any] | [string, string, any] | "OR" | "AND"
 >
