@@ -1,19 +1,31 @@
 language: node_js
 node_js:
-- node
-- '9'
 - '8'
+
+before_install:
+- npm install -g npm@5 # skip this if you are using node 9
+- npm install -g greenkeeper-lockfile@1
+
+before_script: greenkeeper-lockfile-update
+
 script:
 - npm run lint
 - npm run build
 - npm run test
+
 after_script:
 - npm run report-coverage
+- greenkeeper-lockfile-upload
+
 deploy:
   provider: npm
-  email: "alexanderchristie@outlook.com"
+  email: alexanderchristie@outlook.com
   api_key:
     secure: DR2U7w6d9pB7oW2VA4hRQrUzJJ8EfeP+BzQNtC01rSc3p+f/JVNUTD4yIv2sKUctfUGNQGeJc6QV53Wq/VXsRdXN3In27L1BA5RcUnLRpgjgwBRWeqKjUvhHkjX8+8QHke10dzftM8yQC4aseXatz4v1Ovu+9J+/G+ktmPTKaHtf+tfbUMOnKlFOWdF8RweZz8OOmRv6DyQ9nxJ2+wGJTGY6S0Ii0p4OLiF2Yo5P2sTicF13hyaeuHC8WMqN2id8ZBEiOOVAtlq84Ox0QorIzc4EfafDn4WDdj95q+u41UzvOzjaJ6J1Bgzuzb+kwvuTj2ljdqYmbEXmQFn1zYZa3+eDoAAUJQO+QtP9jwFtqm0o/AJliNYzApWrPy9InR2CKa3p0WXqd5s32ccz4hZqJ9ls2Ot4gYNeRgEG+oW32B9q0pi20AbPnLkoEpCYQfHTEIH9jLZTNMSmRf5Ak3BpMG/wkO70i8KvNRoagG+W7eDbM6g8YOCLQXV6f9gFjsPefjDtabVZ0aQUrn615S5cW7O525MruG61yZS4pDjBE0T98OD3a8hyKdMB9kABi8VtiGyYcKY/VRA4nHJsmZ6Ax1aHGSA58a8drQOAv7AUBG1J8o8HMLjj2y+LaVzF6ieIOoVAeCqip+RROsUWmEb+FoDEfSj27k0joCQQAoEgfmA=
   skip_cleanup: true
   on:
     branch: master
+    
+env:
+  global:
+    secure: fQnkfv2KLHZ2zhXrX6C/s4Czr1/hvzw7z3zi3Z3N1p1c8AJ2V6YUSrhwKlZnWMn9P1S7AHGuNIn/tACmSZbg5Uwo7CyXJl7qqbhpv7lg/Vn/w+ahJF/bvwKhkj7hPSZJY3CGKft3lp44lMhejMEtgzv3t7yfPIU/Zh9dHgLhbwXRR28KUfwo8FrBbVqi7S5sdyVWy2o9G2l54ncwhp76tL4gIx//B80oAzJy/os/ls2PeyTb4IP9/CYWRbG1ESq2B+mkUqyJbCYaxvH9bJSIZ8mi0iPCV3Q43g0pBxaRscjCQ75RfjhEIiH7FaFGLilXi1xgbPtz/RN/CTCRUZNZ1qcsPRjhzPecEqV/MIU6NXwUlMzzANWMYV9qhwRkKHa4SmzdmK6nhbk3pyxkMveYZKxa084OPWRI9NyERpZ8RlzXYIqge9AyB8SswicnU3Oa3T6hnMTGxV1T9BRoCjtuxmeKaTYtsi45/dZ8llJr1JXWZsyXYsboFuDzBZl15RXCwO/A1Udzks3O2HH2yFz71iWjSvmUL7t3FeruPsTW46/PpxSLH/a8Itfo4WC4MQsXHEzjHuP4D0gK9d+cpe5hipNSuiRJyCCsoPskCjaqbfKBDf7D7+VXEP6QGhbQGcdeLX/3Ta3CAmWkVJw6xxAjv1lKThKI7AVRDgxR4+X+Q4g=
