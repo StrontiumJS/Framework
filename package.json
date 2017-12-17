@@ -30,6 +30,11 @@
     "url": "https://github.com/StrontiumJS/Framework/issues"
   },
   "homepage": "https://github.com/StrontiumJS/Framework#readme",
+  "files": [
+    "lib",
+    "package-lock.json",
+    ".gitignore"
+  ],
   "devDependencies": {
     "@types/chai": "^4.0.10",
     "@types/mocha": "^2.2.44",

@@ -6,7 +6,7 @@ import { BadQueryError } from "../errors/BadQueryError"
  * It makes no assumption as to the underlying structure or outcome of the query and is used as an
  * interchange format.
  */
-export class Query {
+export abstract class Query {
     public static buildToMySQL(filter: Filter): [string, Array<any>] {
         //  Reduce the Filter provided into a query string and parameters for the query
         let query: string = ""
