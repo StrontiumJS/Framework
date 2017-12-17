@@ -32,14 +32,24 @@ suite("Query", () => {
                 ["test_id", "=", 11],
                 "OR",
                 ["more_test_ids", "=", 12],
-                ["random_id", "!=", 13]
+                ["random_id", "!=", 13],
             ]
 
             const [query, parameters] = Query.buildToMySQL(test_filter)
-            
-            expect(query).to.equal("( ?? = ? ) AND ( ?? = ? OR ?? = ? ) AND ( ?? != ? )")
-            expect(parameters).to.deep.equal(["id", 15, "test_id", 11, "more_test_ids", 12, "random_id", 13])
 
+            expect(query).to.equal(
+                "( ?? = ? ) AND ( ?? = ? OR ?? = ? ) AND ( ?? != ? )"
+            )
+            expect(parameters).to.deep.equal([
+                "id",
+                15,
+                "test_id",
+                11,
+                "more_test_ids",
+                12,
+                "random_id",
+                13,
+            ])
         })
 
         test("Multiple concatenation selectors with array", () => {
