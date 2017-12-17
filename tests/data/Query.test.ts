@@ -26,7 +26,23 @@ suite("Query", () => {
             expect(parameters).to.deep.equal(["id", 15, "tenant_id", "Test ID"])
         })
 
-        test("Multiple concatenation selectors", () => {
+        test("Simple concatenation operators", () => {
+            const test_filter: Filter = [
+                ["id", "=", 15],
+                ["test_id", "=", 11],
+                "OR",
+                ["more_test_ids", "=", 12],
+                ["random_id", "!=", 13]
+            ]
+
+            const [query, parameters] = Query.buildToMySQL(test_filter)
+            
+            expect(query).to.equal("( ?? = ? ) AND ( ?? = ? OR ?? = ? ) AND ( ?? != ? )")
+            expect(parameters).to.deep.equal(["id", 15, "test_id", 11, "more_test_ids", 12, "random_id", 13])
+
+        })
+
+        test("Multiple concatenation selectors with array", () => {
             const test_filter: Filter = [
                 ["id", "IN", ["a", "b", "c", "d"]],
                 "OR",
