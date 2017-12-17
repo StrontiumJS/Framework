@@ -68,3 +68,7 @@ typings/
 
 ### WebStorm ###
 .idea
+
+# Ignore the Compiled Output
+dist
+lib

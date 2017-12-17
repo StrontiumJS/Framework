@@ -1,0 +1,73 @@
+{
+  "name": "strontium",
+  "version": "0.0.2-0",
+  "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "build": "./node_modules/.bin/tsc",
+    "test": "npx nyc mocha -u tdd --require ts-node/register 'tests/**/*.test.ts'",
+    "report-coverage": "npx nyc report --reporter=text-lcov | npx coveralls",
+    "lint": "./node_modules/.bin/prettier --config ./prettier.json --write src/**/*.ts tests/**/*.ts && tslint --project ./tsconfig.json src/**/*.ts",
+    "precommit": "npm run lint && git add .",
+    "develop": "./node_modules/.bin/mocha -w -u tdd --require ts-node/register 'tests/**/*.test.ts'"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StrontiumJS/Framework.git"
+  },
+  "keywords": [
+    "nodejs",
+    "typescript",
+    "saas"
+  ],
+  "author": "Alexander Christie <alexanderchristie@outlook.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/StrontiumJS/Framework/issues"
+  },
+  "homepage": "https://github.com/StrontiumJS/Framework#readme",
+  "files": [
+    "lib",
+    "package-lock.json",
+    ".gitignore"
+  ],
+  "devDependencies": {
+    "@types/chai": "^4.0.10",
+    "@types/mocha": "^2.2.44",
+    "@types/node": "^8.0.57",
+    "chai": "^4.1.2",
+    "coveralls": "3.0.0",
+    "husky": "^0.14.3",
+    "mocha": "4.0.1",
+    "nyc": "11.3.0",
+    "prettier": "1.9.2",
+    "ts-node": "^4.0.2",
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.2"
+  },
+  "dependencies": {},
+  "nyc": {
+    "include": [
+      "src/*.ts",
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "typings"
+    ],
+    "extension": [
+      ".ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ],
+    "reporter": [
+      "json",
+      "html",
+      "text"
+    ]
+  }
+}
