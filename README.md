@@ -2,6 +2,8 @@
 
 # Strontium JS
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/StrontiumJS/Framework.svg)](https://greenkeeper.io/)
+
 > ### A TypeScript based NodeJS Framework to build Backend APIs for SaaS Applications.
 
 [![Travis Status](https://img.shields.io/travis/strontiumjs/framework.svg)]()
