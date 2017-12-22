@@ -1,6 +1,6 @@
 /**
  * A BadQueryError represents a logical error in the construction or execution of a query where the
- * responsibility for the failure normally rests on the programmer.
+ * responsibility for the failure rests on the programmer.
  *
  * This can represent either an error in the framework query layer or an error in the underlying
  * execution of the datastore.
