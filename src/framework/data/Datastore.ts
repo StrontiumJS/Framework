@@ -21,7 +21,7 @@ export abstract class Datastore extends Queryable {
      *
      * @returns {Promise<null>}
      */
-    public abstract async open(): Promise<null>
+    public abstract async open(): Promise<void>
 
     /**
      * Close this Datastore's connection to the underlying store.
@@ -32,5 +32,5 @@ export abstract class Datastore extends Queryable {
      *
      * @returns {Promise<null>}
      */
-    public abstract async close(): Promise<null>
+    public abstract async close(): Promise<void>
 }

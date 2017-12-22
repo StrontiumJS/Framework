@@ -1,5 +1,5 @@
-import { Filter } from "./Filter"
 import { BadQueryError } from "../errors/BadQueryError"
+import { Filter } from "./Filter"
 
 /**
  * The Query class represents an abstract filter of structured data.

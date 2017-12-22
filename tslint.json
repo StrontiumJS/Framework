@@ -10,6 +10,15 @@
         "await-promise": true,
         "unified-signatures": true,
         "no-implicit-dependencies": [true, "dev"],
-        "no-construct": true
+        "no-construct": true,
+        "ordered-imports": [
+            true,
+            {
+                "import-sources-order": "lowercase-last",
+                "grouped-imports": true,
+                "named-imports-order": "lowercase-last",
+                "module-source-path": "basename"
+            }
+        ]
     }
 }
