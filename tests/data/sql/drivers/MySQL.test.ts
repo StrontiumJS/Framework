@@ -22,9 +22,11 @@ suite("MySQL", () => {
         })
 
         test("It should throw a ConfigurationError if the arguments provided are undefined", async () => {
-
             // This check needs further improvement for sure.
-            await expect(() => new MySQLDatastore()).to.throw(ConfigurationError, /undefined/)
+            await expect(() => new MySQLDatastore()).to.throw(
+                ConfigurationError,
+                /undefined/
+            )
         })
 
         test("It should return a live connection to MySQL if it succeeds", async () => {
@@ -48,5 +50,15 @@ suite("MySQL", () => {
 
     suite("Transactions", () => {})
 
-    suite("Query Interface", () => {})
+    suite("Query Interface", () => {
+        test("Attempting to query a closed connection should throw a ConnectionError", async () => {
+            let datastore = new MySQLDatastore(
+                process.env.MYSQL_CONNECTION_STRING
+            )
+
+            expect(datastore.query("SELECT 1", [])).to.be.rejectedWith(
+                ConnectionError
+            )
+        })
+    })
 })

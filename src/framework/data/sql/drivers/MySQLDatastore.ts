@@ -75,6 +75,10 @@ export class MySQLDatastore extends SQLDatastore {
     }
 
     public async open(): Promise<void> {
+        if (this.underlying_connection_pool !== undefined) {
+            await this.close()
+        }
+
         this.underlying_connection_pool = createPool(this.connection_options)
 
         try {
