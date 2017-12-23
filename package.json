@@ -32,8 +32,9 @@
   },
   "homepage": "https://github.com/StrontiumJS/Framework#readme",
   "files": [
-    "lib",
+    "lib/src",
     "package-lock.json",
+    "README.md",
     ".gitignore"
   ],
   "devDependencies": {

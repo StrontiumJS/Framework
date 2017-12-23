@@ -1,12 +1,12 @@
 import { SQLTransaction } from "../SQLTransaction"
-import { Connection } from "mysql"
+import { PoolConnection } from "mysql"
 import { v4 as generateUUID } from "uuid"
 
 export class MySQLTransaction extends SQLTransaction {
-    private connection: Connection
+    private connection: PoolConnection
     private rollback_point?: string
 
-    constructor(connection: Connection, rollback_point?: string) {
+    constructor(connection: PoolConnection, rollback_point?: string) {
         super()
 
         this.connection = connection
@@ -15,11 +15,11 @@ export class MySQLTransaction extends SQLTransaction {
 
     public async createTransaction(): Promise<MySQLTransaction> {
         return new Promise((resolve, reject) => {
-            let new_rollback_point = generateUUID()
+            let new_rollback_point = generateUUID().replace(/-/g, "")
 
             this.connection.query(
-                `SAVEPOINT ?`,
-                [new_rollback_point],
+                `SAVEPOINT ${new_rollback_point}`,
+                [],
                 (err) => {
                     if (err) {
                         return reject(err)
@@ -44,14 +44,15 @@ export class MySQLTransaction extends SQLTransaction {
                         return reject(err)
                     }
 
+                    this.connection.release()
                     return resolve()
                 })
             }) as Promise<void>
         } else {
             return new Promise((resolve, reject) => {
                 this.connection.query(
-                    `RELEASE SAVEPOINT ?`,
-                    [this.rollback_point],
+                    `RELEASE SAVEPOINT ${this.rollback_point}`,
+                    [],
                     (err) => {
                         if (err) {
                             return reject(err)
@@ -72,14 +73,15 @@ export class MySQLTransaction extends SQLTransaction {
                         return reject(err)
                     }
 
+                    this.connection.release()
                     return resolve()
                 })
             }) as Promise<void>
         } else {
             return new Promise((resolve, reject) => {
                 this.connection.query(
-                    `ROLLBACK TO SAVEPOINT ?`,
-                    [this.rollback_point],
+                    `ROLLBACK TO SAVEPOINT ${this.rollback_point}`,
+                    [],
                     (err) => {
                         if (err) {
                             return reject(err)
@@ -105,7 +107,7 @@ export class MySQLTransaction extends SQLTransaction {
                         return reject(err)
                     }
 
-                    resolve(response)
+                    return resolve(response)
                 }
             )
         }) as Promise<Array<any>>

@@ -75,3 +75,4 @@ lib
 
 # Ignore the docker temporary directories
 .mysql_data
+.DS_Store

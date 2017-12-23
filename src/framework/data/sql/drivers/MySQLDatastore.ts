@@ -60,7 +60,7 @@ export class MySQLDatastore extends SQLDatastore {
                             return reject(err)
                         }
 
-                        connection.query("BEGIN TRANSACTION", (err) => {
+                        connection.query("BEGIN", (err) => {
                             if (err) {
                                 connection.release()
                                 return reject(err)
