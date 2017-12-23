@@ -4,6 +4,4 @@
  *
  * It is designed as an abstraction over a variety of different datastores query language.
  */
-export type Filter = Array<
-    [string, string, any] | [string, string, any] | "OR" | "AND"
->
+export type Filter = Array<[string, string, any] | "OR" | "AND">

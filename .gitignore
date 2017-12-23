@@ -72,3 +72,7 @@ typings/
 # Ignore the Compiled Output
 dist
 lib
+
+# Ignore the docker temporary directories
+.mysql_data
+.DS_Store

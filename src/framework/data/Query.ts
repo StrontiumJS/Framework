@@ -1,5 +1,5 @@
-import { Filter } from "./Filter"
 import { BadQueryError } from "../errors/BadQueryError"
+import { Filter } from "./Filter"
 
 /**
  * The Query class represents an abstract filter of structured data.
@@ -7,6 +7,11 @@ import { BadQueryError } from "../errors/BadQueryError"
  * interchange format.
  */
 export abstract class Query {
+    /**
+     * Take a Filter and reduce it to a MySQL compatible WHERE statement.
+     *
+     * @param filter A filter to convert to a SQL WHERE or HAVING compatible statement
+     */
     public static buildToMySQL(filter: Filter): [string, Array<any>] {
         //  Reduce the Filter provided into a query string and parameters for the query
         let query: string = ""

@@ -1,0 +1,19 @@
+version: '3.1'
+
+services:
+    mysql:
+        image: mysql:5.7.19
+        environment:
+          - MYSQL_ROOT_PASSWORD=strontium
+          - MYSQL_DATABASE=strontium
+          - MYSQL_USER=strontium
+          - MYSQL_PASSWORD=strontium
+        volumes:
+          - ./.mysql_data:/var/lib/mysql
+        ports:
+          - 3306:3306
+
+    redis:
+        image: redis:3.2.10-alpine
+        ports:
+          - 6379:6379

@@ -1,15 +1,16 @@
 {
   "name": "strontium",
-  "version": "0.0.2-0",
+  "version": "0.0.3-0",
   "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
-    "test": "npx nyc mocha -u tdd --require ts-node/register 'tests/**/*.test.ts'",
+    "test": "npx nyc mocha -u tdd --require ts-node/register --require dotenv/config 'tests/**/*.test.ts'",
     "report-coverage": "npx nyc report --reporter=text-lcov | npx coveralls",
-    "lint": "./node_modules/.bin/prettier --config ./prettier.json --write src/**/*.ts tests/**/*.ts && tslint --project ./tsconfig.json src/**/*.ts",
-    "precommit": "npm run lint && git add .",
+    "lint": "./node_modules/.bin/prettier --list-different --config ./prettier.json src/**/*.ts tests/**/*.ts && tslint --project ./tsconfig.json src/**/*.ts",
+    "fix-lint": "./node_modules/.bin/prettier --config ./prettier.json --write src/**/*.ts tests/**/*.ts && tslint --fix --project ./tsconfig.json src/**/*.ts",
+    "precommit": "lint-staged",
     "develop": "./node_modules/.bin/mocha -w -u tdd --require ts-node/register 'tests/**/*.test.ts'"
   },
   "engines": {
@@ -31,17 +32,24 @@
   },
   "homepage": "https://github.com/StrontiumJS/Framework#readme",
   "files": [
-    "lib",
+    "lib/src",
     "package-lock.json",
+    "README.md",
     ".gitignore"
   ],
   "devDependencies": {
     "@types/chai": "^4.0.10",
+    "@types/chai-as-promised": "^7.1.0",
     "@types/mocha": "^2.2.44",
+    "@types/mysql": "^2.15.2",
     "@types/node": "^8.0.57",
+    "@types/uuid": "^3.4.3",
     "chai": "^4.1.2",
+    "chai-as-promised": "^7.1.1",
     "coveralls": "3.0.0",
+    "dotenv": "^4.0.0",
     "husky": "^0.14.3",
+    "lint-staged": "^6.0.0",
     "mocha": "4.0.1",
     "nyc": "11.4.1",
     "prettier": "1.9.2",
@@ -49,7 +57,10 @@
     "tslint": "^5.8.0",
     "typescript": "^2.6.2"
   },
-  "dependencies": {},
+  "dependencies": {
+    "mysql": "^2.15.0",
+    "uuid": "^3.1.0"
+  },
   "nyc": {
     "include": [
       "src/*.ts",
@@ -68,6 +79,12 @@
       "json",
       "html",
       "text"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,md}": [
+      "npm run fix-lint",
+      "git add"
     ]
   }
 }

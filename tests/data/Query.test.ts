@@ -1,7 +1,7 @@
-import { expect } from "chai"
+import { BadQueryError } from "../../src/framework/errors/BadQueryError"
 import { Filter } from "../../src/framework/data/Filter"
 import { Query } from "../../src/framework/data/Query"
-import { BadQueryError } from "../../src/framework/errors/BadQueryError"
+import { expect } from "chai"
 
 suite("Query", () => {
     suite("buildToMySQL", () => {
