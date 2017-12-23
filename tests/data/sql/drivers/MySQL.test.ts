@@ -166,10 +166,12 @@ suite("MySQL", () => {
             expect(pre_rollback_results).to.deep.equal([])
 
             let nested_transaction = await transaction.createTransaction()
-            nested_transaction.query("INSERT INTO `test_trx` SET ?", [{
-                id: 13,
-                test_field: "test another"
-            }])
+            nested_transaction.query("INSERT INTO `test_trx` SET ?", [
+                {
+                    id: 13,
+                    test_field: "test another",
+                },
+            ])
 
             await nested_transaction.commit()
 
@@ -179,13 +181,16 @@ suite("MySQL", () => {
                 "SELECT id, test_field FROM test_trx",
                 []
             )
-            expect(post_rollback_results).to.deep.equal([{
-                id: 12,
-                test_field: "test",
-            }, {
-                id: 13,
-                test_field: "test another"
-            }])
+            expect(post_rollback_results).to.deep.equal([
+                {
+                    id: 12,
+                    test_field: "test",
+                },
+                {
+                    id: 13,
+                    test_field: "test another",
+                },
+            ])
         })
 
         test("Changes made in a nested transaction should be rolled back but not affect the outer transaction", async () => {
@@ -199,22 +204,27 @@ suite("MySQL", () => {
             ])
 
             let nested_transaction = await transaction.createTransaction()
-            nested_transaction.query("INSERT INTO `test_trx` SET ?", [{
-                id: 13,
-                test_field: "test another"
-            }])
+            nested_transaction.query("INSERT INTO `test_trx` SET ?", [
+                {
+                    id: 13,
+                    test_field: "test another",
+                },
+            ])
 
             let pre_rollback_results = await transaction.query(
                 "SELECT id, test_field FROM test_trx",
                 []
             )
-            expect(pre_rollback_results).to.deep.equal([{
-                id: 12,
-                test_field: "test",
-            }, {
-                id: 13,
-                test_field: "test another"
-            }])
+            expect(pre_rollback_results).to.deep.equal([
+                {
+                    id: 12,
+                    test_field: "test",
+                },
+                {
+                    id: 13,
+                    test_field: "test another",
+                },
+            ])
 
             await nested_transaction.rollback()
 
@@ -224,12 +234,13 @@ suite("MySQL", () => {
                 "SELECT id, test_field FROM test_trx",
                 []
             )
-            expect(post_rollback_results).to.deep.equal([{
-                id: 12,
-                test_field: "test",
-            }])
+            expect(post_rollback_results).to.deep.equal([
+                {
+                    id: 12,
+                    test_field: "test",
+                },
+            ])
         })
-
     })
 
     suite("Query Interface", () => {
