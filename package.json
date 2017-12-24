@@ -40,11 +40,7 @@
   "devDependencies": {
     "@types/chai": "^4.0.10",
     "@types/chai-as-promised": "^7.1.0",
-    "@types/lodash": "^4.14.91",
     "@types/mocha": "^2.2.44",
-    "@types/mysql": "^2.15.2",
-    "@types/node": "^8.0.57",
-    "@types/uuid": "^3.4.3",
     "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
     "coveralls": "3.0.0",
@@ -59,9 +55,15 @@
     "typescript": "^2.6.2"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.91",
+    "@types/mysql": "^2.15.2",
+    "@types/node": "^8.0.57",
+    "@types/uuid": "^3.4.3",
+    "@types/winston": "^2.3.7",
     "lodash": "^4.17.4",
     "mysql": "^2.15.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "winston": "^2.4.0"
   },
   "nyc": {
     "include": [
