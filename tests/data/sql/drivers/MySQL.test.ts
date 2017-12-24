@@ -16,14 +16,12 @@ suite("MySQL", () => {
                 "mysql://not:real@127.0.0.1/strontium?charset=utf8mb4"
             )
 
-            await expect(test_instance.open()).to.be.rejectedWith(
-                ConnectionError
-            )
+            expect(test_instance.open()).to.be.rejectedWith(ConnectionError)
         })
 
         test("It should throw a ConfigurationError if the arguments provided are undefined", async () => {
             // This check needs further improvement for sure.
-            await expect(
+            expect(
                 () => new MySQLDatastore(process.env.NON_EXISTANT as string)
             ).to.throw(ConfigurationError, /undefined/)
         })
