@@ -15,7 +15,9 @@ export class MySQLTransaction extends SQLTransaction {
 
     public async createTransaction(): Promise<MySQLTransaction> {
         return new Promise((resolve, reject) => {
-            let new_rollback_point = generateUUID().replace(/-/g, "")
+            // Strip a UUID down to just letters as this appears to work for MySQL whereas numbers cause issues.
+            // There is likely a far better replacement for this generation sequence using random bytes.
+            let new_rollback_point = generateUUID().replace(/-/g, "").replace(/[0-9]/g, "")
 
             this.connection.query(
                 `SAVEPOINT ${new_rollback_point}`,
