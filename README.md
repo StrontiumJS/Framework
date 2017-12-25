@@ -4,9 +4,9 @@
 
 > ### A Lightweight Toolkit for building robust REST APIs in NodeJS using Typescript
 
-[![Travis Status](https://img.shields.io/travis/StrontiumJS/Framework.svg)]()
-[![Coveralls github](https://img.shields.io/coveralls/github/StrontiumJS/Framework.svg)]
-[![Greenkeeper badge](https://badges.greenkeeper.io/StrontiumJS/Framework.svg)](https://greenkeeper.io/)
+![Travis Status](https://img.shields.io/travis/StrontiumJS/Framework.svg)
+![Coveralls github](https://img.shields.io/coveralls/github/StrontiumJS/Framework.svg)
+![Greenkeeper badge](https://badges.greenkeeper.io/StrontiumJS/Framework.svg)]
 
 ## Introduction
 
