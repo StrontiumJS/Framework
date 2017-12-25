@@ -1,4 +1,4 @@
-import { Renderable } from "../../data/http/Renderable"
+import { Renderable } from "../../http/Renderable"
 import { StrontiumError } from "../StrontiumError"
 
 export abstract class HTTPError extends StrontiumError implements Renderable {

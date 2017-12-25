@@ -1,7 +1,7 @@
-import { InternalError } from "../../../errors/http/InternalError"
+import { InternalError } from "../../errors/http/InternalError"
 import { EndpointControllerConstructor } from "../EndpointController"
-import { HTTPError } from "../../../errors/http/HTTPError"
-import { UnauthorizedError } from "../../../errors/http/UnauthorizedError"
+import { HTTPError } from "../../errors/http/HTTPError"
+import { UnauthorizedError } from "../../errors/http/UnauthorizedError"
 import { Request, Response } from "express"
 import { Renderable } from "../Renderable"
 
