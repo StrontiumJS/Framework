@@ -11,16 +11,16 @@ export abstract class Repository<T> {
     /**
      * Create a new record in the underlying data store.
      *
-     * @param payload The object to be created in the datastore
+     * @param payload The objects to be created in the datastore
      */
-    abstract async create(payload: T): Promise<T>
+    abstract async create(payload: Partial<T>): Promise<T>
 
     /**
      * Read a collection of records from the underlying data store which match the provided filter.
      *
      * @param filter A filter to select which objects should be returned in the read response
      */
-    abstract async read(filter: Filter): Promise<Array<T>>
+    abstract async read(filter: Filter<T>): Promise<Array<T>>
 
     /**
      * Update a collection of records in the underlying data store to the provided values where
@@ -29,7 +29,7 @@ export abstract class Repository<T> {
      * @param payload An payload object representing the delta that should be applied to updated records.
      * @param filter A filter to select which records should be updated.
      */
-    abstract async update(payload: T, filter: Filter): Promise<void>
+    abstract async update(payload: Partial<T>, filter: Filter<T>): Promise<void>
 
     /**
      * Delete a collection of records from the underlying data store where the record matches
@@ -37,5 +37,5 @@ export abstract class Repository<T> {
      *
      * @param filter A filter to select which records should be deleted
      */
-    abstract async delete(filter: Filter): Promise<void>
+    abstract async delete(filter: Filter<T>): Promise<void>
 }

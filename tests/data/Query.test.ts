@@ -3,10 +3,24 @@ import { Filter } from "../../src/framework/data/Filter"
 import { Query } from "../../src/framework/data/Query"
 import { expect } from "chai"
 
+interface TestInterface {
+    id: string
+    tenant_id: string
+    test_id: number
+    company_id: number
+    more_test_ids: string
+    random_id: string
+    TestMultiCaseVariable: string
+    RandomThing: string
+    Random: string
+}
+
 suite("Query", () => {
     suite("buildToMySQL", () => {
         test("Single line selector", () => {
-            const test_filter: Filter = [["id", "=", "Hello World"]]
+            const test_filter: Filter<TestInterface> = [
+                ["id", "=", "Hello World"],
+            ]
 
             const [query, parameters] = Query.buildToMySQL(test_filter)
 
@@ -15,7 +29,7 @@ suite("Query", () => {
         })
 
         test("Multi line selector", () => {
-            const test_filter: Filter = [
+            const test_filter: Filter<TestInterface> = [
                 ["id", "=", 15],
                 ["tenant_id", "=", "Test ID"],
             ]
@@ -27,7 +41,7 @@ suite("Query", () => {
         })
 
         test("Simple concatenation operators", () => {
-            const test_filter: Filter = [
+            const test_filter: Filter<TestInterface> = [
                 ["id", "=", 15],
                 ["test_id", "=", 11],
                 "OR",
@@ -53,14 +67,14 @@ suite("Query", () => {
         })
 
         test("Multiple concatenation selectors with array", () => {
-            const test_filter: Filter = [
+            const test_filter: Filter<TestInterface> = [
                 ["id", "IN", ["a", "b", "c", "d"]],
                 "OR",
                 ["company_id", "=", 123],
                 ["TestMultiCaseVariable", "!=", null],
                 "AND",
                 ["RandomThing", "=", null],
-                ["Ransom", "NOT IN", ["a"]],
+                ["Random", "NOT IN", ["a"]],
             ]
 
             const [query, parameters] = Query.buildToMySQL(test_filter)
@@ -75,13 +89,13 @@ suite("Query", () => {
                 123,
                 "TestMultiCaseVariable",
                 "RandomThing",
-                "Ransom",
+                "Random",
                 ["a"],
             ])
         })
 
         test("IN operator should throw an error when provided with an empty array", () => {
-            const test_filter: Filter = [["id", "IN", []]]
+            const test_filter: Filter<TestInterface> = [["id", "IN", []]]
 
             expect(() => Query.buildToMySQL(test_filter)).to.throw(
                 BadQueryError

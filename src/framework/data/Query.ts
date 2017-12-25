@@ -12,7 +12,7 @@ export abstract class Query {
      *
      * @param filter A filter to convert to a SQL WHERE or HAVING compatible statement
      */
-    public static buildToMySQL(filter: Filter): [string, Array<any>] {
+    public static buildToMySQL(filter: Filter<any>): [string, Array<any>] {
         //  Reduce the Filter provided into a query string and parameters for the query
         let query: string = ""
         let parameters: Array<any> = []
