@@ -15,5 +15,6 @@ suite("Internal Error", () => {
     test("The status code method should return 500", () => {
         let e = new InternalError()
         expect(e.status_code()).to.equal(500)
+        expect(e.render().message).to.equal("An internal server error occurred")
     })
 })
