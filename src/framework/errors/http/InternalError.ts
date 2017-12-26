@@ -15,7 +15,7 @@ export class InternalError extends HTTPError {
         return internal().output.payload
     }
 
-    status_code(): number {
+    statusCode(): number {
         return 500
     }
 }

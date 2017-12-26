@@ -15,7 +15,7 @@ export class UnauthorizedError extends HTTPError {
         return unauthorized(this.message).output.payload
     }
 
-    status_code(): number {
+    statusCode(): number {
         return 401
     }
 }

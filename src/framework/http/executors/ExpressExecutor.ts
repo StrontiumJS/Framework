@@ -1,9 +1,9 @@
-import { InternalError } from "../../errors/http/InternalError"
 import { EndpointControllerConstructor } from "../EndpointController"
 import { HTTPError } from "../../errors/http/HTTPError"
+import { InternalError } from "../../errors/http/InternalError"
+import { Renderable } from "../Renderable"
 import { UnauthorizedError } from "../../errors/http/UnauthorizedError"
 import { Request, Response } from "express"
-import { Renderable } from "../Renderable"
 
 export class ExpressExecutor {
     constructor() {}
@@ -29,8 +29,9 @@ export class ExpressExecutor {
      * @param {EndpointControllerConstructor} Controller
      * @returns {(req: Request, res: e.Response) => void}
      */
-    public middleware(Controller: EndpointControllerConstructor): (req: Request, res: Response) => void {
-
+    public middleware(
+        Controller: EndpointControllerConstructor
+    ): (req: Request, res: Response) => Promise<void> {
         return async (req: Request, res: Response) => {
             let controller_instance = new Controller()
 
@@ -54,8 +55,9 @@ export class ExpressExecutor {
                 let response = await controller_instance.handle()
 
                 // Send the response down the wire as JSON
-                if ( response instanceof Renderable ) {
-                    res.status(200).json(response.render())
+                if (response instanceof Renderable) {
+                    let response_body = await response.render()
+                    res.status(200).json(response_body)
                 } else {
                     res.status(200).json()
                 }
@@ -70,7 +72,7 @@ export class ExpressExecutor {
                 }
 
                 // If the error is a Strontium HTTP error then format the error and set it down
-                res.status(e.render()).json(e.status_code())
+                res.set(e.headers()).status(e.statusCode()).json(e.render())
                 return
             }
         }
