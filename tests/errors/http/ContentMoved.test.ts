@@ -24,7 +24,7 @@ suite("Content Moved", () => {
 
         expect(e.statusCode()).to.equal(302)
         expect(e.headers()).to.deep.equal({
-            Location: "https://new-destination.com"
+            Location: "https://new-destination.com",
         })
     })
 })

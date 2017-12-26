@@ -72,7 +72,10 @@ export class ExpressExecutor {
                 }
 
                 // If the error is a Strontium HTTP error then format the error and set it down
-                res.set(e.headers()).status(e.statusCode()).json(e.render())
+                res
+                    .set(e.headers())
+                    .status(e.statusCode())
+                    .json(e.render())
                 return
             }
         }

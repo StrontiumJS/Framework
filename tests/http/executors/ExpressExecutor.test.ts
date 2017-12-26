@@ -1,8 +1,7 @@
-import { error } from "util"
 import { InternalError } from "../../../src/framework/errors/http/InternalError"
+import { UnauthorizedError } from "../../../src/framework/errors/http/UnauthorizedError"
 import * as Chai from "chai"
 import * as ChaiSpies from "chai-spies"
-import { UnauthorizedError } from "../../../src/framework/errors/http/UnauthorizedError"
 
 import { ExpressExecutor } from "../../../src/framework/http/executors/ExpressExecutor"
 import { TestController, TestResponse } from "./TestController"
@@ -178,7 +177,7 @@ suite("Express Executor", () => {
             await middleware(test_request, test_response)
 
             expect((test_response as any)._getJSON()).to.deep.equal({
-                message: "Test Message"
+                message: "Test Message",
             })
             expect(test_response.statusCode).to.equal(200)
         })
@@ -202,7 +201,6 @@ suite("Express Executor", () => {
     })
 
     suite("Error Handling", async () => {
-
         test("An error that is not a Strontium HTTP Error should be passed to the exception handler of the executor", async () => {
             let test_request: Request = new MockExpressRequest()
             let test_response: Response = new MockExpressResponse()
@@ -225,7 +223,7 @@ suite("Express Executor", () => {
             expect((test_response as any)._getJSON()).to.deep.equal({
                 error: "Internal Server Error",
                 message: "An internal server error occurred",
-                statusCode: 500
+                statusCode: 500,
             })
             expect(test_response.statusCode).to.equal(500)
         })
@@ -254,14 +252,13 @@ suite("Express Executor", () => {
             expect((test_response as any)._getJSON()).to.deep.equal({
                 error: "Unauthorized",
                 message: "Access Prohibited",
-                statusCode: 401
+                statusCode: 401,
             })
             expect(test_response.statusCode).to.equal(401)
         })
 
         test("The default error handler should log the error to console.error", async () => {
-
-            let original_error = console.error
+            let original_error = console["error"]
 
             try {
                 let error_spy = Chai.spy((e: Error) => {})
@@ -285,7 +282,6 @@ suite("Express Executor", () => {
             } finally {
                 console.error = original_error
             }
-
         })
     })
 })

@@ -24,7 +24,7 @@ export class ContentMoved extends HTTPError {
     }
 
     statusCode(): number {
-        if ( this.permanent === true ) {
+        if (this.permanent === true) {
             return 301
         } else {
             return 302
@@ -33,7 +33,7 @@ export class ContentMoved extends HTTPError {
 
     public headers(): { [p: string]: string } {
         return {
-            Location: this.location
+            Location: this.location,
         }
     }
 }
