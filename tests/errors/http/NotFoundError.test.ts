@@ -1,7 +1,6 @@
 import { HTTPError } from "../../../src/framework/errors/http/HTTPError"
 import { NotFoundError } from "../../../src/framework/errors/http/NotFoundError"
 import { StrontiumError } from "../../../src/framework/errors/StrontiumError"
-import { UnauthorizedError } from "../../../src/framework/errors/http/UnauthorizedError"
 import { expect } from "chai"
 
 suite("Not Found Error", () => {
