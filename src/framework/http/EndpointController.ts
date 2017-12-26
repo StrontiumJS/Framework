@@ -1,4 +1,5 @@
 import { Renderable } from "./Renderable"
+import { IncomingMessage } from "http"
 
 /**
  * An EndpointController represents a REST Endpoint in the API which can be executed with a given request context to
@@ -27,8 +28,10 @@ export abstract class EndpointController<R extends Renderable | void> {
      *
      * @param {Request} request
      */
-    public abstract async extract(request: Request): Promise<void>
-    public abstract async extract<T extends Request>(request: T): Promise<void>
+    public abstract async extract(request: IncomingMessage): Promise<void>
+    public abstract async extract<T extends IncomingMessage>(
+        request: T
+    ): Promise<void>
 
     /**
      * The init function is run after the extraction phase of the request and is designed to run elements of the controller
@@ -76,4 +79,13 @@ export abstract class EndpointController<R extends Renderable | void> {
      * @returns {any}
      */
     public abstract async handle(): Promise<R>
+}
+
+/**
+ * An EndpointControllerConstructor represents a function capable of constructing an EndpointController.
+ *
+ * It is used internally by the framework to pass references to a particular Controller's constructor.
+ */
+export interface EndpointControllerConstructor {
+    new (): EndpointController<any>
 }
