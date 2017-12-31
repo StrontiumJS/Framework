@@ -1,12 +1,13 @@
-import { EndpointController } from "../../../src/framework/http/EndpointController"
-import { Renderable } from "../../../src/framework/http/Renderable"
+import { a, mustBe } from "zafiro-validators"
+import { EndpointController } from "../../src/framework/http/EndpointController"
+import { Renderable } from "../../src/framework/http/Renderable"
 
 export class TestController extends EndpointController<TestResponse | void> {
-    public async extract(req: Express.Request): Promise<void> {
-        return
-    }
 
-    public async validate(): Promise<void> {
+    @mustBe(a.string().valid("My Test"))
+    public test: string = "My Test"
+
+    public async extract(req: Express.Request): Promise<void> {
         return
     }
 

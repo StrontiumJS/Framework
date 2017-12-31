@@ -62,7 +62,7 @@ export abstract class EndpointController<R extends Renderable | void> {
     public async validate(): Promise<void> {
         let validation_result = ZaifroValidate(this)
 
-        if (validation_result.error !== undefined) {
+        if (validation_result.error !== null) {
             throw new ValidationError(validation_result.error)
         }
     }
