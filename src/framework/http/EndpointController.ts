@@ -1,5 +1,7 @@
 import { Renderable } from "./Renderable"
+import { ValidationError } from "../errors/http/ValidationError"
 import { IncomingMessage } from "http"
+import { validate as ZaifroValidate } from "zafiro-validators"
 
 /**
  * An EndpointController represents a REST Endpoint in the API which can be executed with a given request context to
@@ -57,7 +59,13 @@ export abstract class EndpointController<R extends Renderable | void> {
      * The executor will call this function and will expect it to throw an error if the contents of the execution are
      * not valid.
      */
-    public abstract async validate(): Promise<void>
+    public async validate(): Promise<void> {
+        let validation_result = ZaifroValidate(this)
+
+        if (validation_result.error !== null) {
+            throw new ValidationError(validation_result.error)
+        }
+    }
 
     /**
      * Authorize that the calling Actor is eligible to perform the stated request on the presented resources.
