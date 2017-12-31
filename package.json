@@ -1,17 +1,17 @@
 {
   "name": "strontium",
-  "version": "0.0.5-0",
+  "version": "0.1.0",
   "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
-    "test": "npx nyc mocha -u tdd --require ts-node/register --require dotenv/config 'tests/**/*.test.ts'",
+    "test": "npx nyc mocha -u tdd --require ts-node/register --require dotenv/config --require reflect-metadata 'tests/**/*.test.ts'",
     "report-coverage": "npx nyc report --reporter=text-lcov | npx coveralls",
     "lint": "./node_modules/.bin/prettier --list-different --config ./prettier.json \"{src,tests}/**/*.ts\" && tslint --project ./tsconfig.json \"{src,tests}/**/*.ts\"",
     "fix-lint": "./node_modules/.bin/prettier --config ./prettier.json --write \"{src,tests}/**/*.ts\" && tslint --fix --project ./tsconfig.json \"{src,tests}/**/*.ts\"",
     "precommit": "lint-staged",
-    "develop": "./node_modules/.bin/mocha -w -u tdd --require ts-node/register 'tests/**/*.test.ts'"
+    "develop": "./node_modules/.bin/mocha -w -u tdd --require ts-node/register --require reflect-metadata 'tests/**/*.test.ts'"
   },
   "engines": {
     "node": ">=8.0.0"
@@ -54,6 +54,7 @@
     "mock-express-response": "^0.2.2",
     "nyc": "11.4.1",
     "prettier": "1.9.2",
+    "reflect-metadata": "^0.1.10",
     "ts-node": "^4.0.2",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2"
@@ -62,6 +63,7 @@
     "@types/boom": "^4.3.8",
     "@types/express": "^4.11.0",
     "@types/ioredis": "^3.2.4",
+    "@types/joi": "^13.0.3",
     "@types/lodash": "^4.14.91",
     "@types/mysql": "^2.15.2",
     "@types/node": "^8.0.57",
@@ -69,9 +71,11 @@
     "boom": "^7.1.1",
     "express": "^4.16.2",
     "ioredis": "^3.2.2",
+    "joi": "^13.0.2",
     "lodash": "^4.17.4",
     "mysql": "^2.15.0",
-    "uuid": "^3.1.0"
+    "uuid": "^3.1.0",
+    "zafiro-validators": "^1.1.0"
   },
   "nyc": {
     "include": [

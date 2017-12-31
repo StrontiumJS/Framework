@@ -4,7 +4,7 @@ import * as Chai from "chai"
 import * as ChaiSpies from "chai-spies"
 
 import { ExpressExecutor } from "../../../src/framework/http/executors/ExpressExecutor"
-import { TestController, TestResponse } from "./TestController"
+import { TestController, TestResponse } from "../TestController"
 import { Request, Response } from "express"
 
 const MockExpressRequest = require("mock-express-request")
