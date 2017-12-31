@@ -1,9 +1,8 @@
-import { a, mustBe } from "zafiro-validators"
 import { EndpointController } from "../../src/framework/http/EndpointController"
 import { Renderable } from "../../src/framework/http/Renderable"
+import { a, mustBe } from "zafiro-validators"
 
 export class TestController extends EndpointController<TestResponse | void> {
-
     @mustBe(a.string().valid("My Test"))
     public test: string = "My Test"
 
