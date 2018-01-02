@@ -1,9 +1,9 @@
 {
   "name": "strontium",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
+  "main": "lib/src/index.js",
+  "types": "lib/src/index.d.ts",
   "scripts": {
     "build": "./node_modules/.bin/tsc",
     "test": "npx nyc mocha -u tdd --require ts-node/register --require dotenv/config --require reflect-metadata 'tests/**/*.test.ts'",
