@@ -64,6 +64,8 @@ export abstract class EndpointController<R extends Renderable | void> {
 
         if (validation_result.error !== null) {
             throw new ValidationError(validation_result.error)
+        } else {
+            Object.assign(this, validation_result.value)
         }
     }
 

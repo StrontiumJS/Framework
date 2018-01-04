@@ -1,6 +1,6 @@
 {
   "name": "strontium",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "StrontiumJS is a NodeJS web framework written in TypeScript for creating backend APIs for SaaS applications.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
