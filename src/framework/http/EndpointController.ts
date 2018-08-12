@@ -1,6 +1,7 @@
 import { Renderable } from "./Renderable"
 import { ValidationError } from "../errors/http/ValidationError"
 import { IncomingMessage } from "http"
+import { injectable } from "inversify"
 import { validate as ZaifroValidate } from "zafiro-validators"
 
 /**
@@ -13,6 +14,7 @@ import { validate as ZaifroValidate } from "zafiro-validators"
  *
  * Extract -> Init -> Validate -> Authorize -> Handle
  */
+@injectable()
 export abstract class EndpointController<R extends Renderable | void> {
     /**
      * This is an extraction phase from the HTTP request where any data required by the Endpoint from the inbound
