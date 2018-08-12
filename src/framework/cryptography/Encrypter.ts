@@ -1,6 +1,9 @@
+import { injectable } from "inversify"
+
 /**
  * The Encrypter is responsible for symmetrically encrypting data so that it can be decrypted later.
  */
+@injectable()
 export abstract class Encrypter {
     /**
      * Encrypt the provided data and return the string representation of the output in Base64.

@@ -2,6 +2,7 @@ import { Filter } from "../Filter"
 import { Query } from "../Query"
 import { Queryable } from "../Queryable"
 import { Repository } from "./Repository"
+import { injectable } from "inversify"
 import { isUndefined, omitBy } from "lodash"
 
 /**
@@ -10,6 +11,7 @@ import { isUndefined, omitBy } from "lodash"
  * It is designed to provide an 80% solution for common SQL workloads with the other 20% being taken up by custom
  * Repository classes or direct queries.
  */
+@injectable()
 export abstract class TableRepository<T extends any> extends Repository<T> {
     private primary_key_field: keyof T
     private datastore: Queryable

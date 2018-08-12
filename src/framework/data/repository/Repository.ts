@@ -1,4 +1,5 @@
 import { Filter } from "../Filter"
+import { injectable } from "inversify"
 
 /**
  * A Repository represents an access mechanism for the underlying data in a store.
@@ -7,6 +8,7 @@ import { Filter } from "../Filter"
  * Repositories in the abstract sense are not tied to any given type of datastore however classes
  * that extend Repository may begin to make more assertions about the nature of the underlying store.
  */
+@injectable()
 export abstract class Repository<T> {
     /**
      * Create a new record in the underlying data store.
