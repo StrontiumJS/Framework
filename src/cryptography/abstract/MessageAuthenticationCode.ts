@@ -9,7 +9,7 @@
  * or weaker guarantees of certain properties.
  */
 export abstract class MessageAuthenticationCode {
-    constructor(secretKey: Buffer) {}
+    constructor(protected secretKey: Buffer) {}
 
     /**
      * Calculate and return the MAC of a given input using the secretKey provided
