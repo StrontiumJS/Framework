@@ -15,5 +15,5 @@ export abstract class Digest {
      *
      * @param input {Buffer} The input to be hashed
      */
-    public abstract hash(input: Buffer): string
+    public abstract calculate(input: Buffer): string
 }
