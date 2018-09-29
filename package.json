@@ -47,7 +47,6 @@
     "chai-spies": "^1.0.0",
     "coveralls": "^3.0.2",
     "dotenv": "^6.0.0",
-    "husky": "^1.0.1",
     "lint-staged": "^7.3.0",
     "mocha": "^5.2.0",
     "mock-express-request": "^0.2.2",
@@ -81,13 +80,5 @@
       "html",
       "text"
     ]
-  },
-  "lint-staged": {
-    "linters": {
-      "*.{ts,md}": [
-        "npm run fix-lint",
-        "git add"
-      ]
-    }
   }
 }
