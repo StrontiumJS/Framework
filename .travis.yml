@@ -1,14 +1,13 @@
 language: node_js
 node_js:
-- '8'
+  - '8'
 
 services:
   - mysql
 
 before_install:
-- npm install -g npm@5 # skip this if you are using node 9
+- npm install -g npm@6
 - npm install -g greenkeeper-lockfile@1
-- mysql -e 'CREATE DATABASE strontium;'
 
 before_script: greenkeeper-lockfile-update
 

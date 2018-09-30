@@ -1,4 +1,4 @@
-import { Digest } from "../../../../lib/src/cryptography/abstract"
+import { Digest } from "../../abstract"
 import { createHash } from "crypto"
 
 /**
