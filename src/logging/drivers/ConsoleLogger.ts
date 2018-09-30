@@ -10,7 +10,10 @@ export class ConsoleLogger extends Logger {
      * @param level {LoggerLevel} The min level of logs the logger should output to the console
      * @param injectedConsole {Console} System console to log to (optional)
      */
-    public constructor(private level: LoggerLevel, private injectedConsole: Console = console) {
+    public constructor(
+        private level: LoggerLevel,
+        private injectedConsole: Console = console
+    ) {
         super()
     }
 
@@ -34,7 +37,11 @@ export class ConsoleLogger extends Logger {
         this.consoleLog(LoggerLevel.FATAL, args, message)
     }
 
-    private consoleLog(level: LoggerLevel, args: LoggerArgs, message: string): void {
+    private consoleLog(
+        level: LoggerLevel,
+        args: LoggerArgs,
+        message: string
+    ): void {
         if (!this.shouldLog(level)) {
             return
         }

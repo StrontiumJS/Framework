@@ -15,17 +15,25 @@ describe("SHA256Digest", () => {
         })
 
         const testHash = (plaintext: string, digest: string) => {
-            let result = hasher.calculate(new Buffer(plaintext, "utf8")).toString("hex")
+            let result = hasher
+                .calculate(new Buffer(plaintext, "utf8"))
+                .toString("hex")
 
             expect(result).to.equal(digest)
         }
 
         it('"abc", the bit string (0x)616263 of length 24 bits', () => {
-            testHash("abc", "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad")
+            testHash(
+                "abc",
+                "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+            )
         })
 
         it('the empty string "", the bit string of length 0', () => {
-            testHash("", "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855")
+            testHash(
+                "",
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            )
         })
 
         it('"abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq" (length 448 bits)', () => {
@@ -41,7 +49,10 @@ describe("SHA256Digest", () => {
                 testString += "aaaaaaaaaa"
             }
 
-            testHash(testString, "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0")
+            testHash(
+                testString,
+                "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0"
+            )
         })
     })
 })
