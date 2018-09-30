@@ -1,38 +1,6 @@
 export type LoggerArgs = Object | null
 
 /**
- * The standarzied levels used across all Logger integrations
- */
-export enum LoggerLevel {
-    /**
-     * Temporary operation detail, i.e. too verbose to be included in "INFO" level.
-     */
-    DEBUG,
-
-    /**
-     * Detail on regular operation.
-     */
-    INFO,
-
-    /**
-     * A note on something that should probably be looked at by an operator eventually.
-     */
-    WARN,
-
-    /**
-     * Fatal for a particular request, but the service/app continues servicing
-     * other requests. An operator should look at this soon(ish).
-     */
-    ERROR,
-
-    /**
-     * The service/app is going to stop or become unusable now.
-     * An operator should definitely look into this soon.
-     */
-    FATAL,
-}
-
-/**
  * The abstract Logger in Strontium
  */
 export abstract class Logger {

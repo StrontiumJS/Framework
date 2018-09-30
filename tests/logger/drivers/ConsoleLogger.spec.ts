@@ -1,6 +1,6 @@
 import { expect } from "chai"
 import { SinonStub, stub } from "sinon"
-import { ConsoleLogger, LoggerLevel } from "../../../src"
+import { ConsoleLogger, LogLevel } from "../../../src"
 
 describe("ConsoleLogger", () => {
     let fakeLogger: Console
@@ -26,7 +26,7 @@ describe("ConsoleLogger", () => {
         let logger: ConsoleLogger
 
         beforeEach(() => {
-            logger = new ConsoleLogger(LoggerLevel.DEBUG, fakeLogger)
+            logger = new ConsoleLogger(LogLevel.DEBUG, fakeLogger)
         })
 
         it("should log a debug message to console.log", () => {
@@ -82,7 +82,7 @@ describe("ConsoleLogger", () => {
 
     describe("Level precedence checks", () => {
         it("should not log a message of lower precedence", () => {
-            const logger = new ConsoleLogger(LoggerLevel.FATAL, fakeLogger)
+            const logger = new ConsoleLogger(LogLevel.FATAL, fakeLogger)
 
             logger.debug({}, "blah")
             expect(logStub.called).to.equal(false)
@@ -98,14 +98,14 @@ describe("ConsoleLogger", () => {
         })
 
         it("should log a message of equal precedence", () => {
-            const logger = new ConsoleLogger(LoggerLevel.WARN, fakeLogger)
+            const logger = new ConsoleLogger(LogLevel.WARN, fakeLogger)
 
             logger.warn({}, "blah")
             expect(warnStub.called).to.equal(true)
         })
 
         it("should log a message of higher precedence", () => {
-            const logger = new ConsoleLogger(LoggerLevel.WARN, fakeLogger)
+            const logger = new ConsoleLogger(LogLevel.WARN, fakeLogger)
 
             logger.error({}, "blah")
             expect(errorStub.called).to.equal(true)
