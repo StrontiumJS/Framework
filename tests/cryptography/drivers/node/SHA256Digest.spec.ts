@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { SHA256Digest } from "../../../../src/cryptography/drivers/node"
+import { SHA256Digest } from "../../../../src"
 
 describe("SHA256Digest", () => {
     /**
