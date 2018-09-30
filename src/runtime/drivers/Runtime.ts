@@ -11,9 +11,7 @@ import { Container } from "inversify"
 export class Runtime implements Process {
     private container: Container = new Container()
 
-    constructor(private processes: Array<Process>) {
-        super()
-    }
+    constructor(private processes: Array<Process>) {}
 
     public async startup(): Promise<void> {
         // Start each process in order, waiting for it to be fully booted before moving to the next.

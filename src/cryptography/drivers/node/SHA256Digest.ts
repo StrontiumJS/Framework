@@ -1,4 +1,4 @@
-import { Digest } from "../../abstract"
+import { Digest } from "../../abstract/Digest"
 import { createHash } from "crypto"
 
 /**
