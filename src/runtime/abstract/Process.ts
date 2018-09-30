@@ -1,3 +1,5 @@
+import { Container } from "inversify"
+
 /**
  * A Process represents a long running logical process within the wider scope
  * of an application runtime.
@@ -21,8 +23,11 @@ export abstract class Process {
      * not cause issues in an already started process ).
      *
      * Implementations should also ensure not to cause any side effects prior to Startup being called.
+     *
+     * @param container {Container} - The Inversify container used by the Runtime for type resolution. This should
+     * be used by implementations to register the started process with the Runtime for use.
      */
-    public abstract async startup(): Promise<void>
+    public abstract async startup(container: Container): Promise<void>
 
     /**
      * Stop the process.
@@ -32,8 +37,11 @@ export abstract class Process {
      *
      * Runtimes will expect that upon the completion of the Promise shutdown is complete to the level that node
      * will gracefully terminate ( the event loop is empty ).
+     *
+     * @param container {Container} - The Inversify container used by the Runtime for type resolution. This should
+     * be used by implementations to deregister the stopped process from the Runtime.
      */
-    public abstract async shutdown(): Promise<void>
+    public abstract async shutdown(container: Container): Promise<void>
 
     /**
      * Return the health status of the Process.
