@@ -10,13 +10,9 @@ import { createHash } from "crypto"
  */
 export class SHA256Digest extends Digest {
     public calculate(input: Buffer): Buffer {
-        // Create a new Hash Builder
         const hashBuilder = createHash("sha256")
-
-        // Pass the input data to it
         hashBuilder.update(input)
 
-        // Return the message digest
         return hashBuilder.digest()
     }
 }

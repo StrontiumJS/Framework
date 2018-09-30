@@ -9,6 +9,11 @@
  * or weaker guarantees of certain properties.
  */
 export abstract class MessageAuthenticationCode {
+    /**
+     * Create a new MessageAuthenticationCode generator.
+     *
+     * @param secretKey - The shared secret to use when generating MACs
+     */
     constructor(protected secretKey: Buffer) {}
 
     /**

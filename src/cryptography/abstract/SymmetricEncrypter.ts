@@ -9,6 +9,11 @@
  * support additional features such as Authentication (AAED).
  */
 export abstract class SymmetricEncrypter {
+    /**
+     * Create a new Symmetric Encrypter.
+     *
+     * @param secretKey - The shared secret to use for encryption.
+     */
     constructor(protected secretKey: Buffer) {}
 
     /**
