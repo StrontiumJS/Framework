@@ -1,2 +1,2 @@
-export { Process } from "./abstract/Process"
+export { Process, isProcess } from "./abstract/Process"
 export { Runtime } from "./driver/Runtime"

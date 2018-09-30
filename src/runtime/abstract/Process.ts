@@ -15,7 +15,7 @@ import { Container } from "inversify"
  * 3. The isHealthy check should only return true if the process is functioning nominally. Any abnormal behaviour or errors
  * should trigger an error.
  */
-export abstract class Process {
+export interface Process {
     /**
      * Start the process.
      *
@@ -27,7 +27,7 @@ export abstract class Process {
      * @param container {Container} - The Inversify container used by the Runtime for type resolution. This should
      * be used by implementations to register the started process with the Runtime for use.
      */
-    public abstract async startup(container: Container): Promise<void>
+    startup(container: Container): Promise<void>
 
     /**
      * Stop the process.
@@ -41,7 +41,7 @@ export abstract class Process {
      * @param container {Container} - The Inversify container used by the Runtime for type resolution. This should
      * be used by implementations to deregister the stopped process from the Runtime.
      */
-    public abstract async shutdown(container: Container): Promise<void>
+    shutdown(container: Container): Promise<void>
 
     /**
      * Return the health status of the Process.
@@ -51,5 +51,9 @@ export abstract class Process {
      * Runtime implementations will decide what to do in the case of health check failure but actions may include
      * attempting to restart the process using Shutdown and Startup sequentially or simply killing the entire runtime.
      */
-    public abstract isHealthy(): boolean
+    isHealthy(): boolean
+}
+
+export const isProcess = (p: any): p is Process => {
+    return p !== undefined && typeof p.isHealthy === "function"
 }

@@ -8,7 +8,7 @@ import { Container } from "inversify"
  * applications and abstract the nasty underlayers of DI and subprocess monitoring
  * that are often discarded due to their complexity.
  */
-export class Runtime extends Process {
+export class Runtime implements Process {
     private container: Container = new Container()
 
     constructor(private processes: Array<Process>) {

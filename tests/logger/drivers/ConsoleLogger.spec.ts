@@ -33,7 +33,7 @@ describe("ConsoleLogger", () => {
             const testArgs = { hello: "world" }
             const testMessage = "test message"
 
-            logger.debug(testArgs, testMessage)
+            logger.debug(testMessage, testArgs)
 
             expect(logStub.called).to.equal(true)
             expect(logStub.args[0]).to.deep.equal([testMessage, testArgs])
@@ -43,7 +43,7 @@ describe("ConsoleLogger", () => {
             const testArgs = { hello: "world" }
             const testMessage = "test message"
 
-            logger.info(testArgs, testMessage)
+            logger.info(testMessage, testArgs)
 
             expect(infoStub.called).to.equal(true)
             expect(infoStub.args[0]).to.deep.equal([testMessage, testArgs])
@@ -53,7 +53,7 @@ describe("ConsoleLogger", () => {
             const testArgs = { hello: "world" }
             const testMessage = "test message"
 
-            logger.warn(testArgs, testMessage)
+            logger.warn(testMessage, testArgs)
 
             expect(warnStub.called).to.equal(true)
             expect(warnStub.args[0]).to.deep.equal([testMessage, testArgs])
@@ -63,7 +63,7 @@ describe("ConsoleLogger", () => {
             const testArgs = { hello: "world" }
             const testMessage = "test message"
 
-            logger.error(testArgs, testMessage)
+            logger.error(testMessage, testArgs)
 
             expect(errorStub.called).to.equal(true)
             expect(errorStub.args[0]).to.deep.equal([testMessage, testArgs])
@@ -73,7 +73,7 @@ describe("ConsoleLogger", () => {
             const testArgs = { hello: "world" }
             const testMessage = "test message"
 
-            logger.fatal(testArgs, testMessage)
+            logger.fatal(testMessage, testArgs)
 
             expect(errorStub.called).to.equal(true)
             expect(errorStub.args[0]).to.deep.equal([testMessage, testArgs])
@@ -84,33 +84,33 @@ describe("ConsoleLogger", () => {
         it("should not log a message of lower precedence", () => {
             const logger = new ConsoleLogger(LogLevel.FATAL, fakeLogger)
 
-            logger.debug({}, "blah")
+            logger.debug("blah", {})
             expect(logStub.called).to.equal(false)
 
-            logger.info({}, "blah")
+            logger.info("blah", {})
             expect(infoStub.called).to.equal(false)
 
-            logger.warn({}, "blah")
+            logger.warn("blah", {})
             expect(warnStub.called).to.equal(false)
 
-            logger.error({}, "blah")
+            logger.error("blah", {})
             expect(errorStub.called).to.equal(false)
         })
 
         it("should log a message of equal precedence", () => {
             const logger = new ConsoleLogger(LogLevel.WARN, fakeLogger)
 
-            logger.warn({}, "blah")
+            logger.warn("blah", {})
             expect(warnStub.called).to.equal(true)
         })
 
         it("should log a message of higher precedence", () => {
             const logger = new ConsoleLogger(LogLevel.WARN, fakeLogger)
 
-            logger.error({}, "blah")
+            logger.error("blah", {})
             expect(errorStub.called).to.equal(true)
 
-            logger.fatal({}, "blah")
+            logger.fatal("blah", {})
             expect(errorStub.called).to.equal(true)
         })
     })
