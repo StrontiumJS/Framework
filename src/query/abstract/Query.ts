@@ -15,4 +15,5 @@ export type FieldFilter<P extends keyof T, T> =
 export type Query<T> = {
     $and?: Array<Query<T>>
     $or?: Array<Query<T>>
-} & ObjectQuery<T>
+} & ObjectQuery<T> &
+    Object
