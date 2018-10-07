@@ -1,5 +1,5 @@
 import { ValidationError } from "../../../errors/ValidationError"
-import Validator from "validator"
+import * as Validator from "validator"
 import NormalizeEmailOptions = ValidatorJS.NormalizeEmailOptions
 
 export const normalizeEmail = (options?: NormalizeEmailOptions) => <I>(
@@ -9,10 +9,11 @@ export const normalizeEmail = (options?: NormalizeEmailOptions) => <I>(
         return input
     }
 
-    let validatedEmail = Validator.normalizeEmail(String(input), options)
+    let normalizedEmail = Validator.normalizeEmail(String(input), options)
+    let isValid = Validator.isEmail(String(normalizedEmail))
 
-    if (validatedEmail !== false) {
-        return validatedEmail
+    if (isValid && typeof normalizedEmail === "string") {
+        return normalizedEmail
     } else {
         throw new ValidationError(
             "NORMALIZE_EMAIL",

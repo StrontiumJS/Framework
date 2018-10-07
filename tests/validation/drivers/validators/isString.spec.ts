@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { isString, ValidationError } from "../../../../src";
+import { ValidationError, isString } from "../../../../src"
 
 describe("isString", () => {
     it("should return undefined if input is undefined", () => {
@@ -7,9 +7,9 @@ describe("isString", () => {
     })
 
     it("should return the input string if input is string", () => {
-        expect(isString('abc')).to.equal('abc')
-        expect(isString('')).to.equal('')
-        expect(isString('undefined')).to.equal('undefined')
+        expect(isString("abc")).to.equal("abc")
+        expect(isString("")).to.equal("")
+        expect(isString("undefined")).to.equal("undefined")
     })
 
     it("should return a validation error if input is not a string", () => {

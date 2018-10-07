@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { isBoolean, ValidationError } from "../../../../src";
+import { ValidationError, isBoolean } from "../../../../src"
 
 describe("isBoolean", () => {
     it("should return undefined if input is undefined", () => {
@@ -15,9 +15,9 @@ describe("isBoolean", () => {
         expect(() => isBoolean({})).to.throw(ValidationError)
         expect(() => isBoolean(1)).to.throw(ValidationError)
         expect(() => isBoolean(0)).to.throw(ValidationError)
-        expect(() => isBoolean('das')).to.throw(ValidationError)
-        expect(() => isBoolean('true')).to.throw(ValidationError)
-        expect(() => isBoolean('false')).to.throw(ValidationError)
+        expect(() => isBoolean("das")).to.throw(ValidationError)
+        expect(() => isBoolean("true")).to.throw(ValidationError)
+        expect(() => isBoolean("false")).to.throw(ValidationError)
         expect(() => isBoolean([])).to.throw(ValidationError)
     })
 })
