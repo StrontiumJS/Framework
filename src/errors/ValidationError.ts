@@ -7,6 +7,6 @@ export class ValidationError extends StrontiumError {
         public friendlyMessage: string = systemMessage,
         public fieldPath?: string
     ) {
-        super()
+        super(systemMessage)
     }
 }
