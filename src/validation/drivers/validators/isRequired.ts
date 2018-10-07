@@ -1,6 +1,6 @@
 import { ValidationError } from "../../../errors/ValidationError"
 
-export const isRequired = <I>(input?: I): Exclude<I, undefined> => {
+export const isRequired = <I>(input?: I): I => {
     if (input !== undefined) {
         return input as Exclude<I, undefined>
     }

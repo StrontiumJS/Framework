@@ -2,7 +2,7 @@ export * from "./abstract/ObjectValidator"
 export * from "./abstract/ValidatorFunction"
 
 export * from "./drivers/helpers/combineValidators"
-export * from "./drivers/helpers/combineValidatorsSync"
+export * from "./drivers/helpers/either"
 
 export * from "./drivers/sanitizers/defaultValue"
 export * from "./drivers/sanitizers/normalizeEmail"

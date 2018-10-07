@@ -1,45 +1,163 @@
 import { expect } from "chai"
 import { combineValidators } from "../../../../src/validation/drivers/helpers/combineValidators"
-import {
-    ValidatorFunction,
-    ValidatorOutput,
-    isRequired,
-} from "../../../../src/validation"
+import { ValidationError } from "../../../../src/errors"
+import { isNumber, isRequired } from "../../../../src/validation"
 
 describe("combineValidators", () => {
     describe("Two Validators", () => {
         it("should apply two validators to a value sequentially and throw the first error encountered", async () => {
-            let testCombiner = async <I, O1, O2>(
-                input: I,
-                V1: ValidatorFunction<I, O1>,
-                V2: ValidatorFunction<O1, O2>
-            ): Promise<O2> => {
-                let o1: O1 = await V1(input)
-                let o2: O2 = await V2(o1)
-                return o2
-            }
+            let testVariable: number | undefined
 
-            let validator: Promise<string> = testCombiner(
-                "test",
-                isRequired,
-                isRequired
-            )
-
-            let test: string | undefined
             // Type test
-            let test1: ValidatorFunction<
-                number | undefined,
-                number
-            > = isRequired
-            let test2: string = validator(test)
+            let testValidator = combineValidators(isNumber, isRequired)
 
-            let test3: ValidatorOutput<unknown, typeof validator> = "test"
+            try {
+                // This useless variable is defined only to ensure type consistency
+                let testOutput: number = await testValidator(testVariable)
+                expect(false).to.equal(true)
+            } catch (e) {
+                expect(e instanceof ValidationError).to.equal(true)
+                expect(e.message === "Value was undefined")
+            }
+        })
+
+        it("should correctly apply the validations in the sequence provided", async () => {
+            let testVariable: number | undefined = 15
+
+            // Type test
+            let testValidator = combineValidators(isNumber, isRequired)
+
+            let testOutput: number = await testValidator(testVariable)
+            expect(testOutput).to.equal(15)
         })
     })
 
-    describe("Three Validators")
+    describe("Three Validators", () => {
+        it("should apply three validators to a value sequentially and throw the first error encountered", async () => {
+            let testVariable: number | undefined
 
-    describe("Four Validators")
+            // Type test
+            let testValidator = combineValidators(
+                isNumber,
+                isRequired,
+                (i): "test" => {
+                    throw new ValidationError(
+                        "TEST_CONSTRAINT",
+                        "This is a test"
+                    )
+                }
+            )
 
-    describe("Five Validators")
+            try {
+                // This useless variable is defined only to ensure type consistency
+                let testOutput: "test" = await testValidator(testVariable)
+                expect(false).to.equal(true)
+            } catch (e) {
+                expect(e instanceof ValidationError).to.equal(true)
+                expect(e.message === "Value was undefined")
+            }
+        })
+
+        it("should correctly apply the validations in the sequence provided", async () => {
+            let testVariable: number | undefined = 15
+
+            // Type test
+            let testValidator = combineValidators(
+                isNumber,
+                isRequired,
+                (i): "test" => "test"
+            )
+
+            let testOutput: string = await testValidator(testVariable)
+            expect(testOutput).to.equal("test")
+        })
+    })
+
+    describe("Four Validators", () => {
+        it("should apply four validators to a value sequentially and throw the first error encountered", async () => {
+            let testVariable: number | undefined
+
+            // Type test
+            let testValidator = combineValidators(
+                isNumber,
+                isRequired,
+                (i) => i,
+                (i): "test" => {
+                    throw new ValidationError(
+                        "TEST_CONSTRAINT",
+                        "This is a test"
+                    )
+                }
+            )
+
+            try {
+                // This useless variable is defined only to ensure type consistency
+                let testOutput: "test" = await testValidator(testVariable)
+                expect(false).to.equal(true)
+            } catch (e) {
+                expect(e instanceof ValidationError).to.equal(true)
+                expect(e.message === "Value was undefined")
+            }
+        })
+
+        it("should correctly apply the validations in the sequence provided", async () => {
+            let testVariable: number | undefined = 15
+
+            // Type test
+            let testValidator = combineValidators(
+                isNumber,
+                isRequired,
+                (i): "test" => "test",
+                (i): "other test" => "other test"
+            )
+
+            let testOutput: string = await testValidator(testVariable)
+            expect(testOutput).to.equal("other test")
+        })
+    })
+
+    describe("Five Validators", () => {
+        it("should apply five validators to a value sequentially and throw the first error encountered", async () => {
+            let testVariable: number | undefined
+
+            // Type test
+            let testValidator = combineValidators(
+                isNumber,
+                isRequired,
+                (i) => i,
+                (i): "test" => {
+                    throw new ValidationError(
+                        "TEST_CONSTRAINT",
+                        "This is a test"
+                    )
+                },
+                (i) => i
+            )
+
+            try {
+                // This useless variable is defined only to ensure type consistency
+                let testOutput: "test" = await testValidator(testVariable)
+                expect(false).to.equal(true)
+            } catch (e) {
+                expect(e instanceof ValidationError).to.equal(true)
+                expect(e.message === "Value was undefined")
+            }
+        })
+
+        it("should correctly apply the validations in the sequence provided", async () => {
+            let testVariable: number | undefined = 15
+
+            // Type test
+            let testValidator = combineValidators(
+                isNumber,
+                isRequired,
+                (i): "test" => "test",
+                (i): "other test" => "other test",
+                (i): "final test" => "final test"
+            )
+
+            let testOutput: string = await testValidator(testVariable)
+            expect(testOutput).to.equal("final test")
+        })
+    })
 })
