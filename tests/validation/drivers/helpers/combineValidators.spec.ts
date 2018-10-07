@@ -1,7 +1,10 @@
 import { expect } from "chai"
-import { combineValidators } from "../../../../src/validation/drivers/helpers/combineValidators"
-import { ValidationError } from "../../../../src/errors"
-import { isNumber, isRequired } from "../../../../src/validation"
+import {
+    ValidationError,
+    combineValidators,
+    isNumber,
+    isRequired,
+} from "../../../../src"
 
 describe("combineValidators", () => {
     describe("Two Validators", () => {

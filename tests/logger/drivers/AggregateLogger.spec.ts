@@ -1,12 +1,7 @@
 import { expect } from "chai"
+import { Container } from "inversify"
 import { stub } from "sinon"
-import {
-    AggregateLogger,
-    LogLevel,
-    Logger,
-    Process,
-} from "../../../src"
-import { Container } from "inversify";
+import { AggregateLogger, LogLevel, Logger, Process } from "../../../src"
 
 class TestLogger extends Logger {
     public log() {}
@@ -59,8 +54,14 @@ describe("AggregateLogger", () => {
 
     describe("startup", () => {
         it("should call startup on each logger", async () => {
-            let processLogger1Stub = stub(fakeProcessLogger1, "startup").returns(Promise.resolve())
-            let processLogger2Stub = stub(fakeProcessLogger2, "startup").returns(Promise.resolve())
+            let processLogger1Stub = stub(
+                fakeProcessLogger1,
+                "startup"
+            ).returns(Promise.resolve())
+            let processLogger2Stub = stub(
+                fakeProcessLogger2,
+                "startup"
+            ).returns(Promise.resolve())
 
             await aggregateLogger.startup(new Container())
 
@@ -71,8 +72,14 @@ describe("AggregateLogger", () => {
 
     describe("shutdown", () => {
         it("should call shutdown on each logger", async () => {
-            let processLogger1Stub = stub(fakeProcessLogger1, "shutdown").returns(Promise.resolve())
-            let processLogger2Stub = stub(fakeProcessLogger2, "shutdown").returns(Promise.resolve())
+            let processLogger1Stub = stub(
+                fakeProcessLogger1,
+                "shutdown"
+            ).returns(Promise.resolve())
+            let processLogger2Stub = stub(
+                fakeProcessLogger2,
+                "shutdown"
+            ).returns(Promise.resolve())
 
             let container = new Container()
             await aggregateLogger.startup(container)
@@ -89,14 +96,20 @@ describe("AggregateLogger", () => {
             let processLogger1Stub = stub(fakeProcessLogger1, "log")
             let processLogger2Stub = stub(fakeProcessLogger2, "log")
 
-            let message = 'hello world';
-            let level = LogLevel.DEBUG;
+            let message = "hello world"
+            let level = LogLevel.DEBUG
             let metadata = { foo: true }
             aggregateLogger.log(message, level, metadata)
 
-            expect(loggerStub.calledWith(message, level, metadata)).to.equal(true)
-            expect(processLogger1Stub.calledWith(message, level, metadata)).to.equal(true)
-            expect(processLogger2Stub.calledWith(message, level, metadata)).to.equal(true)
+            expect(loggerStub.calledWith(message, level, metadata)).to.equal(
+                true
+            )
+            expect(
+                processLogger1Stub.calledWith(message, level, metadata)
+            ).to.equal(true)
+            expect(
+                processLogger2Stub.calledWith(message, level, metadata)
+            ).to.equal(true)
         })
     })
 })
