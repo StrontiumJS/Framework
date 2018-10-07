@@ -59,9 +59,9 @@
   },
   "dependencies": {
     "@types/node": "^10.11.3",
-    "@types/validatorjs": "^3.7.1",
+    "@types/validator": "^9.4.2",
     "inversify": "^4.13.0",
-    "validatorjs": "^3.14.2"
+    "validator": "^10.8.0"
   },
   "nyc": {
     "include": [

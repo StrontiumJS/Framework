@@ -1,8 +1,8 @@
 import { ValidationError } from "../../../errors/ValidationError"
 
-export const isNumber = <I>(input: I): number | undefined => {
+export const isNumber = (input?: unknown): number | undefined => {
     if (input === undefined) {
-        return input
+        return undefined
     }
 
     if (typeof input === "number") {
@@ -11,7 +11,7 @@ export const isNumber = <I>(input: I): number | undefined => {
 
     throw new ValidationError(
         "IS_NUMBER",
-        "Value must be a number",
+        "Value not a number",
         "This value must be a number."
     )
 }
