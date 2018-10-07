@@ -6,25 +6,25 @@ import {
 export function combineValidators<I, O1, O2>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>
-): AsyncValidator<unknown, O2>
+): AsyncValidator<I, O2>
 export function combineValidators<I, O1, O2, O3>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>,
     V3: ValidatorFunction<O2, O3>
-): AsyncValidator<unknown, O3>
+): AsyncValidator<I, O3>
 export function combineValidators<I, O1, O2, O3, O4>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>,
     V3: ValidatorFunction<O2, O3>,
     V4: ValidatorFunction<O3, O4>
-): AsyncValidator<unknown, O4>
+): AsyncValidator<I, O4>
 export function combineValidators<I, O1, O2, O3, O4, O5>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>,
     V3: ValidatorFunction<O2, O3>,
     V4: ValidatorFunction<O3, O4>,
     V5: ValidatorFunction<O4, O5>
-): AsyncValidator<unknown, O5>
+): AsyncValidator<I, O5>
 
 export function combineValidators<I, O1, O2, O3, O4, O5>(
     V1: ValidatorFunction<I, O1>,

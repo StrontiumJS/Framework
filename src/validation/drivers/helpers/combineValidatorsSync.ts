@@ -3,26 +3,25 @@ import { SyncValidator } from "../../abstract/ValidatorFunction"
 export function combineValidatorsSync<I, O1, O2>(
     V1: SyncValidator<I, O1>,
     V2: SyncValidator<O1, O2>
-): SyncValidator<unknown, O2>
+): SyncValidator<I, O2>
 export function combineValidatorsSync<I, O1, O2, O3>(
     V1: SyncValidator<I, O1>,
     V2: SyncValidator<O1, O2>,
     V3: SyncValidator<O2, O3>
-): SyncValidator<unknown, O3>
+): SyncValidator<I, O3>
 export function combineValidatorsSync<I, O1, O2, O3, O4>(
     V1: SyncValidator<I, O1>,
     V2: SyncValidator<O1, O2>,
     V3: SyncValidator<O2, O3>,
     V4: SyncValidator<O3, O4>
-): SyncValidator<unknown, O4>
+): SyncValidator<I, O4>
 export function combineValidatorsSync<I, O1, O2, O3, O4, O5>(
     V1: SyncValidator<I, O1>,
     V2: SyncValidator<O1, O2>,
     V3: SyncValidator<O2, O3>,
     V4: SyncValidator<O3, O4>,
     V5: SyncValidator<O4, O5>
-): SyncValidator<unknown, O5>
-
+): SyncValidator<I, O5>
 export function combineValidatorsSync<I, O1, O2, O3, O4, O5>(
     V1: SyncValidator<I, O1>,
     V2: SyncValidator<O1, O2>,
