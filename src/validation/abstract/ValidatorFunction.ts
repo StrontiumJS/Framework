@@ -1,6 +1,4 @@
-export type ValidatorFunction<I, O> = SyncValidator<I, O> | AsyncValidator<I, O>
-export type SyncValidator<I, O> = (input: I) => O
-export type AsyncValidator<I, O> = (input: I) => Promise<O>
+export type ValidatorFunction<I, O> = (input: I) => O | Promise<O>
 
 export type ValidatorOutput<
     I,

@@ -1,32 +1,29 @@
 import { ValidationError } from "../../../errors/ValidationError"
-import {
-    AsyncValidator,
-    ValidatorFunction,
-} from "../../abstract/ValidatorFunction"
+import { ValidatorFunction } from "../../abstract/ValidatorFunction"
 import { compact } from "../../../utils/list"
 
 export function either<I, O1, O2>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<I, O2>
-): AsyncValidator<unknown, O1 | O2>
+): ValidatorFunction<I, O1 | O2>
 export function either<I, O1, O2, O3>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<I, O2>,
     V3: ValidatorFunction<I, O3>
-): AsyncValidator<unknown, O1 | O2 | O3>
+): ValidatorFunction<I, O1 | O2 | O3>
 export function either<I, O1, O2, O3, O4>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<I, O2>,
     V3: ValidatorFunction<I, O3>,
     V4: ValidatorFunction<I, O4>
-): AsyncValidator<unknown, O1 | O2 | O3 | O4>
+): ValidatorFunction<I, O1 | O2 | O3 | O4>
 export function either<I, O1, O2, O3, O4, O5>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<I, O2>,
     V3: ValidatorFunction<I, O3>,
     V4: ValidatorFunction<I, O4>,
     V5: ValidatorFunction<I, O5>
-): AsyncValidator<unknown, O1 | O2 | O3 | O4 | O5>
+): ValidatorFunction<I, O1 | O2 | O3 | O4 | O5>
 
 export function either<I, O1, O2, O3, O4, O5>(
     V1: ValidatorFunction<I, O1>,
@@ -35,10 +32,10 @@ export function either<I, O1, O2, O3, O4, O5>(
     V4?: ValidatorFunction<I, O4>,
     V5?: ValidatorFunction<I, O5>
 ):
-    | AsyncValidator<I, O1 | O2>
-    | AsyncValidator<I, O1 | O2 | O3>
-    | AsyncValidator<I, O1 | O2 | O3 | O4>
-    | AsyncValidator<I, O1 | O2 | O3 | O4 | O5> {
+    | ValidatorFunction<I, O1 | O2>
+    | ValidatorFunction<I, O1 | O2 | O3>
+    | ValidatorFunction<I, O1 | O2 | O3 | O4>
+    | ValidatorFunction<I, O1 | O2 | O3 | O4 | O5> {
     // This is split into if statements so Type completion is rigid. It's possible this could
     // be better written in the future but for now TypeScript is happy.
     if (V5 !== undefined && V4 !== undefined && V3 !== undefined) {

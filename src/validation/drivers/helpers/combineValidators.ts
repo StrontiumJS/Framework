@@ -1,30 +1,27 @@
-import {
-    AsyncValidator,
-    ValidatorFunction,
-} from "../../abstract/ValidatorFunction"
+import { ValidatorFunction } from "../../abstract/ValidatorFunction"
 
 export function combineValidators<I, O1, O2>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>
-): AsyncValidator<I, O2>
+): ValidatorFunction<I, O2>
 export function combineValidators<I, O1, O2, O3>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>,
     V3: ValidatorFunction<O2, O3>
-): AsyncValidator<I, O3>
+): ValidatorFunction<I, O3>
 export function combineValidators<I, O1, O2, O3, O4>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>,
     V3: ValidatorFunction<O2, O3>,
     V4: ValidatorFunction<O3, O4>
-): AsyncValidator<I, O4>
+): ValidatorFunction<I, O4>
 export function combineValidators<I, O1, O2, O3, O4, O5>(
     V1: ValidatorFunction<I, O1>,
     V2: ValidatorFunction<O1, O2>,
     V3: ValidatorFunction<O2, O3>,
     V4: ValidatorFunction<O3, O4>,
     V5: ValidatorFunction<O4, O5>
-): AsyncValidator<I, O5>
+): ValidatorFunction<I, O5>
 
 export function combineValidators<I, O1, O2, O3, O4, O5>(
     V1: ValidatorFunction<I, O1>,
@@ -33,10 +30,10 @@ export function combineValidators<I, O1, O2, O3, O4, O5>(
     V4?: ValidatorFunction<O3, O4>,
     V5?: ValidatorFunction<O4, O5>
 ):
-    | AsyncValidator<I, O2>
-    | AsyncValidator<I, O3>
-    | AsyncValidator<I, O4>
-    | AsyncValidator<I, O5> {
+    | ValidatorFunction<I, O2>
+    | ValidatorFunction<I, O3>
+    | ValidatorFunction<I, O4>
+    | ValidatorFunction<I, O5> {
     // This is split into if statements so Type completion is rigid. It's possible this could
     // be better written in the future but for now TypeScript is happy.
     if (V5 !== undefined && V4 !== undefined && V3 !== undefined) {
