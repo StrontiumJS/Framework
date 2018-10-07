@@ -6,6 +6,6 @@ export class ValidationError extends StrontiumError {
         public systemMessage: string,
         public friendlyMessage: string = systemMessage
     ) {
-        super()
+        super(systemMessage)
     }
 }
