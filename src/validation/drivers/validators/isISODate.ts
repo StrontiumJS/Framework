@@ -1,5 +1,5 @@
 import { ValidationError } from "../../../errors/ValidationError"
-import Validator from "validator"
+import * as Validator from "validator"
 
 export const isISODate = (input?: unknown): Date | undefined => {
     if (input === undefined) {
