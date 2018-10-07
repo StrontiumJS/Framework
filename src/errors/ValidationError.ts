@@ -4,7 +4,8 @@ export class ValidationError extends StrontiumError {
     constructor(
         public constraintName: string,
         public systemMessage: string,
-        public friendlyMessage: string = systemMessage
+        public friendlyMessage: string = systemMessage,
+        public fieldPath?: string
     ) {
         super(systemMessage)
     }
