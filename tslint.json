@@ -5,7 +5,6 @@
         "no-unbound-method": true,
         "no-unnecessary-callback-wrapper": true,
         "no-unnecessary-qualifier": true,
-        "only-arrow-functions": true,
         "promise-function-async": true,
         "await-promise": true,
         "unified-signatures": true,
