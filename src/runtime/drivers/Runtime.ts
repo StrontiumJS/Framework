@@ -21,8 +21,8 @@ export class Runtime implements Process {
     }
 
     public async shutdown(): Promise<void> {
-        // Stop each process in order, waiting for it to be full closed before moving to the next.
-        for (let p of this.processes) {
+        // Stop each process in reverse order, waiting for it to be full closed before moving to the next.
+        for (let p of this.processes.reverse()) {
             await p.shutdown(this.container)
         }
     }

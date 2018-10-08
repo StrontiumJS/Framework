@@ -11,6 +11,7 @@
     "declaration": true,
 
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     /* Strict Type-Checking Options */
     "strict": true,                            /* Enable all strict type-checking options. */
