@@ -3,8 +3,8 @@ import { StrontiumError } from "../StrontiumError"
 export abstract class HTTPError extends StrontiumError {
     constructor(
         public statusCode: number,
-        private externalMessage: string,
-        private internalMessage?: string
+        public externalMessage: string,
+        public internalMessage?: string
     ) {
         super(internalMessage)
     }

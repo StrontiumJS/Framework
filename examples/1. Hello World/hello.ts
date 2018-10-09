@@ -1,8 +1,8 @@
 import "reflect-metadata"
 
-import { injectable } from "inversify"
-import { ControllerInput, ControllerOutput, EndpointController } from "../../src/http"
 import { FastifyServer } from "../../src/http/drivers/FastifyServer"
+import { ControllerInput, ControllerOutput, EndpointController } from "../../src/http"
+import { injectable } from "inversify"
 import { AggregateLogger, ConsoleLogger, LogLevel } from "../../src/logging"
 import { Runtime } from "../../src/runtime"
 import { isNull, isString } from "../../src/validation"

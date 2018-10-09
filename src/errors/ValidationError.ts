@@ -3,8 +3,8 @@ import { HTTPError } from "./http/HTTPError"
 export class ValidationError extends HTTPError {
     constructor(
         public constraintName: string,
-        private internalMessage: string,
-        private externalMessage: string = internalMessage,
+        internalMessage: string,
+        externalMessage: string = internalMessage,
         public fieldPath?: string
     ) {
         super(400, internalMessage, externalMessage)
