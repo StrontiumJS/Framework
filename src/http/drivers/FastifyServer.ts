@@ -145,6 +145,11 @@ export class FastifyServer implements Process {
 
             requestContainer.parent = applicationContainer
 
+            // Register request and response with the DI container directly so that Controller's can access
+            // if an escape hatch is required
+            requestContainer.bind("request").toConstantValue(request)
+            requestContainer.bind("response").toConstantValue(response)
+
             let endpointController:
                 | EndpointController
                 | undefined = requestContainer.get(controller)
