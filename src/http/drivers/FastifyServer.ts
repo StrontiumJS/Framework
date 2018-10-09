@@ -102,7 +102,7 @@ export class FastifyServer implements Process {
 
         let middleware = this.getMiddleware(container)
         for (let m of middleware) {
-          this.server.use(m)
+            this.server.use(m)
         }
 
         await this.server.listen(this.port)
@@ -119,9 +119,9 @@ export class FastifyServer implements Process {
         }
     }
 
-    protected getMiddleware(container: Container): Array<
-        Fastify.Middleware<any, any, any>
-    > {
+    protected getMiddleware(
+        container: Container
+    ): Array<Fastify.Middleware<any, any, any>> {
         return []
     }
 
