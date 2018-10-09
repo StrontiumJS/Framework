@@ -1,11 +1,11 @@
-import { injectable } from "inversify";
-import "reflect-metadata";
-import { ControllerInput, ControllerOutput, EndpointController } from "../../src/http";
+import "reflect-metadata"
 
-import { FastifyServer } from "../../src/http/drivers/FastifyServer";
-import { AggregateLogger, ConsoleLogger, LogLevel, Logger } from "../../src/logging";
-import { Runtime } from "../../src/runtime";
-import { isNull, isString } from "../../src/validation";
+import { injectable } from "inversify"
+import { ControllerInput, ControllerOutput, EndpointController } from "../../src/http"
+import { FastifyServer } from "../../src/http/drivers/FastifyServer"
+import { AggregateLogger, ConsoleLogger, LogLevel } from "../../src/logging"
+import { Runtime } from "../../src/runtime"
+import { isNull, isString } from "../../src/validation"
 
 // Create a simple hello world controller
 @injectable()

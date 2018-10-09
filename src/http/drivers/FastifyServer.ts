@@ -1,4 +1,5 @@
 import { HTTPError } from "../../errors/http/HTTPError"
+import { InternalServerError } from "../../errors/http/InternalServerError"
 import { InvalidControllerError } from "../../errors/InvalidControllerError"
 import { RouterMap } from "../abstract/RouterMap"
 import * as Fastify from "fastify"
@@ -156,6 +157,7 @@ export class FastifyServer implements Process {
             let inputValidatorSchema = endpointController.inputValidator
 
             let validatedInput
+            let rawResponse
             try {
                 let validator = isObject({
                     body: inputValidatorSchema.body,
@@ -173,6 +175,8 @@ export class FastifyServer implements Process {
                     params: request.params,
                     meta: this.getRequestMetadata(request),
                 })
+
+                rawResponse = await endpointController.handle(validatedInput)
             } catch (e) {
                 // Detect Input Validation issues.
                 // Any other errors will be thrown directly if they are HTTPError compatible or 500 and logged if not.
@@ -180,31 +184,15 @@ export class FastifyServer implements Process {
                     response.code(e.statusCode)
                     return e.toResponseBody()
                 } else {
-                    response.code(500)
-
                     let logger = requestContainer.get(Logger)
                     if (logger) {
                         logger.error(e.message, e)
                     }
 
-                    return
+                    let publicError = new InternalServerError()
+                    response.code(publicError.statusCode)
+                    return publicError.toResponseBody()
                 }
-            }
-
-            let rawResponse
-            try {
-                rawResponse = await endpointController.handle(validatedInput)
-            } catch (e) {
-                // Handle errors that occur during the handling of the response.
-                // Certain Strontium codes are used to change the Response Code and those are caught here.
-                response.code(500)
-
-                let logger = requestContainer.get(Logger)
-                if (logger) {
-                    logger.error(e.message, e)
-                }
-
-                return
             }
 
             try {
@@ -216,14 +204,19 @@ export class FastifyServer implements Process {
             } catch (e) {
                 // Handle errors in the output validation.
                 // Returns 500 errors as this shouldn't really happen and is normally a developer issue.
-                response.code(500)
-
                 let logger = requestContainer.get(Logger)
                 if (logger) {
-                    logger.error(e.message, e)
+                    logger.error(
+                        `An error occurred validating the output of ${
+                            controller.name
+                        }. Check that you are returning the correct value.`,
+                        e
+                    )
                 }
 
-                return
+                let publicError = new InternalServerError()
+                response.code(publicError.statusCode)
+                return publicError.toResponseBody()
             }
         }
     }

@@ -3,11 +3,11 @@ import { HTTPError } from "./http/HTTPError"
 export class ValidationError extends HTTPError {
     constructor(
         public constraintName: string,
-        public systemMessage: string,
-        public friendlyMessage: string = systemMessage,
+        private internalMessage: string,
+        private externalMessage: string = internalMessage,
         public fieldPath?: string
     ) {
-        super(400, friendlyMessage, systemMessage)
+        super(400, internalMessage, externalMessage)
     }
 
     public toResponseBody(): {
@@ -17,7 +17,7 @@ export class ValidationError extends HTTPError {
     } {
         return {
             statusCode: this.statusCode,
-            errorMessage: this.friendlyMessage,
+            errorMessage: this.externalMessage,
             path: this.fieldPath,
         }
     }
