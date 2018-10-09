@@ -10,7 +10,6 @@ import { isNull, isString } from "../../src/validation"
 // Create a simple hello world controller
 @injectable()
 class HelloWorldController extends EndpointController {
-
   public inputValidator = {
     body: isNull,
     headers: {},
