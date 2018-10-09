@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../errors/ValidationError"
+import { ValidationError } from "../../../errors/http/ValidationError"
 
 export const isNumber = (input?: unknown): number | undefined => {
     if (input === undefined) {

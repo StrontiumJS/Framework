@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../errors/ValidationError"
+import { ValidationError } from "../../../errors/http/ValidationError"
 import * as Validator from "validator"
 import NormalizeEmailOptions = ValidatorJS.NormalizeEmailOptions
 

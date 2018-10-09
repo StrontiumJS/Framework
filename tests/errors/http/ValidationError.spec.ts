@@ -1,5 +1,5 @@
 import { expect } from "chai"
-import { ValidationError } from "../../src"
+import { ValidationError } from "../../../src"
 
 describe("ValidationError", () => {
     it("should create a ValidationError", () => {
@@ -14,8 +14,8 @@ describe("ValidationError", () => {
 
         expect(error).to.be.instanceof(ValidationError)
         expect(error.constraintName).to.equal(constraintName)
-        expect(error.systemMessage).to.equal(systemMessage)
-        expect(error.friendlyMessage).to.equal(userMessage)
+        expect(error.internalMessage).to.equal(systemMessage)
+        expect(error.externalMessage).to.equal(userMessage)
         expect(error.message).to.equal(systemMessage)
     })
 
@@ -23,6 +23,6 @@ describe("ValidationError", () => {
         let systemMessage = "a specific message"
         let error = new ValidationError("THING", systemMessage)
 
-        expect(error.friendlyMessage).to.equal(systemMessage)
+        expect(error.externalMessage).to.equal(systemMessage)
     })
 })

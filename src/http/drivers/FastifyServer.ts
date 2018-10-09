@@ -115,7 +115,7 @@ export class FastifyServer implements Process {
         }
     }
 
-    protected getMiddleware(): Array<
+    protected getMiddleware(container: Container): Array<
         Fastify.FastifyMiddleware<any, any, any, any>
     > {
         return []

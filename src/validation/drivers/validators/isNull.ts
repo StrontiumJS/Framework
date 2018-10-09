@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../errors/ValidationError"
+import { ValidationError } from "../../../errors/http/ValidationError"
 
 export const isNull = (input?: unknown): null | undefined => {
     if (input === undefined) {

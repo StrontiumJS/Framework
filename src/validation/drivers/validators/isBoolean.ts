@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../errors/ValidationError"
+import { ValidationError } from "../../../errors/http/ValidationError"
 
 export const isBoolean = (input?: unknown): boolean | undefined => {
     if (input === undefined) {

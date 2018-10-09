@@ -1,4 +1,4 @@
-import { HTTPError } from "./http/HTTPError"
+import { HTTPError } from "./HTTPError"
 
 export class ValidationError extends HTTPError {
     constructor(
@@ -7,7 +7,7 @@ export class ValidationError extends HTTPError {
         externalMessage: string = internalMessage,
         public fieldPath?: string
     ) {
-        super(400, internalMessage, externalMessage)
+        super(400, externalMessage, internalMessage)
     }
 
     public toResponseBody(): {

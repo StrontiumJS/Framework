@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../errors/ValidationError"
+import { ValidationError } from "../../../errors/http/ValidationError"
 
 export const isRequired = <I>(input?: I): I => {
     if (input !== undefined) {

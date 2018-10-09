@@ -1,4 +1,4 @@
-import { ValidationError } from "../../../errors/ValidationError"
+import { ValidationError } from "../../../errors/http/ValidationError"
 import { ValidatorFunction } from "../../abstract/ValidatorFunction"
 import { compact } from "../../../utils/list"
 
@@ -126,10 +126,10 @@ interface WrappedValidatorOutput<O> {
 }
 
 // Used internally to catch validation errors and return undefined
-async function runAndWrap<I, O>(
+const runAndWrap = async <I, O>(
     input: I,
     validator: ValidatorFunction<I, O>
-): Promise<WrappedValidatorOutput<O>> {
+): Promise<WrappedValidatorOutput<O>> => {
     try {
         return { value: await validator(input) }
     } catch (e) {
@@ -137,10 +137,10 @@ async function runAndWrap<I, O>(
     }
 }
 
-function buildEitherErrorMessage(
+const buildEitherErrorMessage = (
     outputs: WrappedValidatorOutput<any>[]
-): string {
-    return compact(outputs.map(({ err }) => err && err.systemMessage)).join(
+): string => {
+    return compact(outputs.map(({ err }) => err && err.internalMessage)).join(
         ", "
     )
 }
