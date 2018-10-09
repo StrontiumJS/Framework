@@ -100,7 +100,11 @@ export class FastifyServer implements Process {
         // Attach the container to the server
         this.server.decorateRequest("container", container)
 
-        // Build the middleware stack as provided to the constructor.
+        let middleware = this.getMiddleware(container)
+        for (let m of middleware) {
+          this.server.use(m)
+        }
+
         await this.server.listen(this.port)
         this.isAlive = true
 
@@ -116,7 +120,7 @@ export class FastifyServer implements Process {
     }
 
     protected getMiddleware(container: Container): Array<
-        Fastify.FastifyMiddleware<any, any, any, any>
+        Fastify.Middleware<any, any, any>
     > {
         return []
     }
