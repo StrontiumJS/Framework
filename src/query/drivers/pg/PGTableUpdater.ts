@@ -7,9 +7,7 @@ import { Filter } from "../.."
 
 @injectable()
 export class PGTableUpdater<T extends Object> extends Query<void> {
-    constructor(
-        @inject(PGStore) private store: PGStore
-    ) {
+    constructor(@inject(PGStore) private store: PGStore) {
         super()
     }
 
