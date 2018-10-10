@@ -1,5 +1,6 @@
+import { compilePgFilter } from "../../../src/query/drivers/pg/PGFilterCompiler"
 import { expect } from "chai"
-import { PGQueryCompiler, Query } from "../../../src"
+import { Filter } from "../../../src/query"
 
 interface PGTestModel {
     id: number
@@ -12,14 +13,12 @@ interface PGTestModel {
 }
 
 describe("PGQueryCompiler", () => {
-    const compiler = new PGQueryCompiler()
-
     const expectQueryOutcome = (
-        query: Query<PGTestModel>,
+        query: Filter<PGTestModel>,
         expectedQuerystring: string,
         expectedParameters: Array<any>
     ) => {
-        let result = compiler.compile(query)
+        let result = compilePgFilter(query)
         expect(result[0]).to.equal(expectedQuerystring)
         expect(result[1]).to.deep.equal(expectedParameters)
     }
