@@ -22,5 +22,5 @@ export abstract class MessageAuthenticationCode {
      *
      * @param input {Buffer} The input to be MAC-ed
      */
-    public abstract calculate(input: Buffer): Buffer
+    public abstract calculate(input: Buffer): Promise<Buffer>
 }

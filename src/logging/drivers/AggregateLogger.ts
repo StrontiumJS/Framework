@@ -31,7 +31,6 @@ export class AggregateLogger extends Logger implements Process {
             }
         }
 
-        // Remove this Logger from use
         container.unbind(Logger)
     }
 
@@ -44,7 +43,7 @@ export class AggregateLogger extends Logger implements Process {
         }
 
         // Bind this container to the logging implementation
-        container.rebind(Logger).toConstantValue(this)
+        container.bind(Logger).toConstantValue(this)
     }
 
     public log(message: string, level: LogLevel, metadata?: Object): void {

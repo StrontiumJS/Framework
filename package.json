@@ -62,8 +62,11 @@
     "@types/pg": "^7.4.11",
     "@types/uuid": "^3.4.4",
     "@types/validator": "^9.4.2",
+    "axios": "^0.18.0",
+    "base64url": "^3.0.0",
     "fastify": "^1.12.1",
     "inversify": "^4.13.0",
+    "jwa": "^1.1.6",
     "pg": "^7.5.0",
     "uuid": "^3.3.2",
     "validator": "^10.8.0"

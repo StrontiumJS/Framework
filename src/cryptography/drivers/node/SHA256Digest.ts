@@ -9,7 +9,7 @@ import { createHash } from "crypto"
  * on the build flags of the underlying runtime.
  */
 export class SHA256Digest extends Digest {
-    public calculate(input: Buffer): Buffer {
+    public async calculate(input: Buffer): Promise<Buffer> {
         const hashBuilder = createHash("sha256")
         hashBuilder.update(input)
 

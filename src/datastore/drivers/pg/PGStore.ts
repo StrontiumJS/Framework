@@ -62,7 +62,7 @@ export class PGStore implements Process, SQLStore {
                 this.healthyState = false
             })
 
-            container.rebind(PGStore).toConstantValue(this)
+            container.bind(PGStore).toConstantValue(this)
         } else {
             throw new Error(
                 "A PG Pool already exists and cannot be reinstated without first being closed. This usually happens from calling startup on an existing Runtime."
@@ -72,6 +72,8 @@ export class PGStore implements Process, SQLStore {
 
     public async shutdown(container: Container): Promise<void> {
         if (this.connection) {
+            container.unbind(PGStore)
+
             await this.connection.end()
 
             // Dereference the pool
