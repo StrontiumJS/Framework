@@ -195,7 +195,7 @@ export class FastifyServer implements Process {
                 } else {
                     let logger = requestContainer.get(Logger)
                     if (logger) {
-                        logger.error(e.message, e)
+                        logger.error("[HTTP - REQUEST - FAILED]", e)
                     }
 
                     let publicError = new InternalServerError()
@@ -216,7 +216,7 @@ export class FastifyServer implements Process {
                 let logger = requestContainer.get(Logger)
                 if (logger) {
                     logger.error(
-                        `An error occurred validating the output of ${
+                        `[HTTP - VALIDATION - FAILED] An error occurred validating the output of ${
                             controller.name
                         }. Check that you are returning the correct value.`,
                         e

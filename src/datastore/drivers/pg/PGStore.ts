@@ -8,12 +8,12 @@ import { Process } from "../../../runtime"
 export class PGStore implements Process, SQLStore {
     private connection?: Pool
     private logger?: Logger
-    private healthState: boolean = false
+    private healthyState: boolean = false
 
     constructor(private connectionOptions: PoolConfig) {}
 
     public isHealthy(): boolean {
-        return this.healthState
+        return this.healthyState
     }
 
     public async query<R>(
@@ -51,7 +51,7 @@ export class PGStore implements Process, SQLStore {
             this.logger = container.get(Logger)
 
             this.connection = new Pool(this.connectionOptions)
-            this.healthState = true
+            this.healthyState = true
 
             // Handle errors and mark the connection as unhealthy
             this.connection.on("error", (err) => {
@@ -59,10 +59,10 @@ export class PGStore implements Process, SQLStore {
                     this.logger.error("PGStore encountered an error", err)
                 }
 
-                this.healthState = false
+                this.healthyState = false
             })
 
-            container.bind(PGStore).toConstantValue(this)
+            container.rebind(PGStore).toConstantValue(this)
         } else {
             throw new Error(
                 "A PG Pool already exists and cannot be reinstated without first being closed. This usually happens from calling startup on an existing Runtime."
@@ -76,7 +76,7 @@ export class PGStore implements Process, SQLStore {
 
             // Dereference the pool
             this.connection = undefined
-            this.healthState = false
+            this.healthyState = false
         }
     }
 }
