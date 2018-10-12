@@ -42,9 +42,7 @@ export class GCPSConsumer implements Process {
 
     public async pollAndExecute(container: Container): Promise<void> {
         // Fetch the prefetch count
-
         // Process in parallel - waiting for all to complete
-
         // Run it again!
     }
 
