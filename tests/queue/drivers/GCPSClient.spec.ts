@@ -114,5 +114,10 @@ describe("GCPSClient", () => {
         )
 
         expect(secondMessages[0].message.data).to.equal("NACKED-MESSAGE")
+
+        await client.acknowledge(
+            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            [secondMessages[0].ackId]
+        )
     }).timeout(5000)
 })
