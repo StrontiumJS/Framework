@@ -82,9 +82,14 @@ export class GCPSConsumer implements Process {
     }
 
     public async pollAndExecute(container: Container): Promise<void> {
-        // Fetch the prefetch count
-        // Process in parallel - waiting for all to complete
-        // Run it again!
+        while (this.isEnabled) {
+            let messages = await this.client.pullTasks(this.subscriptionName, this.prefetchCount, false)
+
+            await Promise.all(messages.map((m) => this.executeTask(m.ackId, {
+                eventName: m.message.attributes.STRONTIUM_EVENT_NAME,
+                message: m.message.data
+            }, container)))
+        }
     }
 
     public async executeTask(
@@ -99,13 +104,15 @@ export class GCPSConsumer implements Process {
         })
 
         requestContainer.parent = applicationContainer
+        let logger: Logger | undefined = requestContainer.get(Logger)
 
         // Spawn a handler for the Task type
         let handlerType = this.taskHandlers[task.eventName]
+        if (logger) {
+            logger.info(`[GCPS - TASK - START] Event of type ${task.eventName} received by Consumer.`)
+        }
 
         if (handlerType === undefined) {
-            let logger: Logger | undefined = requestContainer.get(Logger)
-
             if (logger) {
                 logger.error(
                     `[GCPS - TASK - NO_IMPLEMENTATION_FAIL] No implementation found for event ${
@@ -134,6 +141,9 @@ export class GCPSConsumer implements Process {
             await requestHandler.handle(validatedMessage)
 
             await this.ack(ackId)
+            if (logger) {
+                logger.info(`[GCPS - TASK - SUCCESS] Event of type ${task.eventName} successfully completed by Consumer.`)
+            }
         } catch (e) {
             let logger: Logger | undefined = requestContainer.get(Logger)
 

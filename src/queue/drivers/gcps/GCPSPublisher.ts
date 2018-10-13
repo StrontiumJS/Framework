@@ -31,7 +31,7 @@ export class GCPSPublisher extends QueuePublisher implements Process {
             attributes: {
                 STRONTIUM_EVENT_NAME: eventName,
             },
-            data: JSON.stringify(message),
+            data: message,
         })
     }
 
