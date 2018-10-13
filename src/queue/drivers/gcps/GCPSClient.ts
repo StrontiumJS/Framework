@@ -11,8 +11,8 @@ export interface GCPSMessage {
 export interface GCPSSubscription {
     name: string
     topic: string
-    pushConfig?: {
-        pushEndpoint: string
+    pushConfig: {
+        pushEndpoint?: string
     }
     ackDeadlineSeconds: number
     retainAckedMessages: boolean

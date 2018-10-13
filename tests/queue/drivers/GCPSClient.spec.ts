@@ -26,7 +26,7 @@ describe("GCPSClient", () => {
         }
     })
 
-    it("Should publish a method and correctly reconstruct it", async () => {
+    it("Should publish a message and correctly reconstruct it", async () => {
         await client.publish(
             "projects/strontium-tests/topics/integrationTestTopic",
             {
@@ -120,4 +120,12 @@ describe("GCPSClient", () => {
             [secondMessages[0].ackId]
         )
     }).timeout(5000)
+
+    it("Should fetch a GCPS Subscription", async () => {
+
+        let subscription = await client.getSubscriptionData("projects/strontium-tests/subscriptions/integrationTestSubscription")
+
+        expect(subscription.pushConfig).to.deep.equal({})
+        expect(subscription.ackDeadlineSeconds).to.equal(25)
+    })
 })

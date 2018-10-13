@@ -43,7 +43,7 @@ export class GCPSConsumer implements Process {
             this.subscriptionName
         )
 
-        if (subscription.pushConfig !== undefined) {
+        if (subscription.pushConfig !== {}) {
             throw new Error(
                 "The Strontium GCPS Consumer does not support Push based GCPS subscriptions. " +
                     "Please change the subscription inside Google Cloud Platform to operate on a Pull Based model if you wish " +
