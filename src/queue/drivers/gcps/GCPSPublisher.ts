@@ -29,9 +29,9 @@ export class GCPSPublisher extends QueuePublisher implements Process {
     ): Promise<void> {
         return this.client.publish(queueName, {
             attributes: {
-                "STRONTIUM_EVENT_NAME": eventName
+                STRONTIUM_EVENT_NAME: eventName,
             },
-            data: JSON.stringify(message)
+            data: JSON.stringify(message),
         })
     }
 

@@ -1,3 +1,4 @@
+import { GCPSClient } from "./GCPSClient"
 import { QueueHandler } from "../../abstract/QueueHandler"
 import { SerializedTask } from "../../abstract/SerializedTask"
 import { TransientError } from "../../../errors/TransientError"
@@ -10,14 +11,20 @@ import Timer = NodeJS.Timer
 export class GCPSConsumer implements Process {
     public isEnabled: boolean = false
     private ackDeadlineSeconds: number = 0
+    private client: GCPSClient
 
     constructor(
+        serviceAccountEmail: string,
+        keyId: string,
+        privateKey: string,
         public subscriptionName: string,
         public taskHandlers: {
             [eventName: string]: ConstructorOf<QueueHandler<any>>
         },
         public prefetchCount: number = 15
-    ) {}
+    ) {
+        this.client = new GCPSClient(serviceAccountEmail, keyId, privateKey)
+    }
 
     public isHealthy(): boolean {
         return this.isEnabled
@@ -30,15 +37,49 @@ export class GCPSConsumer implements Process {
     public async startup(container: Container): Promise<void> {
         // Start the process
         this.isEnabled = true
+
+        // Fetch the subscription configuration
+        let subscription = await this.client.getSubscriptionData(
+            this.subscriptionName
+        )
+
+        if (subscription.pushConfig !== undefined) {
+            throw new Error(
+                "The Strontium GCPS Consumer does not support Push based GCPS subscriptions. " +
+                    "Please change the subscription inside Google Cloud Platform to operate on a Pull Based model if you wish " +
+                    "to use this queue processor."
+            )
+        }
+
+        this.ackDeadlineSeconds = subscription.ackDeadlineSeconds
+
         this.pollAndExecute(container)
         return
     }
 
-    public async ack(ackId: string): Promise<void> {}
+    public async ack(ackId: string): Promise<void> {
+        return this.client.acknowledge(this.subscriptionName, [ackId])
+    }
 
-    public async nack(ackId: string, requeue: boolean = false): Promise<void> {}
+    public async nack(ackId: string, requeue: boolean = false): Promise<void> {
+        if (requeue) {
+            return this.client.modifyAckDeadline(
+                this.subscriptionName,
+                [ackId],
+                0
+            )
+        } else {
+            return this.ack(ackId)
+        }
+    }
 
-    public async extendAck(ackid: string): Promise<void> {}
+    public async extendAck(ackId: string): Promise<void> {
+        return this.client.modifyAckDeadline(
+            this.subscriptionName,
+            [ackId],
+            this.ackDeadlineSeconds
+        )
+    }
 
     public async pollAndExecute(container: Container): Promise<void> {
         // Fetch the prefetch count
