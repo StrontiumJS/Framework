@@ -14,7 +14,6 @@ export class PGTableInserter<T extends Object> extends Query<void> {
         payload: Partial<T>,
         returning?: string
     ): Promise<void> {
-
         let query = `
           INSERT INTO
             ${tableName} (${Object.keys(payload).map(() => "??")})

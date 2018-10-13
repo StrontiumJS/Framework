@@ -31,7 +31,9 @@ describe("PGTableInserter", () => {
             []
         )
         await testStore.query(
-            `INSERT INTO tableReaderTest (testcolumn, testnumber) VALUES ($1, $2)`, ["test", 123])
+            `INSERT INTO tableReaderTest (testcolumn, testnumber) VALUES ($1, $2)`,
+            ["test", 123]
+        )
     })
 
     afterEach(async () => {
@@ -40,8 +42,8 @@ describe("PGTableInserter", () => {
 
     it("should read the correct values from the table", async () => {
         let reader = new PGTableReader<{
-            id: number,
-            testcolumn: string,
+            id: number
+            testcolumn: string
             testnumber: number
         }>(testStore)
 
@@ -53,8 +55,8 @@ describe("PGTableInserter", () => {
 
     it("should read the correct fields from the table", async () => {
         let reader = new PGTableReader<{
-            id: number,
-            testcolumn: string,
+            id: number
+            testcolumn: string
             testnumber: number
         }>(testStore)
 
@@ -66,12 +68,17 @@ describe("PGTableInserter", () => {
 
     it("should apply a limit if provided", async () => {
         let reader = new PGTableReader<{
-            id: number,
-            testcolumn: string,
+            id: number
+            testcolumn: string
             testnumber: number
         }>(testStore)
 
-        let data = await reader.execute("tableReaderTest", {}, ["testcolumn"], 1)
+        let data = await reader.execute(
+            "tableReaderTest",
+            {},
+            ["testcolumn"],
+            1
+        )
 
         expect(data[0].testcolumn).to.equal("test")
         expect(data[0].testnumber).to.equal(undefined)
@@ -79,14 +86,19 @@ describe("PGTableInserter", () => {
 
     it("should apply an offset if provided", async () => {
         let reader = new PGTableReader<{
-            id: number,
-            testcolumn: string,
+            id: number
+            testcolumn: string
             testnumber: number
         }>(testStore)
 
-        let data = await reader.execute("tableReaderTest", {}, ["testcolumn"], 1, 1)
+        let data = await reader.execute(
+            "tableReaderTest",
+            {},
+            ["testcolumn"],
+            1,
+            1
+        )
 
         expect(data.length).to.equal(0)
     })
-
 })

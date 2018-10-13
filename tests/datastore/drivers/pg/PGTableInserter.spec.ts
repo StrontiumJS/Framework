@@ -38,26 +38,32 @@ describe("PGTableInserter", () => {
 
     it("it should insert a value into the correct SQL table", async () => {
         let inserter = new PGTableInserter<{
-            id: number,
-            testcolumn: string,
+            id: number
+            testcolumn: string
             testnumber: number
         }>(testStore)
 
-        await inserter.execute("tableInserterTest", {
-            testcolumn: "test value",
-            testnumber: 1720
-        }, "id")
+        await inserter.execute(
+            "tableInserterTest",
+            {
+                testcolumn: "test value",
+                testnumber: 1720,
+            },
+            "id"
+        )
 
         let data = await testStore.query<{
-            id: number,
-            testcolumn: string,
+            id: number
+            testcolumn: string
             testnumber: number
-        }>(`
+        }>(
+            `
             SELECT * FROM tableInserterTest
-        `, [])
+        `,
+            []
+        )
 
         expect(data[0].testcolumn).to.equal("test value")
         expect(data[0].testnumber).to.equal(1720)
     })
-
 })
