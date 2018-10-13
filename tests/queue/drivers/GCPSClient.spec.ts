@@ -8,6 +8,13 @@ describe("GCPSClient", () => {
         process.env.GCPS_SERVICE_ACCOUNT_PRIVATE_KEY!
     )
 
+    before(function() {
+        // If the test suite is not running in CI then skip this suite - it's slow and requires credentials
+        if (process.env.CI !== "true") {
+            this.skip()
+        }
+    })
+
     beforeEach(async function() {
         this.timeout(5000)
 

@@ -1,6 +1,6 @@
 import "reflect-metadata"
 
-import { FastifyServer } from "../../src/http/drivers/FastifyServer"
+import { FastifyServer } from "../../src/http"
 import { ControllerInput, ControllerOutput, EndpointController } from "../../src/http"
 import { injectable } from "inversify"
 import { AggregateLogger, ConsoleLogger, LogLevel } from "../../src/logging"
