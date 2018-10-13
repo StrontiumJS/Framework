@@ -47,7 +47,7 @@ describe("GCPSClient", () => {
             "projects/strontium-tests/subscriptions/integrationTestSubscription",
             [messages[0].ackId]
         )
-    })
+    }).timeout(5000)
 
     it("Acking a message should remove it from the queue", async () => {
         await client.publish(
