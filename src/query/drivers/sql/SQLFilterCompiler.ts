@@ -1,16 +1,17 @@
 import { Filter, FilterCompiler } from "../.."
 
 /**
- * The PostgreSQL query compiler takes a standard Strontium Query and returns a SQL
- * query with arguments passed to the Postgres driver as an array of objects.
+ * The SQL query compiler takes a standard Strontium Query and returns a SQL
+ * query with arguments. It uses a MySQL dialect which requires Post Processing to operate
+ * in other databases.
  */
-export const compilePgFilter: FilterCompiler<[string, Array<any>]> = (
+export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
     filter: Filter<any>
 ): [string, Array<any>] => {
     let queries: Array<[string, Array<any>]> = []
 
     if (filter.$or) {
-        let subqueries = filter.$or.map(compilePgFilter)
+        let subqueries = filter.$or.map(compileSQLFilter)
 
         let orQuery = concatQueryStringsWithConjunction(subqueries, "OR")
 
@@ -18,7 +19,7 @@ export const compilePgFilter: FilterCompiler<[string, Array<any>]> = (
     }
 
     if (filter.$and) {
-        let subqueries = filter.$and.map(compilePgFilter)
+        let subqueries = filter.$and.map(compileSQLFilter)
 
         let andQuery = concatQueryStringsWithConjunction(subqueries, "AND")
 

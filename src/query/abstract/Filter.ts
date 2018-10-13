@@ -15,5 +15,4 @@ export type FieldFilter<P extends keyof T, T> =
 export type Filter<T> = {
     $and?: Array<Filter<T>>
     $or?: Array<Filter<T>>
-} & FilterObject<T> &
-    Object
+} & FilterObject<T>

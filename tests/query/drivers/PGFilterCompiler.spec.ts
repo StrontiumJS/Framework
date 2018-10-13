@@ -1,4 +1,4 @@
-import { compilePgFilter } from "../../../src/query/drivers/pg/PGFilterCompiler"
+import { compileSQLFilter } from "../../../src/query/drivers/sql/SQLFilterCompiler"
 import { expect } from "chai"
 import { Filter } from "../../../src/query"
 
@@ -18,7 +18,7 @@ describe("PGQueryCompiler", () => {
         expectedQuerystring: string,
         expectedParameters: Array<any>
     ) => {
-        let result = compilePgFilter(query)
+        let result = compileSQLFilter(query)
         expect(result[0]).to.equal(expectedQuerystring)
         expect(result[1]).to.deep.equal(expectedParameters)
     }

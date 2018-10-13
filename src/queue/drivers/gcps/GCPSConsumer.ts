@@ -12,6 +12,7 @@ export class GCPSConsumer implements Process {
     public isEnabled: boolean = false
     private ackDeadlineSeconds: number = 0
     private client: GCPSClient
+    private logger?: Logger
 
     constructor(
         serviceAccountEmail: string,
@@ -32,6 +33,7 @@ export class GCPSConsumer implements Process {
 
     public async shutdown(container: Container): Promise<void> {
         this.isEnabled = false
+        this.logger = undefined
     }
 
     public async startup(container: Container): Promise<void> {
@@ -117,12 +119,14 @@ export class GCPSConsumer implements Process {
         })
 
         requestContainer.parent = applicationContainer
-        let logger: Logger | undefined = requestContainer.get(Logger)
+        if (requestContainer.isBound(Logger)) {
+            this.logger = requestContainer.get(Logger)
+        }
 
         // Spawn a handler for the Task type
         let handlerType = this.taskHandlers[task.eventName]
-        if (logger) {
-            logger.info(
+        if (this.logger) {
+            this.logger.info(
                 `[GCPS - TASK - START] Event of type ${
                     task.eventName
                 } received by Consumer.`
@@ -130,8 +134,8 @@ export class GCPSConsumer implements Process {
         }
 
         if (handlerType === undefined) {
-            if (logger) {
-                logger.error(
+            if (this.logger) {
+                this.logger.error(
                     `[GCPS - TASK - NO_IMPLEMENTATION_FAIL] No implementation found for event ${
                         task.eventName
                     }`
@@ -158,19 +162,17 @@ export class GCPSConsumer implements Process {
             await requestHandler.handle(validatedMessage)
 
             await this.ack(ackId)
-            if (logger) {
-                logger.info(
+            if (this.logger) {
+                this.logger.info(
                     `[GCPS - TASK - SUCCESS] Event of type ${
                         task.eventName
                     } successfully completed by Consumer.`
                 )
             }
         } catch (e) {
-            let logger: Logger | undefined = requestContainer.get(Logger)
-
             if (e instanceof TransientError) {
-                if (logger) {
-                    logger.error(
+                if (this.logger) {
+                    this.logger.error(
                         "[GCPS - TASK - TRANSIENT_FAIL] Task failed with transient error. Attempting to reschedule execution.",
                         e
                     )
@@ -178,8 +180,8 @@ export class GCPSConsumer implements Process {
 
                 await this.nack(ackId, true)
             } else {
-                if (logger) {
-                    logger.error(
+                if (this.logger) {
+                    this.logger.error(
                         "[GCPS - TASK - PERMANENT_FAIL] Task failed with permanent error.",
                         e
                     )

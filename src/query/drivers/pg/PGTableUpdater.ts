@@ -1,6 +1,7 @@
-import { compilePgFilter } from "./PGFilterCompiler"
+import { pgQueryPostProcessor } from "./PGQueryPostProcessor"
 import { PGStore } from "../../../datastore/drivers/pg/PGStore"
 import { Query } from "../../abstract/Query"
+import { compileSQLFilter } from "../sql/SQLFilterCompiler"
 import { inject, injectable } from "inversify"
 
 import { Filter } from "../.."
@@ -11,24 +12,28 @@ export class PGTableUpdater<T extends Object> extends Query<void> {
         super()
     }
 
-    public async execute<T>(
+    public async execute(
         tableName: string,
         filter: Filter<T>,
         delta: Partial<T>
     ): Promise<void> {
-        let [filterQuery, filterParameters] = compilePgFilter(filter)
+        let [filterQuery, filterParameters] = compileSQLFilter(filter)
 
         let query = `
           UPDATE
             ${tableName}
           SET
             ?
-          WHERE
+          ${filterQuery === "" ? "" : "WHERE"}
             ${filterQuery}
         `
 
         let parameters = [delta, ...filterParameters]
 
-        await this.store.query(query, parameters)
+        let [finalQuery, finalParameters] = pgQueryPostProcessor(
+            query,
+            parameters
+        )
+        await this.store.query(finalQuery, finalParameters)
     }
 }

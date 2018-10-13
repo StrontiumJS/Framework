@@ -1,9 +1,7 @@
-import { compilePgFilter } from "./PGFilterCompiler"
+import { pgQueryPostProcessor } from "./PGQueryPostProcessor"
 import { PGStore } from "../../../datastore/drivers/pg/PGStore"
 import { Query } from "../../abstract/Query"
 import { inject, injectable } from "inversify"
-
-import { Filter } from "../.."
 
 @injectable()
 export class PGTableInserter<T extends Object> extends Query<void> {
@@ -11,30 +9,38 @@ export class PGTableInserter<T extends Object> extends Query<void> {
         super()
     }
 
-    public async execute<T>(
+    public async execute(
         tableName: string,
-        filter: Filter<T>,
         payload: Partial<T>,
         returning?: string
     ): Promise<void> {
-        let [filterQuery, filterParameters] = compilePgFilter(filter)
 
         let query = `
           INSERT INTO
-            ${tableName}
+            ${tableName} (${Object.keys(payload).map(() => "??")})
           VALUES
-            ${payload}
-          WHERE
-            ${filterQuery}
+            (${Object.keys(payload).map(() => "?")})
           ${returning === undefined ? "" : "RETURNING ??"}
         `
 
-        let parameters = [payload, ...filterParameters]
+        let parameters: Array<any> = []
+
+        Object.keys(payload).forEach((k: string) => {
+            parameters.push(k)
+        })
+
+        Object.keys(payload).forEach((k: string) => {
+            parameters.push(payload[k as keyof T])
+        })
 
         if (returning !== undefined) {
             parameters.push(returning)
         }
 
-        await this.store.query(query, parameters)
+        let [finalQuery, finalParameters] = pgQueryPostProcessor(
+            query,
+            parameters
+        )
+        await this.store.query(finalQuery, finalParameters)
     }
 }
