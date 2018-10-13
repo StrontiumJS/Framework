@@ -122,8 +122,9 @@ describe("GCPSClient", () => {
     }).timeout(5000)
 
     it("Should fetch a GCPS Subscription", async () => {
-
-        let subscription = await client.getSubscriptionData("projects/strontium-tests/subscriptions/integrationTestSubscription")
+        let subscription = await client.getSubscriptionData(
+            "projects/strontium-tests/subscriptions/integrationTestSubscription"
+        )
 
         expect(subscription.pushConfig).to.deep.equal({})
         expect(subscription.ackDeadlineSeconds).to.equal(25)

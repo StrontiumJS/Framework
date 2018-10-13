@@ -83,12 +83,25 @@ export class GCPSConsumer implements Process {
 
     public async pollAndExecute(container: Container): Promise<void> {
         while (this.isEnabled) {
-            let messages = await this.client.pullTasks(this.subscriptionName, this.prefetchCount, false)
+            let messages = await this.client.pullTasks(
+                this.subscriptionName,
+                this.prefetchCount,
+                false
+            )
 
-            await Promise.all(messages.map((m) => this.executeTask(m.ackId, {
-                eventName: m.message.attributes.STRONTIUM_EVENT_NAME,
-                message: m.message.data
-            }, container)))
+            await Promise.all(
+                messages.map(async (m) =>
+                    this.executeTask(
+                        m.ackId,
+                        {
+                            eventName:
+                                m.message.attributes.STRONTIUM_EVENT_NAME,
+                            message: m.message.data,
+                        },
+                        container
+                    )
+                )
+            )
         }
     }
 
@@ -109,7 +122,11 @@ export class GCPSConsumer implements Process {
         // Spawn a handler for the Task type
         let handlerType = this.taskHandlers[task.eventName]
         if (logger) {
-            logger.info(`[GCPS - TASK - START] Event of type ${task.eventName} received by Consumer.`)
+            logger.info(
+                `[GCPS - TASK - START] Event of type ${
+                    task.eventName
+                } received by Consumer.`
+            )
         }
 
         if (handlerType === undefined) {
@@ -142,7 +159,11 @@ export class GCPSConsumer implements Process {
 
             await this.ack(ackId)
             if (logger) {
-                logger.info(`[GCPS - TASK - SUCCESS] Event of type ${task.eventName} successfully completed by Consumer.`)
+                logger.info(
+                    `[GCPS - TASK - SUCCESS] Event of type ${
+                        task.eventName
+                    } successfully completed by Consumer.`
+                )
             }
         } catch (e) {
             let logger: Logger | undefined = requestContainer.get(Logger)
