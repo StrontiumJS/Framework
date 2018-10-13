@@ -27,11 +27,15 @@ export class GCPSClient {
         private keyId: string,
         private privateKey: string
     ) {
+        // Sanitize the private key
+        let sanitizedPrivateKey = privateKey.replace(/\\n/g, `
+`)
+
         this.signer = new AsymmetricJWTSigner(
             new RSASHA256Signer(
                 // Public key is empty as this will never be used to validate a token
                 new Buffer(""),
-                new Buffer(privateKey)
+                new Buffer(sanitizedPrivateKey)
             ),
             "RS256",
             keyId
