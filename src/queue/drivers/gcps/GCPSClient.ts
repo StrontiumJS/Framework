@@ -28,8 +28,11 @@ export class GCPSClient {
         private privateKey: string
     ) {
         // Sanitize the private key
-        let sanitizedPrivateKey = privateKey.replace(/\\n/g, `
-`)
+        let sanitizedPrivateKey = privateKey.replace(
+            /\\n/g,
+            `
+`
+        )
 
         this.signer = new AsymmetricJWTSigner(
             new RSASHA256Signer(
