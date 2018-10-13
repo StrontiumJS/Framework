@@ -1,7 +1,7 @@
-import { Container } from "inversify"
 import { PGStore } from "../../../../src/datastore/drivers/pg/PGStore"
-import { PGTableInserter, PGTableReader } from "../../../../src/query"
 import { expect } from "chai"
+import { Container } from "inversify"
+import { PGTableInserter, PGTableReader } from "../../../../src/query"
 
 describe("PGTableInserter", () => {
     const testStore = new PGStore({
