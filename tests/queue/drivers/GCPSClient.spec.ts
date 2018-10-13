@@ -8,12 +8,21 @@ describe("GCPSClient", () => {
         process.env.GCPS_SERVICE_ACCOUNT_PRIVATE_KEY!
     )
 
-    beforeEach(async () => {
+    beforeEach(async function() {
+        this.timeout(5000)
+
         // Dump all existing messages
-        let messages = await client.pullTasks("projects/strontium-tests/subscriptions/integrationTestSubscription", 1000)
+        let messages = await client.pullTasks(
+            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            1000,
+            true
+        )
 
         if (messages.length > 0) {
-            await client.acknowledge("projects/strontium-tests/subscriptions/integrationTestSubscription", messages.map((m) => m.ackId))
+            await client.acknowledge(
+                "projects/strontium-tests/subscriptions/integrationTestSubscription",
+                messages.map((m) => m.ackId)
+            )
         }
     })
 
@@ -28,7 +37,8 @@ describe("GCPSClient", () => {
 
         let messages = await client.pullTasks(
             "projects/strontium-tests/subscriptions/integrationTestSubscription",
-            1
+            1,
+            true
         )
 
         expect(messages[0].message.data).to.equal("MY-INTEGRATION-TEST")
@@ -50,7 +60,8 @@ describe("GCPSClient", () => {
 
         let messages = await client.pullTasks(
             "projects/strontium-tests/subscriptions/integrationTestSubscription",
-            1
+            1,
+            true
         )
 
         expect(messages[0].message.data).to.equal("MY-INTEGRATION-TEST")
@@ -64,11 +75,12 @@ describe("GCPSClient", () => {
 
         let secondMessages = await client.pullTasks(
             "projects/strontium-tests/subscriptions/integrationTestSubscription",
-            1
+            1,
+            true
         )
 
         expect(secondMessages.length).to.equal(0)
-    })
+    }).timeout(5000)
 
     it("Nacking a message should readd it to the queue", async () => {
         await client.publish(
@@ -81,7 +93,8 @@ describe("GCPSClient", () => {
 
         let messages = await client.pullTasks(
             "projects/strontium-tests/subscriptions/integrationTestSubscription",
-            1
+            1,
+            true
         )
 
         expect(messages[0].message.data).to.equal("NACKED-MESSAGE")
@@ -96,9 +109,10 @@ describe("GCPSClient", () => {
 
         let secondMessages = await client.pullTasks(
             "projects/strontium-tests/subscriptions/integrationTestSubscription",
-            1
+            1,
+            true
         )
 
         expect(secondMessages[0].message.data).to.equal("NACKED-MESSAGE")
-    })
+    }).timeout(5000)
 })

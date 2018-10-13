@@ -39,7 +39,9 @@ export class GCPSClient {
     }
 
     public async signRequest(
-        audience: "https://pubsub.googleapis.com/google.pubsub.v1.Publisher" | "https://pubsub.googleapis.com/google.pubsub.v1.Subscriber"
+        audience:
+            | "https://pubsub.googleapis.com/google.pubsub.v1.Publisher"
+            | "https://pubsub.googleapis.com/google.pubsub.v1.Subscriber"
     ): Promise<string> {
         let currentUnixTimestamp = Math.round(new Date().getTime() / 1000)
 
@@ -56,10 +58,14 @@ export class GCPSClient {
         await Axios.post(
             `https://pubsub.googleapis.com/v1/${topic}:publish`,
             {
-                messages: [{
-                    attributes: message.attributes,
-                    data: Buffer.from(JSON.stringify(message.data)).toString("base64")
-                }],
+                messages: [
+                    {
+                        attributes: message.attributes,
+                        data: Buffer.from(
+                            JSON.stringify(message.data)
+                        ).toString("base64"),
+                    },
+                ],
             },
             {
                 headers: {
@@ -90,7 +96,8 @@ export class GCPSClient {
 
     public async pullTasks(
         subscriptionName: string,
-        maxMessages: number = 10
+        maxMessages: number = 10,
+        returnImmediately: boolean = false
     ): Promise<
         Array<{
             ackId: string
@@ -100,8 +107,8 @@ export class GCPSClient {
         let taskResp = await Axios.post(
             `https://pubsub.googleapis.com/v1/${subscriptionName}:pull`,
             {
-                returnImmediately: false,
-                maxMessages: maxMessages
+                returnImmediately: returnImmediately,
+                maxMessages: maxMessages,
             },
             {
                 headers: {
@@ -114,15 +121,19 @@ export class GCPSClient {
             }
         )
 
-        return taskResp.data.receivedMessages ? taskResp.data.receivedMessages.map((m: any) => {
-            return {
-                ackId: m.ackId,
-                message: {
-                    attributes: m.attributes,
-                    data: JSON.parse(Buffer.from(m.message.data, "base64").toString())
-                }
-            }
-        }) : []
+        return taskResp.data.receivedMessages
+            ? taskResp.data.receivedMessages.map((m: any) => {
+                  return {
+                      ackId: m.ackId,
+                      message: {
+                          attributes: m.attributes,
+                          data: JSON.parse(
+                              Buffer.from(m.message.data, "base64").toString()
+                          ),
+                      },
+                  }
+              })
+            : []
     }
 
     public async modifyAckDeadline(
