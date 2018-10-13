@@ -13,14 +13,14 @@ describe("GCPSClient", () => {
 
         // Dump all existing messages
         let messages = await client.pullTasks(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             1000,
             true
         )
 
         if (messages.length > 0) {
             await client.acknowledge(
-                "projects/strontium-tests/subscriptions/integrationTestSubscription",
+                "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
                 messages.map((m) => m.ackId)
             )
         }
@@ -36,7 +36,7 @@ describe("GCPSClient", () => {
         )
 
         let messages = await client.pullTasks(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             1,
             true
         )
@@ -44,7 +44,7 @@ describe("GCPSClient", () => {
         expect(messages[0].message.data).to.equal("MY-INTEGRATION-TEST")
 
         await client.acknowledge(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             [messages[0].ackId]
         )
     }).timeout(5000)
@@ -59,7 +59,7 @@ describe("GCPSClient", () => {
         )
 
         let messages = await client.pullTasks(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             1,
             true
         )
@@ -69,12 +69,12 @@ describe("GCPSClient", () => {
         // Ack the message if all goes to plan - this test suite can cause a build up of messages in the subscription if it
         // fails but for now that is just cleaned up manually meaning this is a little flaky.
         await client.acknowledge(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             [messages[0].ackId]
         )
 
         let secondMessages = await client.pullTasks(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             1,
             true
         )
@@ -92,7 +92,7 @@ describe("GCPSClient", () => {
         )
 
         let messages = await client.pullTasks(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             1,
             true
         )
@@ -102,13 +102,13 @@ describe("GCPSClient", () => {
         // Ack the message if all goes to plan - this test suite can cause a build up of messages in the subscription if it
         // fails but for now that is just cleaned up manually meaning this is a little flaky.
         await client.modifyAckDeadline(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             [messages[0].ackId],
             0
         )
 
         let secondMessages = await client.pullTasks(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             1,
             true
         )
@@ -116,17 +116,17 @@ describe("GCPSClient", () => {
         expect(secondMessages[0].message.data).to.equal("NACKED-MESSAGE")
 
         await client.acknowledge(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription",
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest",
             [secondMessages[0].ackId]
         )
     }).timeout(5000)
 
     it("Should fetch a GCPS Subscription", async () => {
         let subscription = await client.getSubscriptionData(
-            "projects/strontium-tests/subscriptions/integrationTestSubscription"
+            "projects/strontium-tests/subscriptions/strontiumIntegrationTest"
         )
 
         expect(subscription.pushConfig).to.deep.equal({})
-        expect(subscription.ackDeadlineSeconds).to.equal(25)
+        expect(subscription.ackDeadlineSeconds).to.equal(10)
     })
 })
