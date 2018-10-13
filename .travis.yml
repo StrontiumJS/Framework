@@ -3,13 +3,15 @@ node_js:
   - '8'
 
 services:
-  - mysql
+  - postgresql
 
 before_install:
 - npm install -g npm@6
 - npm install -g greenkeeper-lockfile@1
 
-before_script: greenkeeper-lockfile-update
+before_script:
+  - greenkeeper-lockfile-update
+  - psql -c 'create database strontium;' -U postgres
 
 script:
 - npm run lint
