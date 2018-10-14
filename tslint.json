@@ -1,11 +1,10 @@
 {
     "rules": {
         "no-unused-expression": true,
-        "no-unused-variable": true,
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"],
         "no-unbound-method": true,
         "no-unnecessary-callback-wrapper": true,
         "no-unnecessary-qualifier": true,
-        "only-arrow-functions": true,
         "promise-function-async": true,
         "await-promise": true,
         "unified-signatures": true,
