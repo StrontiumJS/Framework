@@ -22,12 +22,12 @@ export abstract class SymmetricEncrypter {
      *
      * @param plaintext {Buffer} - Plaintext to undergo encryption
      */
-    public abstract encrypt(plaintext: Buffer): Buffer
+    public abstract encrypt(plaintext: Buffer): Promise<Buffer>
 
     /**
      * Decrypt encrypted Ciphertext to it's original Plaintext form.
      *
      * @param ciphertext {Buffer} - Ciphertext to undergo decryption
      */
-    public abstract decrypt(ciphertext: Buffer): Buffer
+    public abstract decrypt(ciphertext: Buffer): Promise<Buffer>
 }

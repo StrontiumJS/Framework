@@ -1,46 +1,63 @@
-export type LoggerArgs = Object | null
-
 /**
- * The abstract Logger in Strontium
+ * Logger provides an abstract definition of the API Strontium feels a Logger
+ * should expose.
  */
+import { LogLevel } from "./LogLevel"
+
 export abstract class Logger {
     /**
      * Log a message at a FATAL log level
      *
-     * @param args {LoggerArgs} Additional data to be logged with the log message
-     * @param message {string} Log message to be logged
+     * @param message {string} The core message to be logged
+     * @param metadata {Object} Optional additional data to be attached to the log message
      */
-    public abstract fatal(args: LoggerArgs, message: string): void
+    public fatal(message: string, metadata?: Object): void {
+        this.log(message, LogLevel.FATAL, metadata)
+    }
 
     /**
      * Log a message at a ERROR log level
      *
-     * @param args {LoggerArgs} Additional data to be logged with the log message
-     * @param message {string} Log message to be logged
+     * @param message {string} The core message to be logged
+     * @param metadata {Object} Optional additional data to be attached to the log message
      */
-    public abstract error(args: LoggerArgs, message: string): void
+    public error(message: string, metadata?: Object): void {
+        this.log(message, LogLevel.ERROR, metadata)
+    }
 
     /**
      * Log a message at a WARN log level
      *
-     * @param args {LoggerArgs} Additional data to be logged with the log message
-     * @param message {string} Log message to be logged
+     * @param message {string} The core message to be logged
+     * @param metadata {Object} Optional additional data to be attached to the log message
      */
-    public abstract warn(args: LoggerArgs, message: string): void
+    public warn(message: string, metadata?: Object): void {
+        this.log(message, LogLevel.WARN, metadata)
+    }
 
     /**
      * Log a message at a INFO log level
      *
-     * @param args {LoggerArgs} Additional data to be logged with the log message
-     * @param message {string} Log message to be logged
+     * @param message {string} The core message to be logged
+     * @param metadata {Object} Optional additional data to be attached to the log message
      */
-    public abstract info(args: LoggerArgs, message: string): void
+    public info(message: string, metadata?: Object): void {
+        this.log(message, LogLevel.INFO, metadata)
+    }
 
     /**
      * Log a message at a DEBUG log level
      *
-     * @param args {LoggerArgs} Additional data to be logged with the log message
-     * @param message {string} Log message to be logged
+     * @param message {string} The core message to be logged
+     * @param metadata {Object} Optional additional data to be attached to the log message
      */
-    public abstract debug(args: LoggerArgs, message: string): void
+    public debug(message: string, metadata?: Object): void {
+        this.log(message, LogLevel.DEBUG, metadata)
+    }
+
+    public abstract log(
+        message: string,
+        level: LogLevel,
+        metadata?: Object
+    ): void
 }

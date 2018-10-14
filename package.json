@@ -44,7 +44,7 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.2",
-    "dotenv": "^6.0.0",
+    "dotenv": "^6.1.0",
     "lint-staged": "^7.3.0",
     "mocha": "^5.2.0",
     "mock-express-request": "^0.2.2",
@@ -55,10 +55,21 @@
     "sinon": "^6.3.4",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "^2.9.2"
+    "typescript": "^3.1.1"
   },
   "dependencies": {
-    "@types/node": "^10.11.3"
+    "@types/node": "^10.11.3",
+    "@types/pg": "^7.4.11",
+    "@types/uuid": "^3.4.4",
+    "@types/validator": "^9.4.2",
+    "axios": "^0.18.0",
+    "base64url": "^3.0.0",
+    "fastify": "^1.12.1",
+    "inversify": "^4.13.0",
+    "jwa": "^1.1.6",
+    "pg": "^7.5.0",
+    "uuid": "^3.3.2",
+    "validator": "^10.8.0"
   },
   "nyc": {
     "include": [

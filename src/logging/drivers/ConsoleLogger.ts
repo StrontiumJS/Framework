@@ -1,5 +1,5 @@
 import { LogLevel } from "../abstract/LogLevel"
-import { Logger, LoggerArgs } from "../abstract/Logger"
+import { Logger } from "../abstract/Logger"
 
 /**
  * A simple Logging Driver used to ouput log messages to STDOUT and STDERR.
@@ -18,48 +18,24 @@ export class ConsoleLogger extends Logger {
         super()
     }
 
-    public debug(args: LoggerArgs, message: string): void {
-        this.consoleLog(LogLevel.DEBUG, args, message)
-    }
-
-    public info(args: LoggerArgs, message: string): void {
-        this.consoleLog(LogLevel.INFO, args, message)
-    }
-
-    public warn(args: LoggerArgs, message: string): void {
-        this.consoleLog(LogLevel.WARN, args, message)
-    }
-
-    public error(args: LoggerArgs, message: string): void {
-        this.consoleLog(LogLevel.ERROR, args, message)
-    }
-
-    public fatal(args: LoggerArgs, message: string): void {
-        this.consoleLog(LogLevel.FATAL, args, message)
-    }
-
-    private consoleLog(
-        level: LogLevel,
-        args: LoggerArgs,
-        message: string
-    ): void {
+    public log(message: string, level: LogLevel, metadata: Object): void {
         if (!this.shouldLog(level)) {
             return
         }
 
         switch (level) {
             case LogLevel.DEBUG:
-                this.injectedConsole.log(message, args)
+                this.injectedConsole.log(message, metadata)
                 break
             case LogLevel.INFO:
-                this.injectedConsole.info(message, args)
+                this.injectedConsole.info(message, metadata)
                 break
             case LogLevel.WARN:
-                this.injectedConsole.warn(message, args)
+                this.injectedConsole.warn(message, metadata)
                 break
             case LogLevel.ERROR:
             case LogLevel.FATAL:
-                this.injectedConsole.error(message, args)
+                this.injectedConsole.error(message, metadata)
                 break
         }
     }
