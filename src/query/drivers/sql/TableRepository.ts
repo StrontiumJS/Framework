@@ -55,7 +55,7 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
         } else {
             let query = `
                 INSERT INTO
-                    ${this.tableName} (${Object.keys(payload).map(() => "??")})
+                    "${this.tableName}" (${Object.keys(payload).map(() => "??")})
                 VALUES
                     (${Object.keys(payload).map(() => "?")})
                 RETURNING ??
@@ -105,7 +105,7 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
             SELECT
                 ${this.queryFields.join(", ")}	
             FROM
-                ??
+                "${this.tableName}"
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
@@ -148,10 +148,10 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
         let filteredPayload = (omitBy(payload, isUndefined) as unknown) as T
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
 
-        let parameters = [this.tableName, filteredPayload, ...filterParameters]
+        let parameters = [filteredPayload, ...filterParameters]
         let lookupQuery = `	
             UPDATE
-                ??
+                "${this.tableName}"
             SET
                 ?
             ${filterQuery !== "" ? "WHERE" : ""}	
@@ -170,11 +170,11 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
         connection: SQLStore = this.store
     ): Promise<void> {
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
-        let parameters = [this.tableName, ...filterParameters]
+        let parameters = [...filterParameters]
 
         let lookupQuery = `	
             DELETE FROM	
-                ??
+                "${this.tableName}"
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
