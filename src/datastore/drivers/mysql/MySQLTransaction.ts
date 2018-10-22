@@ -8,7 +8,11 @@ import { v4 } from "uuid"
 export class MySQLTransaction implements SQLStore {
     private transactionId: string = v4()
 
-    constructor(private store: MySQLStore, private connection: PoolConnection, private logger?: Logger) {
+    constructor(
+        private store: MySQLStore,
+        private connection: PoolConnection,
+        private logger?: Logger
+    ) {
         if (this.logger) {
             this.logger.debug("Transaction Opened", {
                 transactionId: this.transactionId,
@@ -22,12 +26,18 @@ export class MySQLTransaction implements SQLStore {
     ): Promise<Array<R>> {
         try {
             // @ts-ignore
-            let queryResult = await promisify(this.connection.query)(queryString, parameters)
+            let queryResult = await promisify(
+                this.connection.query.bind(this.connection)
+            )(queryString, parameters)
+
             return queryResult.results
         } catch (e) {
             if (e.fatal) {
                 if (this.logger) {
-                    this.logger.error("MySQL Transaction encountered a fatal error", e)
+                    this.logger.error(
+                        "MySQL Transaction encountered a fatal error",
+                        e
+                    )
                 }
 
                 this.store.healthyState = false
@@ -38,12 +48,12 @@ export class MySQLTransaction implements SQLStore {
     }
 
     public async commit(): Promise<void> {
-        await promisify(this.connection.commit)()
+        await promisify(this.connection.commit.bind(this.connection))()
         await this.finalizeTransaction()
     }
 
     public async rollback(): Promise<void> {
-        await promisify(this.connection.rollback)()
+        await promisify(this.connection.rollback.bind(this.connection))()
         await this.finalizeTransaction()
     }
 
@@ -53,6 +63,7 @@ export class MySQLTransaction implements SQLStore {
                 transactionId: this.transactionId,
             })
         }
-        await promisify(this.connection.release)()
+
+        await promisify(this.connection.release.bind(this.connection))()
     }
 }

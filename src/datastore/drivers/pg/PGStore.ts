@@ -1,3 +1,4 @@
+import { pgQueryPostProcessor } from "../../../query/drivers/pg/PGQueryPostProcessor"
 import { PGTransaction } from "./PGTransaction"
 import { SQLStore } from "../../abstract/SQLStore"
 import { Container } from "inversify"
@@ -21,10 +22,16 @@ export class PGStore implements Process, SQLStore {
         parameters: Array<any>
     ): Promise<Array<R>> {
         if (this.connection) {
+            let [
+                processedQueryString,
+                processedParameters,
+            ] = pgQueryPostProcessor(queryString, parameters)
+
             let queryResult = await this.connection.query(
-                queryString,
-                parameters
+                processedQueryString,
+                processedParameters
             )
+
             return queryResult.rows
         } else {
             throw new Error(

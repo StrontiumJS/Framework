@@ -24,12 +24,18 @@ export class MySQLStore implements Process, SQLStore {
         if (this.connection) {
             try {
                 // @ts-ignore
-                let queryResult = await promisify(this.connection.query)(queryString, parameters)
+                let queryResult = await promisify(this.connection.query)(
+                    queryString,
+                    parameters
+                )
                 return queryResult.results
             } catch (e) {
                 if (e.fatal) {
                     if (this.logger) {
-                        this.logger.error("MySQL Store encountered a fatal error", e)
+                        this.logger.error(
+                            "MySQL Store encountered a fatal error",
+                            e
+                        )
                     }
 
                     this.healthyState = false
@@ -51,8 +57,10 @@ export class MySQLStore implements Process, SQLStore {
             )
         }
 
-        let connection = await promisify(this.connection.getConnection)()
-        await promisify(connection.beginTransaction)()
+        let connection = await promisify(
+            this.connection.getConnection.bind(this.connection)
+        )()
+        await promisify(connection.beginTransaction.bind(this.connection))()
 
         return new MySQLTransaction(this, connection, this.logger)
     }
@@ -78,7 +86,7 @@ export class MySQLStore implements Process, SQLStore {
         if (this.connection) {
             container.unbind(MySQLStore)
 
-            await promisify(this.connection.end)()
+            await promisify(this.connection.end.bind(this.connection))()
 
             // Dereference the pool
             this.connection = undefined

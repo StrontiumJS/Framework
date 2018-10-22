@@ -1,3 +1,4 @@
+import { pgQueryPostProcessor } from "../../../query/drivers/pg/PGQueryPostProcessor"
 import { SQLStore } from "../../abstract/SQLStore"
 import { Logger } from "../../../logging"
 import { PoolClient } from "pg"
@@ -18,7 +19,16 @@ export class PGTransaction implements SQLStore {
         queryString: string,
         parameters: Array<any>
     ): Promise<Array<R>> {
-        let queryResult = await this.connection.query(queryString, parameters)
+        let [processedQueryString, processedParameters] = pgQueryPostProcessor(
+            queryString,
+            parameters
+        )
+
+        let queryResult = await this.connection.query(
+            processedQueryString,
+            processedParameters
+        )
+
         return queryResult.rows
     }
 

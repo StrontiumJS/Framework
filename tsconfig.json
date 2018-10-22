@@ -34,7 +34,8 @@
 
     "types": [
       "node",
-      "mocha"
+      "mocha",
+      "validator"
     ]
 
   },
