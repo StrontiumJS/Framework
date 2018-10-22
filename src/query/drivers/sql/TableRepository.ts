@@ -1,3 +1,4 @@
+import { pgQueryPostProcessor } from "../pg/PGQueryPostProcessor"
 import { Repository } from "../../abstract/Repository"
 import { MySQLStore, SQLStore } from "../../../datastore"
 import { injectable } from "inversify"
@@ -72,9 +73,14 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
 
             parameters.push(this.primaryKeyField)
 
-            let results = await this.store.query<{ [key: string]: any }>(
+            let [processedQuery, processedParameters] = pgQueryPostProcessor(
                 query,
                 parameters
+            )
+
+            let results = await this.store.query<{ [key: string]: any }>(
+                processedQuery,
+                processedParameters
             )
             filteredPayload[this.primaryKeyField] =
                 results[0][this.primaryKeyField as string] || id
@@ -122,7 +128,14 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
             parameters.push(pagination.offset)
         }
 
-        let results = await connection.query<T>(lookupQuery, parameters)
+        let [processedQuery, processedParameters] = pgQueryPostProcessor(
+            lookupQuery,
+            parameters
+        )
+        let results = await connection.query<T>(
+            processedQuery,
+            processedParameters
+        )
         return results
     }
 
@@ -144,7 +157,12 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
-        await connection.query(lookupQuery, parameters)
+
+        let [processedQuery, processedParameters] = pgQueryPostProcessor(
+            lookupQuery,
+            parameters
+        )
+        await connection.query(processedQuery, processedParameters)
     }
 
     async delete(
@@ -160,7 +178,12 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
-        await connection.query(lookupQuery, parameters)
+
+        let [processedQuery, processedParameters] = pgQueryPostProcessor(
+            lookupQuery,
+            parameters
+        )
+        await connection.query(processedQuery, processedParameters)
     }
 
     async generateID(): Promise<any> {
