@@ -1,5 +1,5 @@
 import { Repository } from "../../abstract/Repository"
-import { SQLStore } from "../../../datastore"
+import { MySQLStore, SQLStore } from "../../../datastore"
 import { injectable } from "inversify"
 import { isUndefined, omitBy } from "lodash"
 
@@ -32,23 +32,55 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
 
         // Filter the payload for any undefined keys
         let filteredPayload = (omitBy(payload, isUndefined) as unknown) as T
-        let insertQuery = `
-            INSERT INTO
-                ??
-            SET
-                ?
-        `
 
-        // This can throw a SQL error which will be returned directly to the caller rather than handled here.
-        let result: any = await connection.query(insertQuery, [
-            this.tableName,
-            filteredPayload,
-        ])
+        if (connection instanceof MySQLStore) {
+            let insertQuery = `
+                INSERT INTO
+                    ??
+                SET
+                    ?
+            `
 
-        let insertedId = result.insertId
-        filteredPayload[this.primaryKeyField] = insertedId || id
+            // This can throw a SQL error which will be returned directly to the caller rather than handled here.
+            let result: any = await connection.query(insertQuery, [
+                this.tableName,
+                filteredPayload,
+            ])
 
-        return filteredPayload
+            let insertedId = result.insertId
+            filteredPayload[this.primaryKeyField] = insertedId || id
+
+            return filteredPayload
+        } else {
+            let query = `
+                INSERT INTO
+                    ${this.tableName} (${Object.keys(payload).map(() => "??")})
+                VALUES
+                    (${Object.keys(payload).map(() => "?")})
+                RETURNING ??
+            `
+
+            let parameters: Array<any> = []
+
+            Object.keys(payload).forEach((k: string) => {
+                parameters.push(k)
+            })
+
+            Object.keys(payload).forEach((k: string) => {
+                parameters.push(payload[k as keyof T])
+            })
+
+            parameters.push(this.primaryKeyField)
+
+            let results = await this.store.query<{ [key: string]: any }>(
+                query,
+                parameters
+            )
+            filteredPayload[this.primaryKeyField] =
+                results[0][this.primaryKeyField as string] || id
+
+            return filteredPayload
+        }
     }
 
     async read(
