@@ -25,6 +25,7 @@ export class PGStore implements Process, SQLStore {
                 queryString,
                 parameters
             )
+
             return queryResult.rows
         } else {
             throw new Error(

@@ -19,6 +19,7 @@ export class PGTransaction implements SQLStore {
         parameters: Array<any>
     ): Promise<Array<R>> {
         let queryResult = await this.connection.query(queryString, parameters)
+
         return queryResult.rows
     }
 

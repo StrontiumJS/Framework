@@ -12,7 +12,7 @@ interface PGTestModel {
     removedAt: Date | null
 }
 
-describe("PGQueryCompiler", () => {
+describe("SQLFilterCompiler", () => {
     const expectQueryOutcome = (
         query: Filter<PGTestModel>,
         expectedQuerystring: string,
