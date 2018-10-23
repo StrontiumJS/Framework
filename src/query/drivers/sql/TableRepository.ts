@@ -13,12 +13,12 @@ import { Filter, compileSQLFilter } from "../.."
  * Repository classes or direct queries.
  */
 @injectable()
-export abstract class TableRepository<T extends any> extends Repository<T> {
+export abstract class TableRepository<T extends any, K extends keyof T> extends Repository<T, K> {
     constructor(
         private store: SQLStore,
         private tableName: string,
         private queryFields: Array<keyof T>,
-        private primaryKeyField: keyof T
+        private primaryKeyField: K
     ) {
         super()
     }
@@ -26,7 +26,7 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
     async create(
         payload: Partial<T>,
         connection: SQLStore = this.store
-    ): Promise<T> {
+    ): Promise<T[K]> {
         // Generate an ID for the new record
         let id = await this.generateID()
         payload[this.primaryKeyField] = payload[this.primaryKeyField] || id
@@ -48,10 +48,7 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
                 filteredPayload,
             ])
 
-            let insertedId = result.insertId
-            filteredPayload[this.primaryKeyField] = insertedId || id
-
-            return filteredPayload
+            return result.insertId || id
         } else {
             let query = `
                 INSERT INTO
@@ -84,10 +81,8 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
                 processedQuery,
                 processedParameters
             )
-            filteredPayload[this.primaryKeyField] =
-                results[0][this.primaryKeyField as string] || id
 
-            return filteredPayload
+            return results[0][this.primaryKeyField as string] || id
         }
     }
 

@@ -7,13 +7,13 @@ import { Filter } from "./Filter"
  * Repositories in the abstract sense are not tied to any given type of datastore however classes
  * that extend Repository may begin to make more assertions about the nature of the underlying store.
  */
-export abstract class Repository<T> {
+export abstract class Repository<T, K extends keyof T> {
     /**
      * Create a new record in the underlying data store.
      *
      * @param payload The objects to be created in the datastore
      */
-    abstract async create(payload: Partial<T>): Promise<T>
+    abstract async create(payload: Partial<T>): Promise<T[K]>
 
     /**
      * Read a collection of records from the underlying data store which match the provided filter.
