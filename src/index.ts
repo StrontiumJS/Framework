@@ -1,4 +1,5 @@
 export * from "./cryptography"
+export * from "./datastore"
 export * from "./errors"
 export * from "./http"
 export * from "./logging"
