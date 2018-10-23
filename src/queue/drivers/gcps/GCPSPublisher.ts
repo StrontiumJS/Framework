@@ -1,5 +1,4 @@
 import { GCPSClient } from "./GCPSClient"
-import { QueueHanderPayload, QueueHandler } from "../../abstract/QueueHandler"
 import { QueuePublisher } from "../../abstract/QueuePublisher"
 import { Container } from "inversify"
 import { Process } from "../../../runtime"
@@ -22,10 +21,10 @@ export class GCPSPublisher extends QueuePublisher implements Process {
         return true
     }
 
-    public async publish<Q extends QueueHandler<any>>(
+    public async publish<Q extends {}>(
         queueName: string,
         eventName: string,
-        message: QueueHanderPayload<Q>
+        message: Q
     ): Promise<void> {
         return this.client.publish(queueName, {
             attributes: {

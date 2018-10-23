@@ -55,7 +55,9 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
         } else {
             let query = `
                 INSERT INTO
-                    "${this.tableName}" (${Object.keys(payload).map(() => "??")})
+                    "${this.tableName}" (${Object.keys(payload).map(
+                () => "??"
+            )})
                 VALUES
                     (${Object.keys(payload).map(() => "?")})
                 RETURNING ??
