@@ -35,7 +35,8 @@
     "types": [
       "node",
       "mocha",
-      "validator"
+      "validator",
+      "inversify"
     ]
 
   },
