@@ -13,7 +13,10 @@ import { Filter, compileSQLFilter } from "../.."
  * Repository classes or direct queries.
  */
 @injectable()
-export abstract class TableRepository<T extends any, K extends keyof T> extends Repository<T, K> {
+export abstract class TableRepository<
+    T extends any,
+    K extends keyof T
+> extends Repository<T, K> {
     constructor(
         private store: SQLStore,
         private tableName: string,
