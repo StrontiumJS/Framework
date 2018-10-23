@@ -55,22 +55,22 @@ export abstract class TableRepository<T extends any> extends Repository<T> {
         } else {
             let query = `
                 INSERT INTO
-                    "${this.tableName}" (${Object.keys(payload).map(
+                    "${this.tableName}" (${Object.keys(filteredPayload).map(
                 () => "??"
             )})
                 VALUES
-                    (${Object.keys(payload).map(() => "?")})
+                    (${Object.keys(filteredPayload).map(() => "?")})
                 RETURNING ??
             `
 
             let parameters: Array<any> = []
 
-            Object.keys(payload).forEach((k: string) => {
+            Object.keys(filteredPayload).forEach((k: string) => {
                 parameters.push(k)
             })
 
-            Object.keys(payload).forEach((k: string) => {
-                parameters.push(payload[k as keyof T])
+            Object.keys(filteredPayload).forEach((k: string) => {
+                parameters.push(filteredPayload[k as keyof T])
             })
 
             parameters.push(this.primaryKeyField)
