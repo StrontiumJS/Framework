@@ -17,4 +17,12 @@ export abstract class HTTPError extends StrontiumError {
             errorMessage: this.externalMessage,
         }
     }
+
+    public static isHTTPError(e: any): e is HTTPError {
+        return (
+            e !== undefined &&
+            typeof e.statusCode === "number" &&
+            typeof e.toResponseBody === "function"
+        )
+    }
 }
