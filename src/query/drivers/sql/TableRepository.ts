@@ -118,14 +118,12 @@ export abstract class TableRepository<
 
         if (pagination.limit) {
             lookupQuery = `${lookupQuery}	
-            LIMIT ?`
-            parameters.push(pagination.limit)
+            LIMIT ${pagination.limit}`
         }
 
         if (pagination.offset) {
             lookupQuery = `${lookupQuery}	
-            OFFSET ?`
-            parameters.push(pagination.offset)
+            OFFSET ${pagination.offset}`
         }
 
         let [processedQuery, processedParameters] = pgQueryPostProcessor(
