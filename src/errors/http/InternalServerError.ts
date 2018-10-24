@@ -7,5 +7,7 @@ export class InternalServerError extends HTTPError {
             "An internal error occurred. The system administrator has been notified.",
             "Internal Error occurred."
         )
+
+        Object.setPrototypeOf(this, InternalServerError.prototype)
     }
 }

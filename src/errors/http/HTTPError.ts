@@ -7,6 +7,8 @@ export abstract class HTTPError extends StrontiumError {
         public internalMessage?: string
     ) {
         super(internalMessage)
+
+        Object.setPrototypeOf(this, HTTPError.prototype)
     }
 
     toResponseBody(): { statusCode: number; errorMessage: string } {
