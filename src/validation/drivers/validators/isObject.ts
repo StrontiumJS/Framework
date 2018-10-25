@@ -16,14 +16,18 @@ export const isObject = <V extends ObjectValidator>(validator: V) => async (
     let response: Partial<ValidatedObject<V>> = {}
 
     for (let p in validator) {
-        if (validator.hasOwnProperty(p) && i.hasOwnProperty(p)) {
+        if (validator.hasOwnProperty(p)) {
             // Sadly ts-ignore this as TS doesn't understand that we have strongly ensured
             // that this property is present.
             // @ts-ignore
             let rawValue = i[p]
 
             try {
-                response[p] = await validator[p](rawValue)
+                let validatedOutput = await validator[p](rawValue)
+
+                if (validatedOutput !== undefined) {
+                    response[p] = validatedOutput
+                }
             } catch (e) {
                 if (e instanceof ValidationError) {
                     // Append the path to the error message
