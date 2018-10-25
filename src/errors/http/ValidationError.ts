@@ -8,8 +8,6 @@ export class ValidationError extends HTTPError {
         public fieldPath?: string
     ) {
         super(400, externalMessage, internalMessage)
-
-        Object.setPrototypeOf(this, ValidationError.prototype)
     }
 
     public toResponseBody(): {
