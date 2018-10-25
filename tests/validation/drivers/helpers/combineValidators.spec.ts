@@ -2,21 +2,25 @@ import { expect } from "chai"
 import {
     ValidationError,
     combineValidators,
+    isISOAlpha2CountryCode,
     isNumber,
-    isRequired,
+    isString,
 } from "../../../../src"
 
 describe("combineValidators", () => {
     describe("Two Validators", () => {
         it("should apply two validators to a value sequentially and throw the first error encountered", async () => {
-            let testVariable: number | undefined
+            let testVariable: string | undefined
 
             // Type test
-            let testValidator = combineValidators(isNumber, isRequired)
+            let testValidator = combineValidators(
+                isString,
+                isISOAlpha2CountryCode
+            )
 
             try {
                 // This useless variable is defined only to ensure type consistency
-                let testOutput: number = await testValidator(testVariable)
+                let testOutput: string = await testValidator(testVariable)
                 expect(false).to.equal(true)
             } catch (e) {
                 expect(e instanceof ValidationError).to.equal(true)
@@ -25,24 +29,27 @@ describe("combineValidators", () => {
         })
 
         it("should correctly apply the validations in the sequence provided", async () => {
-            let testVariable: number | undefined = 15
+            let testVariable: string | undefined = "GB"
 
             // Type test
-            let testValidator = combineValidators(isNumber, isRequired)
+            let testValidator = combineValidators(
+                isString,
+                isISOAlpha2CountryCode
+            )
 
-            let testOutput: number = await testValidator(testVariable)
-            expect(testOutput).to.equal(15)
+            let testOutput: string = await testValidator(testVariable)
+            expect(testOutput).to.equal("GB")
         })
     })
 
     describe("Three Validators", () => {
         it("should apply three validators to a value sequentially and throw the first error encountered", async () => {
-            let testVariable: number | undefined
+            let testVariable: string | undefined
 
             // Type test
             let testValidator = combineValidators(
-                isNumber,
-                isRequired,
+                isString,
+                isISOAlpha2CountryCode,
                 (i): "test" => {
                     throw new ValidationError(
                         "TEST_CONSTRAINT",
@@ -62,12 +69,12 @@ describe("combineValidators", () => {
         })
 
         it("should correctly apply the validations in the sequence provided", async () => {
-            let testVariable: number | undefined = 15
+            let testVariable: string | undefined = "GB"
 
             // Type test
             let testValidator = combineValidators(
-                isNumber,
-                isRequired,
+                isString,
+                isISOAlpha2CountryCode,
                 (i): "test" => "test"
             )
 
@@ -82,8 +89,8 @@ describe("combineValidators", () => {
 
             // Type test
             let testValidator = combineValidators(
-                isNumber,
-                isRequired,
+                isString,
+                isISOAlpha2CountryCode,
                 (i) => i,
                 (i): "test" => {
                     throw new ValidationError(
@@ -104,12 +111,12 @@ describe("combineValidators", () => {
         })
 
         it("should correctly apply the validations in the sequence provided", async () => {
-            let testVariable: number | undefined = 15
+            let testVariable: string | undefined = "GB"
 
             // Type test
             let testValidator = combineValidators(
-                isNumber,
-                isRequired,
+                isString,
+                isISOAlpha2CountryCode,
                 (i): "test" => "test",
                 (i): "other test" => "other test"
             )
@@ -121,12 +128,12 @@ describe("combineValidators", () => {
 
     describe("Five Validators", () => {
         it("should apply five validators to a value sequentially and throw the first error encountered", async () => {
-            let testVariable: number | undefined
+            let testVariable: string | undefined = "GB"
 
             // Type test
             let testValidator = combineValidators(
-                isNumber,
-                isRequired,
+                isString,
+                isISOAlpha2CountryCode,
                 (i) => i,
                 (i): "test" => {
                     throw new ValidationError(
@@ -148,12 +155,12 @@ describe("combineValidators", () => {
         })
 
         it("should correctly apply the validations in the sequence provided", async () => {
-            let testVariable: number | undefined = 15
+            let testVariable: string | undefined = "GB"
 
             // Type test
             let testValidator = combineValidators(
-                isNumber,
-                isRequired,
+                isString,
+                isISOAlpha2CountryCode,
                 (i): "test" => "test",
                 (i): "other test" => "other test",
                 (i): "final test" => "final test"

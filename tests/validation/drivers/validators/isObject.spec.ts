@@ -2,42 +2,34 @@ import { expect } from "chai"
 import { combineValidators } from "../../../../src/validation/drivers/helpers/combineValidators"
 import {
     ValidationError,
+    isISOAlpha2CountryCode,
     isObject,
-    isRequired,
     isString,
 } from "../../../../src"
 
 describe("isNull", () => {
     const objectFilter = isObject({
         test: isString,
-        otherTest: combineValidators(isString, isRequired),
-    })
-
-    it("should return undefined if input is undefined", async () => {
-        expect(
-            await isObject({
-                test: isString,
-            })(undefined)
-        ).to.equal(undefined)
+        otherTest: combineValidators(isString, isISOAlpha2CountryCode),
     })
 
     it("should return the validated object if all keys pass validation", async () => {
         expect(
             await objectFilter({
                 test: "TEST",
-                otherTest: "MORE TESTING",
+                otherTest: "GB",
             })
         ).to.deep.equal({
             test: "TEST",
-            otherTest: "MORE TESTING",
+            otherTest: "GB",
         })
 
         expect(
             await objectFilter({
-                otherTest: "MORE TESTING",
+                otherTest: "GB",
             })
         ).to.deep.equal({
-            otherTest: "MORE TESTING",
+            otherTest: "GB",
         })
     })
 

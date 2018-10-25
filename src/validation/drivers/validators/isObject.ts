@@ -5,10 +5,6 @@ import { ObjectValidator, ValidatedObject } from "../.."
 export const isObject = <V extends ObjectValidator>(validator: V) => async (
     i: unknown
 ): Promise<ValidatedObject<V> | undefined> => {
-    if (typeof i === "undefined") {
-        return undefined
-    }
-
     if (typeof i !== "object" || i === null) {
         throw new ValidationError(
             "IS_OBJECT",

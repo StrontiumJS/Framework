@@ -1,11 +1,8 @@
+import { expectToThrowCustomClass } from "../../../helpers/ExpectToThrowCustomClass"
 import { expect } from "chai"
-import { ValidationError, normalizeEmail } from "../../../../src"
+import { ValidationError, isString, normalizeEmail } from "../../../../src"
 
 describe("normalizeEmail", () => {
-    it("should return undefined if input is undefined", () => {
-        expect(normalizeEmail({})(undefined)).to.equal(undefined)
-    })
-
     it("should return the input email address if it is valid", () => {
         expect(normalizeEmail({})("jamie@iscool.com")).to.equal(
             "jamie@iscool.com"
@@ -16,16 +13,32 @@ describe("normalizeEmail", () => {
     })
 
     it("should return a validation error if input is not a valid email", () => {
-        expect(() => console.log(normalizeEmail({})("abc.com"))).to.throw(
+        expectToThrowCustomClass(
+            () => normalizeEmail({})("abc.com"),
             ValidationError
         )
-        expect(() => normalizeEmail({})("@abc.com")).to.throw(ValidationError)
-        expect(() => normalizeEmail({})("jamie@abc")).to.throw(ValidationError)
-        expect(() => normalizeEmail({})({})).to.throw(ValidationError)
-        expect(() => normalizeEmail({})(1)).to.throw(ValidationError)
-        expect(() => normalizeEmail({})(0)).to.throw(ValidationError)
-        expect(() => normalizeEmail({})(true)).to.throw(ValidationError)
-        expect(() => normalizeEmail({})(false)).to.throw(ValidationError)
-        expect(() => normalizeEmail({})(null)).to.throw(ValidationError)
+        expectToThrowCustomClass(
+            () => normalizeEmail({})("@abc.com"),
+            ValidationError
+        )
+        expectToThrowCustomClass(
+            () => normalizeEmail({})("jamie@abc"),
+            ValidationError
+        )
+        expectToThrowCustomClass(() => normalizeEmail({})({}), ValidationError)
+        expectToThrowCustomClass(() => normalizeEmail({})(1), ValidationError)
+        expectToThrowCustomClass(() => normalizeEmail({})(0), ValidationError)
+        expectToThrowCustomClass(
+            () => normalizeEmail({})(true),
+            ValidationError
+        )
+        expectToThrowCustomClass(
+            () => normalizeEmail({})(false),
+            ValidationError
+        )
+        expectToThrowCustomClass(
+            () => normalizeEmail({})(null),
+            ValidationError
+        )
     })
 })

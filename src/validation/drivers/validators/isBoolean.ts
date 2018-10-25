@@ -1,10 +1,6 @@
 import { ValidationError } from "../../../errors/http/ValidationError"
 
-export const isBoolean = (input?: unknown): boolean | undefined => {
-    if (input === undefined) {
-        return undefined
-    }
-
+export const isBoolean = (input?: unknown): boolean => {
     if (typeof input === "boolean") {
         return input
     }

@@ -1,10 +1,6 @@
 import { ValidationError } from "../../../errors/http/ValidationError"
 
-export const isNull = (input?: unknown): null | undefined => {
-    if (input === undefined) {
-        return undefined
-    }
-
+export const isNull = (input?: unknown): null => {
     if (input === null) {
         return null
     }

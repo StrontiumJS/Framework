@@ -189,7 +189,7 @@ export class FastifyServer implements Process {
             } catch (e) {
                 // Detect Input Validation issues.
                 // Any other errors will be thrown directly if they are HTTPError compatible or 500 and logged if not.
-                if (HTTPError.isHTTPError(e)) {
+                if (e instanceof HTTPError) {
                     response.code(e.statusCode)
                     return e.toResponseBody()
                 } else {

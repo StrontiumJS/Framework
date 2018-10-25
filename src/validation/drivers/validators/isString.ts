@@ -1,10 +1,6 @@
 import { ValidationError } from "../../../errors/http/ValidationError"
 
-export const isString = (input?: unknown): string | undefined => {
-    if (input === undefined) {
-        return undefined
-    }
-
+export const isString = (input?: unknown): string => {
     if (typeof input === "string") {
         return input
     }

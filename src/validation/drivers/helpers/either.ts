@@ -1,6 +1,5 @@
 import { ValidationError } from "../../../errors/http/ValidationError"
 import { ValidatorFunction } from "../../abstract/ValidatorFunction"
-import { compact } from "../../../utils/list"
 
 export function either<I, O1, O2>(
     V1: ValidatorFunction<I, O1>,
@@ -36,111 +35,50 @@ export function either<I, O1, O2, O3, O4, O5>(
     | ValidatorFunction<I, O1 | O2 | O3>
     | ValidatorFunction<I, O1 | O2 | O3 | O4>
     | ValidatorFunction<I, O1 | O2 | O3 | O4 | O5> {
-    // This is split into if statements so Type completion is rigid. It's possible this could
-    // be better written in the future but for now TypeScript is happy.
-    if (V5 !== undefined && V4 !== undefined && V3 !== undefined) {
-        return async (i: I) => {
-            let outputs = await Promise.all([
-                runAndWrap(i, V1),
-                runAndWrap(i, V2),
-                runAndWrap(i, V3),
-                runAndWrap(i, V4),
-                runAndWrap(i, V5),
-            ])
-            let [o1, o2, o3, o4, o5] = outputs
-            let eitherValue =
-                o1.value || o2.value || o3.value || o4.value || o5.value
-            if (eitherValue !== undefined) {
-                return eitherValue
-            } else {
-                throw new ValidationError(
-                    "EITHER",
-                    buildEitherErrorMessage(outputs),
-                    "This value did not match any validators."
-                )
+    return async (i: I) => {
+        let errors: Array<unknown> = []
+
+        // Iterate over each validator in descending order until one succeeds.
+        for (let validator of [V1, V2, V3, V4, V5]) {
+            if (validator !== undefined) {
+                try {
+                    return await validator(i)
+                } catch (e) {
+                    errors.push(e)
+                }
             }
         }
-    } else if (V4 !== undefined && V3 !== undefined) {
-        return async (i: I) => {
-            let outputs = await Promise.all([
-                runAndWrap(i, V1),
-                runAndWrap(i, V2),
-                runAndWrap(i, V3),
-                runAndWrap(i, V4),
-            ])
-            let [o1, o2, o3, o4] = outputs
-            let eitherValue = o1.value || o2.value || o3.value || o4.value
-            if (eitherValue !== undefined) {
-                return eitherValue
+
+        // If we get to this stage then we have failed the validator - throw a Validation Error unless one of
+        // the validators threw a different error type
+        let failedConstraints: Array<string> = []
+        let failedInternalMessages: Array<string> = []
+        let failedExternalMessages: Array<string> = []
+
+        for (let error of errors) {
+            if (error instanceof ValidationError) {
+                failedConstraints.push(error.constraintName)
+
+                if (error.internalMessage) {
+                    failedInternalMessages.push(error.internalMessage)
+                }
+
+                if (error.externalMessage) {
+                    failedExternalMessages.push(error.externalMessage)
+                }
             } else {
-                throw new ValidationError(
-                    "EITHER",
-                    buildEitherErrorMessage(outputs),
-                    "This value did not match any validators."
-                )
+                throw error
             }
         }
-    } else if (V3 !== undefined) {
-        return async (i: I) => {
-            let outputs = await Promise.all([
-                runAndWrap(i, V1),
-                runAndWrap(i, V2),
-                runAndWrap(i, V3),
-            ])
-            let [o1, o2, o3] = outputs
-            let eitherValue = o1.value || o2.value || o3.value
-            if (eitherValue !== undefined) {
-                return eitherValue
-            } else {
-                throw new ValidationError(
-                    "EITHER",
-                    buildEitherErrorMessage(outputs),
-                    "This value did not match any validators."
-                )
-            }
-        }
-    } else {
-        return async (i: I) => {
-            let outputs = await Promise.all([
-                runAndWrap(i, V1),
-                runAndWrap(i, V2),
-            ])
-            let [o1, o2] = outputs
-            let eitherValue = o1.value || o2.value
-            if (eitherValue !== undefined) {
-                return eitherValue
-            } else {
-                throw new ValidationError(
-                    "EITHER",
-                    buildEitherErrorMessage(outputs),
-                    "This value did not match any validators."
-                )
-            }
-        }
+
+        throw new ValidationError(
+            `EITHER(${failedConstraints.join(",")})`,
+            `No compatible validators found: (${failedInternalMessages.join(
+                ", "
+            )})`,
+            `This value did not match any of the following validators: (${failedExternalMessages.join(
+                " | "
+            )})`
+        )
     }
-}
-
-interface WrappedValidatorOutput<O> {
-    value?: O
-    err?: ValidationError
-}
-
-// Used internally to catch validation errors and return undefined
-const runAndWrap = async <I, O>(
-    input: I,
-    validator: ValidatorFunction<I, O>
-): Promise<WrappedValidatorOutput<O>> => {
-    try {
-        return { value: await validator(input) }
-    } catch (e) {
-        return { err: e }
-    }
-}
-
-const buildEitherErrorMessage = (
-    outputs: WrappedValidatorOutput<any>[]
-): string => {
-    return compact(outputs.map(({ err }) => err && err.internalMessage)).join(
-        ", "
-    )
 }

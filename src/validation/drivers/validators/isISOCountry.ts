@@ -1,11 +1,7 @@
 import { ValidationError } from "../../../errors/http/ValidationError"
 import * as Validator from "validator"
 
-export const isISOAlpha2CountryCode = (input?: unknown): string | undefined => {
-    if (input === undefined) {
-        return undefined
-    }
-
+export const isISOAlpha2CountryCode = (input: unknown): string => {
     if (Validator.isISO31661Alpha2(String(input))) {
         return String(input)
     } else {

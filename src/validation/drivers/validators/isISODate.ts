@@ -1,11 +1,7 @@
 import { ValidationError } from "../../../errors/http/ValidationError"
 import * as Validator from "validator"
 
-export const isISODate = (input?: unknown): Date | undefined => {
-    if (input === undefined) {
-        return undefined
-    }
-
+export const isISODate = (input: unknown): Date => {
     if (Validator.isISO8601(String(input))) {
         return new Date(String(input))
     } else {

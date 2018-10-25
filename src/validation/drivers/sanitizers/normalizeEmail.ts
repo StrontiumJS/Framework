@@ -5,10 +5,6 @@ import NormalizeEmailOptions = ValidatorJS.NormalizeEmailOptions
 export const normalizeEmail = (options?: NormalizeEmailOptions) => <I>(
     input: I
 ): string | undefined => {
-    if (input === undefined) {
-        return input
-    }
-
     let normalizedEmail = Validator.normalizeEmail(String(input), options)
     let isValid = Validator.isEmail(String(normalizedEmail))
 
