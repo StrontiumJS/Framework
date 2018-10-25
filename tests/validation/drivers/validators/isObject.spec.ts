@@ -1,12 +1,13 @@
 import { expect } from "chai"
 import { combineValidators } from "../../../../src/validation/drivers/helpers/combineValidators"
+import { either } from "../../../../src/validation/drivers/helpers/either"
 import {
-  ValidationError,
-  isISOAlpha2CountryCode,
-  isObject,
-  isString, isUndefined
-} from "../../../../src";
-import { either } from "../../../../src/validation/drivers/helpers/either";
+    ValidationError,
+    isISOAlpha2CountryCode,
+    isObject,
+    isString,
+    isUndefined,
+} from "../../../../src"
 
 describe("isNull", () => {
     const objectFilter = isObject({
@@ -58,14 +59,14 @@ describe("isNull", () => {
     })
 
     it("should return a required validation error if a key is absent", async () => {
-      try {
-        await objectFilter({
-          test: "Test Value"
-        })
-        expect(false).to.equal(true)
-      } catch (e) {
-        expect(e).to.be.instanceOf(ValidationError)
-        expect(e.constraintName).to.equal("IS_STRING")
-      }
+        try {
+            await objectFilter({
+                test: "Test Value",
+            })
+            expect(false).to.equal(true)
+        } catch (e) {
+            expect(e).to.be.instanceOf(ValidationError)
+            expect(e.constraintName).to.equal("IS_STRING")
+        }
     })
 })
