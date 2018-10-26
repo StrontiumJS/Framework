@@ -12,7 +12,7 @@ describe("isExactly", () => {
         expect(testValidator("more-test")).to.equal("more-test")
     })
 
-    it("should return a validation error if input is not boolean", () => {
+    it("should return a validation error if input is not in the allowed set", () => {
         let testValidator = isExactly(["test", "other-test", "more-test"])
 
         expectToThrowCustomClass(() => testValidator({}), ValidationError)
