@@ -209,6 +209,12 @@ export class FastifyServer implements Process {
                     rawResponse
                 )
 
+                // Handle an edge case in Fastify that doesn't allow async/await undefined returns
+                if (validatedOutput === undefined) {
+                    return response.send()
+                }
+
+
                 return validatedOutput
             } catch (e) {
                 // Handle errors in the output validation.
