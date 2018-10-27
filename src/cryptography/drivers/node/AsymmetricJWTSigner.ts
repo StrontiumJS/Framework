@@ -30,7 +30,9 @@ export class AsymmetricJWTSigner extends JWTSigner {
             new Buffer(`${encodedHeader}.${encodedClaim}`)
         )
 
-        return `${encodedHeader}.${encodedClaim}.${fromBase64(signature.toString("base64"))}`
+        return `${encodedHeader}.${encodedClaim}.${fromBase64(
+            signature.toString("base64")
+        )}`
     }
 
     public async verify(token: string): Promise<unknown> {
