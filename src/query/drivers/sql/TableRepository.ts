@@ -151,14 +151,20 @@ export abstract class TableRepository<
             UPDATE
                 "${this.tableName}"
             SET
-                ?
+                ${Object.keys(filteredPayload).map(() => "?? = ?")}
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
 
+        let payloadParameters: Array<any> = []
+        Object.keys(filteredPayload).forEach((k) => {
+            payloadParameters.push(k)
+            payloadParameters.push(filteredPayload[k])
+        })
+
         let [processedQuery, processedParameters] = pgQueryPostProcessor(
             lookupQuery,
-            parameters
+            [...payloadParameters, ...parameters]
         )
         await connection.query(processedQuery, processedParameters)
     }
