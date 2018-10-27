@@ -214,7 +214,6 @@ export class FastifyServer implements Process {
                     return response.send()
                 }
 
-
                 return validatedOutput
             } catch (e) {
                 // Handle errors in the output validation.
