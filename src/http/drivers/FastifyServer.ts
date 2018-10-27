@@ -40,7 +40,7 @@ export class FastifyServer implements Process {
                     )
                     break
                 case "PATCH":
-                    this.server.post(
+                    this.server.patch(
                         route.route,
                         this.requestHandler(
                             route.endpointController,
@@ -50,7 +50,7 @@ export class FastifyServer implements Process {
                     )
                     break
                 case "PUT":
-                    this.server.post(
+                    this.server.put(
                         route.route,
                         this.requestHandler(
                             route.endpointController,
@@ -60,7 +60,7 @@ export class FastifyServer implements Process {
                     )
                     break
                 case "DELETE":
-                    this.server.post(
+                    this.server.delete(
                         route.route,
                         this.requestHandler(
                             route.endpointController,
@@ -70,7 +70,7 @@ export class FastifyServer implements Process {
                     )
                     break
                 case "OPTIONS":
-                    this.server.post(
+                    this.server.options(
                         route.route,
                         this.requestHandler(
                             route.endpointController,
