@@ -3,7 +3,7 @@ import { JWTSigner } from "../../abstract/JWTSigner"
 
 // Types are dodgy on this library
 // @ts-ignore
-import { decode, encode } from "base64url"
+import { decode, encode, fromBase64 } from "base64url"
 
 export class AsymmetricJWTSigner extends JWTSigner {
     constructor(
@@ -30,9 +30,7 @@ export class AsymmetricJWTSigner extends JWTSigner {
             new Buffer(`${encodedHeader}.${encodedClaim}`)
         )
 
-        return `${encodedHeader}.${encodedClaim}.${signature.toString(
-            "base64"
-        )}`
+        return `${encodedHeader}.${encodedClaim}.${fromBase64(signature.toString("base64"))}`
     }
 
     public async verify(token: string): Promise<unknown> {
@@ -56,7 +54,7 @@ export class AsymmetricJWTSigner extends JWTSigner {
 
         let claimBody = claimComponents[1]
 
-        let decodedSignature = new Buffer(claimComponents[2], "base64")
+        let decodedSignature = new Buffer(decode(claimComponents[2]))
 
         // Delegate validation of the signature to the signer
         await this.signer.verify(
