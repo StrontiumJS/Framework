@@ -146,7 +146,6 @@ export abstract class TableRepository<
         let filteredPayload = (omitBy(payload, isUndefined) as unknown) as T
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
 
-        let parameters = [filteredPayload, ...filterParameters]
         let lookupQuery = `	
             UPDATE
                 "${this.tableName}"
@@ -164,7 +163,7 @@ export abstract class TableRepository<
 
         let [processedQuery, processedParameters] = pgQueryPostProcessor(
             lookupQuery,
-            [...payloadParameters, ...parameters]
+            [...payloadParameters, ...filterParameters]
         )
         await connection.query(processedQuery, processedParameters)
     }
