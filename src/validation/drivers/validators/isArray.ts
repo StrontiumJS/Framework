@@ -1,10 +1,10 @@
 import { ValidationError } from "../../../errors"
 
-import { ValidatorFunction } from "../.."
+import { ValidatorFunction, ValidatorOutput } from "../.."
 
-export const isArray = <V extends ValidatorFunction<unknown, O>, O>(
+export const isArray = <V extends ValidatorFunction<any, any>>(
     innerValidator: V
-) => async (input: unknown): Promise<Array<O>> => {
+) => async (input: unknown): Promise<Array<ValidatorOutput<unknown, V>>> => {
     if (!Array.isArray(input)) {
         throw new ValidationError(
             "IS_ARRAY",
@@ -13,7 +13,9 @@ export const isArray = <V extends ValidatorFunction<unknown, O>, O>(
         )
     }
 
-    let validatedArray: Array<O> = await Promise.all(input.map(innerValidator))
+    let validatedArray: Array<ValidatorOutput<unknown, V>> = await Promise.all(
+        input.map(innerValidator)
+    )
 
     return validatedArray
 }
