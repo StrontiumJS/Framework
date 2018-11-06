@@ -1,6 +1,6 @@
 import { pgQueryPostProcessor } from "../pg/PGQueryPostProcessor"
 import { Repository } from "../../abstract/Repository"
-import { MySQLStore, SQLStore } from "../../../datastore"
+import { MySQLStore, PGStore, SQLStore } from "../../../datastore"
 import { injectable } from "inversify"
 import { isUndefined, omitBy } from "lodash"
 
@@ -17,6 +17,11 @@ export abstract class TableRepository<
     T extends any,
     K extends keyof T
 > extends Repository<T, K> {
+    private postProcessor: (
+        query: string,
+        parameters: Array<any>
+    ) => [string, Array<any>] = (q, p) => [q, p]
+
     constructor(
         private store: SQLStore,
         private tableName: string,
@@ -24,6 +29,10 @@ export abstract class TableRepository<
         private primaryKeyField: K
     ) {
         super()
+
+        if (store instanceof PGStore) {
+            this.postProcessor = pgQueryPostProcessor
+        }
     }
 
     async create(
@@ -75,7 +84,7 @@ export abstract class TableRepository<
 
             parameters.push(this.primaryKeyField)
 
-            let [processedQuery, processedParameters] = pgQueryPostProcessor(
+            let [processedQuery, processedParameters] = this.postProcessor(
                 query,
                 parameters
             )
@@ -126,7 +135,7 @@ export abstract class TableRepository<
             OFFSET ${pagination.offset}`
         }
 
-        let [processedQuery, processedParameters] = pgQueryPostProcessor(
+        let [processedQuery, processedParameters] = this.postProcessor(
             lookupQuery,
             parameters
         )
@@ -161,7 +170,7 @@ export abstract class TableRepository<
             payloadParameters.push(filteredPayload[k])
         })
 
-        let [processedQuery, processedParameters] = pgQueryPostProcessor(
+        let [processedQuery, processedParameters] = this.postProcessor(
             lookupQuery,
             [...payloadParameters, ...filterParameters]
         )
@@ -182,7 +191,7 @@ export abstract class TableRepository<
                 ${filterQuery}	
         `
 
-        let [processedQuery, processedParameters] = pgQueryPostProcessor(
+        let [processedQuery, processedParameters] = this.postProcessor(
             lookupQuery,
             parameters
         )

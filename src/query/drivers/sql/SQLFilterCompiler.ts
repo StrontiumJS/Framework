@@ -46,13 +46,21 @@ export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
                 // IN with an empty array typically causes an error - just make a tautological filter instead
                 queries.push(["TRUE = FALSE", []])
             } else {
-                queries.push(["?? IN ?", [field, subquery.$in]])
+                queries.push([
+                    `?? IN (${subquery.$in.map((p: any) => "?").join(", ")})`,
+                    [field, ...subquery.$in],
+                ])
             }
         } else if (subquery.$nin !== undefined) {
             if (subquery.$nin.length === 0) {
                 queries.push(["TRUE = TRUE", []])
             } else {
-                queries.push(["?? NOT IN ?", [field, subquery.$nin]])
+                queries.push([
+                    `?? NOT IN (${subquery.$nin
+                        .map((p: any) => "?")
+                        .join(", ")})`,
+                    [field, ...subquery.$nin],
+                ])
             }
         } else if (subquery.$neq !== undefined) {
             if (subquery.$neq === null) {

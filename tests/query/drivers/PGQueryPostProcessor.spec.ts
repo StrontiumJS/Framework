@@ -116,8 +116,8 @@ describe("PGQueryPostProcessor", () => {
             expectQueryOutcome(
                 finalQuery,
                 ["a", "b", "c", "d", ...filterParameters, 250],
-                "SELECT a, b, c, d FROM myTable WHERE ((test = $1) OR (((otherThing > $2) AND (moreThings = $3)) AND (finalThing IN $4))) AND (rabbit = $5) LIMIT $6",
-                ["thing", 123, "test", ["final", "testing"], "foot", 250]
+                "SELECT a, b, c, d FROM myTable WHERE ((test = $1) OR (((otherThing > $2) AND (moreThings = $3)) AND (finalThing IN ($4, $5)))) AND (rabbit = $6) LIMIT $7",
+                ["thing", 123, "test", "final", "testing", "foot", 250]
             )
         })
     })
