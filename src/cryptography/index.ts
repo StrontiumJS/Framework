@@ -1,4 +1,6 @@
+export { AsymmetricSigner } from "./abstract/AsymmetricSigner"
 export { Digest } from "./abstract/Digest"
+export { JWTSigner } from "./abstract/JWTSigner"
 export { MessageAuthenticationCode } from "./abstract/MessageAuthenticationCode"
 export { SymmetricEncrypter } from "./abstract/SymmetricEncrypter"
 
