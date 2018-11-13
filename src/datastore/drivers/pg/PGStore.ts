@@ -49,16 +49,13 @@ export class PGStore implements Process, SQLStore {
 
     public async startup(container: Container): Promise<void> {
         if (this.connection === undefined) {
-            if (container.isBound(Logger)) {
-                this.logger = container.get(Logger)
-            }
-
             this.connection = new Pool(this.connectionOptions)
             this.healthyState = true
 
             // Handle errors and mark the connection as unhealthy
             this.connection.on("error", (err) => {
-                if (this.logger) {
+                if (container.isBound(Logger)) {
+                    this.logger = container.get(Logger)
                     this.logger.error("PGStore encountered an error", err)
                 }
 
