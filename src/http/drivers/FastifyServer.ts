@@ -16,7 +16,7 @@ export class FastifyServer implements Process {
     private server: Fastify.FastifyInstance = Fastify()
     private isAlive: boolean = false
 
-    constructor(public routes: RouterMap, private port: number = 8080) {
+    constructor(public routes: RouterMap, private port: number = 8080, private host: string = "127.0.0.1") {
         for (let route of routes) {
             switch (route.method) {
                 case "GET":
@@ -105,7 +105,7 @@ export class FastifyServer implements Process {
             this.server.use(m)
         }
 
-        await this.server.listen(this.port)
+        await this.server.listen(this.port, this.host)
         this.isAlive = true
 
         let loggerInstance = container.get(Logger)
