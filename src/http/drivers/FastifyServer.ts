@@ -16,7 +16,11 @@ export class FastifyServer implements Process {
     private server: Fastify.FastifyInstance = Fastify()
     private isAlive: boolean = false
 
-    constructor(public routes: RouterMap, private port: number = 8080, private host: string = "127.0.0.1") {
+    constructor(
+        public routes: RouterMap,
+        private port: number = 8080,
+        private host: string = "127.0.0.1"
+    ) {
         for (let route of routes) {
             switch (route.method) {
                 case "GET":
