@@ -1,6 +1,6 @@
 import { ValidationError } from "../../../errors"
 
-export const isExactly = <V extends Array<O>, O>(values: V) => (
+export const isExactly = <O>(values: Array<O>) => (
     i: unknown
 ): O => {
     for (let value of values) {
