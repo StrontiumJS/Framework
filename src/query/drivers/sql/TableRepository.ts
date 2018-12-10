@@ -89,7 +89,7 @@ export abstract class TableRepository<
                 parameters
             )
 
-            let results = await this.store.query<{ [key: string]: any }>(
+            let results = await connection.query<{ [key: string]: any }>(
                 processedQuery,
                 processedParameters
             )
