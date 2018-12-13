@@ -58,9 +58,6 @@ export function either<I, O1, O2, O3, O4, O5>(
         for (let error of errors) {
             if (error instanceof ValidationError) {
                 failedConstraints.push(error.constraintName)
-                if (error.fieldPath) {
-                    throw error
-                }
 
                 if (error.internalMessage) {
                     failedInternalMessages.push(error.internalMessage)
