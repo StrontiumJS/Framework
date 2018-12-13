@@ -7,7 +7,7 @@ export const isNumber = (input?: unknown): number => {
 
     throw new ValidationError(
         "IS_NUMBER",
-        "Value not a number",
+        `Value ${input} not a number`,
         "This value must be a number."
     )
 }

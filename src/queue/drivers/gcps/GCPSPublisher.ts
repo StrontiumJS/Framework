@@ -34,6 +34,26 @@ export class GCPSPublisher extends QueuePublisher implements Process {
         })
     }
 
+    public async publishMany<Q extends {}>(
+        queueName: string,
+        messages: Array<{
+            eventName: string
+            message: Q
+        }>
+    ): Promise<void> {
+        return this.client.publishMany(
+            queueName,
+            messages.map((message) => {
+                return {
+                    attributes: {
+                        STRONTIUM_EVENT_NAME: message.eventName,
+                    },
+                    data: message.message,
+                }
+            })
+        )
+    }
+
     public async shutdown(container: Container): Promise<void> {
         container.unbind(QueuePublisher)
         container.unbind(GCPSPublisher)
