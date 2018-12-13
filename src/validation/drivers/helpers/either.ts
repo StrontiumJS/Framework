@@ -45,6 +45,9 @@ export function either<I, O1, O2, O3, O4, O5>(
                     return await validator(i)
                 } catch (e) {
                     errors.push(e)
+                    if (e.fieldPath) {
+                        throw e
+                    }
                 }
             }
         }
