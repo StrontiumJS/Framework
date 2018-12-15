@@ -56,21 +56,33 @@ export function either<I, O1, O2, O3, O4, O5>(
         let failedExternalMessages: Array<string> = []
         let fieldPaths = []
         let hasAtLeastOneSubError = false
+        let validatorErrorMessages = ""
 
         for (let error of errors) {
             if (error instanceof ValidationError) {
-                failedConstraints.push(error.constraintName)
-                fieldPaths.push(`'${error.fieldPath}'` || "")
-
                 if (error.fieldPath) {
-                    hasAtLeastOneSubError = true
+                    failedConstraints.push(`IS_OBJECT(${error.constraintName})`)
+                } else {
+                    failedConstraints.push(error.constraintName)
                 }
 
                 if (error.internalMessage) {
-                    failedInternalMessages.push(error.internalMessage)
+                    let internal = error.internalMessage
+                    if (error.fieldPath) {
+                        internal = `(Path: '${error.fieldPath}' ${
+                            error.internalMessage
+                        })`
+                    }
+                    failedInternalMessages.push(internal)
                 }
 
                 if (error.externalMessage) {
+                    let external = error.externalMessage
+                    if (error.fieldPath) {
+                        external = `(Path: '${error.fieldPath}' ${
+                            error.externalMessage
+                        })`
+                    }
                     failedExternalMessages.push(error.externalMessage)
                 }
             } else {
@@ -78,19 +90,12 @@ export function either<I, O1, O2, O3, O4, O5>(
             }
         }
 
-        // TODO: map to produce "Key: 'b.d' should be "
-        let fieldPathsError = hasAtLeastOneSubError
-            ? `. Respective Subpaths of errors: (${fieldPaths.join(",")}).`
-            : ""
-
         throw new ValidationError(
             `EITHER(${failedConstraints.join(",")})`,
-            `No compatible validators found: (${failedInternalMessages.join(
-                ", "
-            )})${fieldPathsError}`,
+            `Either: (${failedInternalMessages.join(" | ")})`,
             `This value did not match any of the following validators: (${failedExternalMessages.join(
                 " | "
-            )})${fieldPathsError}`
+            )})`
         )
     }
 }
