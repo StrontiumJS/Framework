@@ -69,6 +69,10 @@ typings/
 ### WebStorm ###
 .idea
 
+### Sublime ###
+*.sublime-*
+.prettierrc.json
+
 # Ignore the Compiled Output
 dist
 lib

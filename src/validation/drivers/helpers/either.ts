@@ -45,9 +45,6 @@ export function either<I, O1, O2, O3, O4, O5>(
                     return await validator(i)
                 } catch (e) {
                     errors.push(e)
-                    if (e.fieldPath) {
-                        throw e
-                    }
                 }
             }
         }
@@ -57,10 +54,17 @@ export function either<I, O1, O2, O3, O4, O5>(
         let failedConstraints: Array<string> = []
         let failedInternalMessages: Array<string> = []
         let failedExternalMessages: Array<string> = []
+        let fieldPaths = []
+        let hasAtLeastOneSubError = false
 
         for (let error of errors) {
             if (error instanceof ValidationError) {
                 failedConstraints.push(error.constraintName)
+                fieldPaths.push(`'${error.fieldPath}'` || "")
+
+                if (error.fieldPath) {
+                    hasAtLeastOneSubError = true
+                }
 
                 if (error.internalMessage) {
                     failedInternalMessages.push(error.internalMessage)
@@ -74,14 +78,19 @@ export function either<I, O1, O2, O3, O4, O5>(
             }
         }
 
+        // TODO: map to produce "Key: 'b.d' should be "
+        let fieldPathsError = hasAtLeastOneSubError
+            ? `. Respective Subpaths of errors: (${fieldPaths.join(",")}).`
+            : ""
+
         throw new ValidationError(
             `EITHER(${failedConstraints.join(",")})`,
             `No compatible validators found: (${failedInternalMessages.join(
                 ", "
-            )})`,
+            )})${fieldPathsError}`,
             `This value did not match any of the following validators: (${failedExternalMessages.join(
                 " | "
-            )})`
+            )})${fieldPathsError}`
         )
     }
 }

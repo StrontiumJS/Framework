@@ -6,6 +6,7 @@ import { Container } from "inversify"
 import { Logger } from "../../../logging"
 import { Process } from "../../../runtime"
 import { ConstructorOf } from "../../../utils/types"
+import { isEmpty } from "lodash"
 import Timer = NodeJS.Timer
 
 export class GCPSConsumer implements Process {
@@ -45,7 +46,7 @@ export class GCPSConsumer implements Process {
             this.subscriptionName
         )
 
-        if (subscription.pushConfig !== {}) {
+        if (!isEmpty(subscription.pushConfig)) {
             throw new Error(
                 "The Strontium GCPS Consumer does not support Push based GCPS subscriptions. " +
                     "Please change the subscription inside Google Cloud Platform to operate on a Pull Based model if you wish " +
