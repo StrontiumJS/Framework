@@ -84,6 +84,32 @@ export class GCPSClient {
         )
     }
 
+    public async publishMany(
+        topic: string,
+        messages: Array<GCPSMessage>
+    ): Promise<void> {
+        await Axios.post(
+            `https://pubsub.googleapis.com/v1/${topic}:publish`,
+            {
+                messages: messages.map((message) => {
+                    return {
+                        attributes: message.attributes,
+                        data: Buffer.from(
+                            JSON.stringify(message.data)
+                        ).toString("base64"),
+                    }
+                }),
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${await this.signRequest(
+                        "https://pubsub.googleapis.com/google.pubsub.v1.Publisher"
+                    )}`,
+                },
+            }
+        )
+    }
+
     public async getSubscriptionData(
         subscriptionName: string
     ): Promise<GCPSSubscription> {
