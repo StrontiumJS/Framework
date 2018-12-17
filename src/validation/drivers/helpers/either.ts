@@ -55,7 +55,6 @@ export function either<I, O1, O2, O3, O4, O5>(
         let failedInternalMessages: Array<string> = []
         let failedExternalMessages: Array<string> = []
         let fieldPaths = []
-        let hasAtLeastOneSubError = false
         let validatorErrorMessages = ""
 
         for (let error of errors) {
