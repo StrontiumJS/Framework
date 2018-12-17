@@ -58,8 +58,6 @@ describe("isNull", () => {
         }
     })
 
-    it("should allow for undefined keys in the validated output")
-
     it("should return a required validation error if a key is absent", async () => {
         try {
             await objectFilter({

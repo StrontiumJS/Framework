@@ -54,35 +54,16 @@ export function either<I, O1, O2, O3, O4, O5>(
         let failedConstraints: Array<string> = []
         let failedInternalMessages: Array<string> = []
         let failedExternalMessages: Array<string> = []
-        let fieldPaths = []
-        let hasAtLeastOneSubError = false
-        let validatorErrorMessages = ""
 
         for (let error of errors) {
             if (error instanceof ValidationError) {
-                if (error.fieldPath) {
-                    failedConstraints.push(`IS_OBJECT(${error.constraintName})`)
-                } else {
-                    failedConstraints.push(error.constraintName)
-                }
+                failedConstraints.push(error.constraintName)
 
                 if (error.internalMessage) {
-                    let internal = error.internalMessage
-                    if (error.fieldPath) {
-                        internal = `(Path: '${error.fieldPath}' ${
-                            error.internalMessage
-                        })`
-                    }
-                    failedInternalMessages.push(internal)
+                    failedInternalMessages.push(error.internalMessage)
                 }
 
                 if (error.externalMessage) {
-                    let external = error.externalMessage
-                    if (error.fieldPath) {
-                        external = `(Path: '${error.fieldPath}' ${
-                            error.externalMessage
-                        })`
-                    }
                     failedExternalMessages.push(error.externalMessage)
                 }
             } else {
@@ -92,7 +73,9 @@ export function either<I, O1, O2, O3, O4, O5>(
 
         throw new ValidationError(
             `EITHER(${failedConstraints.join(",")})`,
-            `Either: (${failedInternalMessages.join(" | ")})`,
+            `No compatible validators found: (${failedInternalMessages.join(
+                ", "
+            )})`,
             `This value did not match any of the following validators: (${failedExternalMessages.join(
                 " | "
             )})`
