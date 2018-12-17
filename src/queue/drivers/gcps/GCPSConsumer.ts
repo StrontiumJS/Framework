@@ -3,10 +3,10 @@ import { QueueHandler } from "../../abstract/QueueHandler"
 import { SerializedTask } from "../../abstract/SerializedTask"
 import { TransientError } from "../../../errors/TransientError"
 import { Container } from "inversify"
+import { isEmpty } from "lodash"
 import { Logger } from "../../../logging"
 import { Process } from "../../../runtime"
 import { ConstructorOf } from "../../../utils/types"
-import { isEmpty } from "lodash"
 import Timer = NodeJS.Timer
 
 export class GCPSConsumer implements Process {
