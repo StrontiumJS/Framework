@@ -1,12 +1,12 @@
 import { expect } from "chai"
 import {
     either,
-    isUndefined,
-    isObject,
-    isString,
     isBoolean,
     isISOAlpha2CountryCode,
     isNumber,
+    isObject,
+    isString,
+    isUndefined,
 } from "../../../../src"
 
 describe("either", () => {
