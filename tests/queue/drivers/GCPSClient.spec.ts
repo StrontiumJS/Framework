@@ -1,12 +1,9 @@
 import { expect } from "chai"
 import { GCPSClient } from "../../../src/queue"
 
-// const TOPIC_NAME = "projects/strontium-tests/topics/integrationTestTopic"
-// const SUBSCRIPTION_NAME = "projects/strontium-tests/subscriptions/strontiumIntegrationTest"
-const TOPIC_NAME =
-    "projects/fundstack-david-development/subscriptions/federal-to-load-publisher"
+const TOPIC_NAME = "projects/strontium-tests/topics/integrationTestTopic"
 const SUBSCRIPTION_NAME =
-    "projects/fundstack-david-development/subscriptions/federal-to-load-receiver"
+    "projects/strontium-tests/subscriptions/strontiumIntegrationTest"
 
 describe("GCPSClient", () => {
     const client = new GCPSClient(
@@ -61,7 +58,7 @@ describe("GCPSClient", () => {
             },
         ])
 
-        let messages = await client.pullTasks(SUBSCRIPTION_NAME, 1, true)
+        let messages = await client.pullTasks(SUBSCRIPTION_NAME, 2, true)
 
         expect(messages[0].message.data).to.equal("MY-INTEGRATION-TEST")
         expect(messages[1].message.data).to.equal("MY-INTEGRATION-TEST2")
