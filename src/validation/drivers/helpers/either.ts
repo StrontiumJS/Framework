@@ -82,7 +82,7 @@ export function either<I, O1, O2, O3, O4, O5>(
                             error.externalMessage
                         })`
                     }
-                    failedExternalMessages.push(error.externalMessage)
+                    failedExternalMessages.push(external)
                 }
             } else {
                 throw error
