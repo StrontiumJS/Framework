@@ -1,5 +1,4 @@
 import Axios from "axios"
-import { isPlainObject } from "lodash"
 import { AsymmetricJWTSigner, RSASHA256Signer } from "../../../cryptography"
 
 export interface GCPSMessage {
@@ -62,28 +61,18 @@ export class GCPSClient {
         })
     }
 
-    public async publish(
-        topic: string,
-        messages: Array<GCPSMessage> | GCPSMessage
-    ): Promise<void> {
-        const isGCPSMessage = (
-            i: Array<GCPSMessage> | GCPSMessage
-        ): i is GCPSMessage => isPlainObject(messages)
-
-        let messageArray: Array<GCPSMessage>
-        messageArray = isGCPSMessage(messages) ? [messages] : messages
-
+    public async publish(topic: string, message: GCPSMessage): Promise<void> {
         await Axios.post(
             `https://pubsub.googleapis.com/v1/${topic}:publish`,
             {
-                messages: messageArray.map((message) => {
-                    return {
+                messages: [
+                    {
                         attributes: message.attributes,
                         data: Buffer.from(
                             JSON.stringify(message.data)
                         ).toString("base64"),
-                    }
-                }),
+                    },
+                ],
             },
             {
                 headers: {

@@ -24,25 +24,14 @@ export class GCPSPublisher extends QueuePublisher implements Process {
     public async publish<Q extends {}>(
         queueName: string,
         eventName: string,
-        messages: Q | Array<Q>
+        message: Q
     ): Promise<void> {
-        const isArray = (i: Array<Q> | Q): i is Array<Q> =>
-            Array.isArray(messages)
-
-        let messageArray: Array<Q>
-        messageArray = isArray(messages) ? messages : [messages]
-
-        return this.client.publish(
-            queueName,
-            messageArray.map((data) => {
-                return {
-                    attributes: {
-                        STRONTIUM_EVENT_NAME: eventName,
-                    },
-                    data,
-                }
-            })
-        )
+        return this.client.publish(queueName, {
+            attributes: {
+                STRONTIUM_EVENT_NAME: eventName,
+            },
+            data: message,
+        })
     }
 
     public async shutdown(container: Container): Promise<void> {
