@@ -61,18 +61,19 @@ export class GCPSClient {
         })
     }
 
-    public async publish(topic: string, message: GCPSMessage): Promise<void> {
+    public async publish(
+        topic: string,
+        messages: Array<GCPSMessage>
+    ): Promise<void> {
         await Axios.post(
             `https://pubsub.googleapis.com/v1/${topic}:publish`,
             {
-                messages: [
-                    {
-                        attributes: message.attributes,
-                        data: Buffer.from(
-                            JSON.stringify(message.data)
-                        ).toString("base64"),
-                    },
-                ],
+                messages: messages.map((m) => ({
+                    attributes: m.attributes,
+                    data: Buffer.from(JSON.stringify(m.data)).toString(
+                        "base64"
+                    ),
+                })),
             },
             {
                 headers: {

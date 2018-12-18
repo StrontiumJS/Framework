@@ -10,7 +10,7 @@ describe("GCPSClient", () => {
 
     before(function() {
         // If the test suite is not running in CI then skip this suite - it's slow and requires credentials
-        if (process.env.CI !== "true") {
+        if (process.env.CI !== "true" || isNaN(Number(process.env.TRAVIS_PULL_REQUEST)) ) {
             this.skip()
         }
     })
@@ -36,10 +36,12 @@ describe("GCPSClient", () => {
     it("Should publish a message and correctly reconstruct it", async () => {
         await client.publish(
             "projects/strontium-tests/topics/integrationTestTopic",
-            {
-                data: "MY-INTEGRATION-TEST",
-                attributes: {},
-            }
+            [
+                {
+                    data: "MY-INTEGRATION-TEST",
+                    attributes: {},
+                },
+            ]
         )
 
         let messages = await client.pullTasks(
@@ -59,10 +61,12 @@ describe("GCPSClient", () => {
     it("Acking a message should remove it from the queue", async () => {
         await client.publish(
             "projects/strontium-tests/topics/integrationTestTopic",
-            {
-                data: "MY-INTEGRATION-TEST",
-                attributes: {},
-            }
+            [
+                {
+                    data: "MY-INTEGRATION-TEST",
+                    attributes: {},
+                },
+            ]
         )
 
         let messages = await client.pullTasks(
@@ -92,10 +96,12 @@ describe("GCPSClient", () => {
     it("Nacking a message should readd it to the queue", async () => {
         await client.publish(
             "projects/strontium-tests/topics/integrationTestTopic",
-            {
-                data: "NACKED-MESSAGE",
-                attributes: {},
-            }
+            [
+                {
+                    data: "NACKED-MESSAGE",
+                    attributes: {},
+                },
+            ]
         )
 
         let messages = await client.pullTasks(

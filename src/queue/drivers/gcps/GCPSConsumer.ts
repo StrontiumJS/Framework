@@ -3,6 +3,7 @@ import { QueueHandler } from "../../abstract/QueueHandler"
 import { SerializedTask } from "../../abstract/SerializedTask"
 import { TransientError } from "../../../errors/TransientError"
 import { Container } from "inversify"
+import { isEmpty } from "lodash"
 import { Logger } from "../../../logging"
 import { Process } from "../../../runtime"
 import { ConstructorOf } from "../../../utils/types"
@@ -45,7 +46,7 @@ export class GCPSConsumer implements Process {
             this.subscriptionName
         )
 
-        if (subscription.pushConfig !== {}) {
+        if (!isEmpty(subscription.pushConfig)) {
             throw new Error(
                 "The Strontium GCPS Consumer does not support Push based GCPS subscriptions. " +
                     "Please change the subscription inside Google Cloud Platform to operate on a Pull Based model if you wish " +
@@ -92,16 +93,17 @@ export class GCPSConsumer implements Process {
             )
 
             await Promise.all(
-                messages.map(async (m) =>
-                    this.executeTask(
-                        m.ackId,
-                        {
-                            eventName:
-                                m.message.attributes.STRONTIUM_EVENT_NAME,
-                            message: m.message.data,
-                        },
-                        container
-                    )
+                messages.map(
+                    async (m) =>
+                        await this.executeTask(
+                            m.ackId,
+                            {
+                                eventName:
+                                    m.message.attributes.STRONTIUM_EVENT_NAME,
+                                message: m.message.data,
+                            },
+                            container
+                        )
                 )
             )
         }
