@@ -10,7 +10,10 @@ describe("GCPSClient", () => {
 
     before(function() {
         // If the test suite is not running in CI then skip this suite - it's slow and requires credentials
-        if (process.env.CI !== "true" || isNaN(Number(process.env.TRAVIS_PULL_REQUEST)) ) {
+        if (
+            process.env.CI !== "true" ||
+            isNaN(Number(process.env.TRAVIS_PULL_REQUEST))
+        ) {
             this.skip()
         }
     })
