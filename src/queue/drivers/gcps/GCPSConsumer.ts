@@ -95,14 +95,13 @@ export class GCPSConsumer implements Process {
             await Promise.all(
                 messages.map(
                     async (m): Promise<void> => {
-                        let eventName = m.message.attributes
-                            ? m.message.attributes.STRONTIUM_EVENT_NAME
-                            : ""
                         try {
                             return this.executeTask(
                                 m.ackId,
                                 {
-                                    eventName,
+                                    eventName:
+                                        m.message.attributes
+                                            .STRONTIUM_EVENT_NAME,
                                     message: m.message.data,
                                 },
                                 container
