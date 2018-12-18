@@ -42,8 +42,6 @@ export class GCPSPublisher extends QueuePublisher implements Process {
         let messageArray: Array<Q>
         messageArray = isArray(messages) ? messages : [messages]
 
-        console.log("messageArray", messageArray.length)
-
         return this.client.publish(
             queueName,
             messageArray.map((data) => {
