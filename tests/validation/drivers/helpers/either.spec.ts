@@ -4,9 +4,6 @@ import {
     isBoolean,
     isISOAlpha2CountryCode,
     isNumber,
-    isObject,
-    isString,
-    isUndefined,
 } from "../../../../src"
 
 describe("either", () => {

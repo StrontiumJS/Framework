@@ -64,13 +64,7 @@ export function either<I, O1, O2, O3, O4, O5>(
                 }
 
                 if (error.externalMessage) {
-                    let external = error.externalMessage
-                    if (error.fieldPath) {
-                        external = `(Path: '${error.fieldPath}' ${
-                            error.externalMessage
-                        })`
-                    }
-                    failedExternalMessages.push(external)
+                    failedExternalMessages.push(error.externalMessage)
                 }
             } else {
                 throw error
