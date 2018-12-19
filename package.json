@@ -63,7 +63,7 @@
     "@types/node": "^10.11.3",
     "@types/pg": "^7.4.11",
     "@types/uuid": "^3.4.4",
-    "@types/validator": "^9.4.2",
+    "@types/validator": "^10.9.0",
     "axios": "^0.18.0",
     "base64url": "^3.0.0",
     "fastify": "^1.12.1",
