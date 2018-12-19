@@ -93,18 +93,26 @@ export class GCPSConsumer implements Process {
             )
 
             await Promise.all(
-                messages.map(
-                    async (m) =>
-                        await this.executeTask(
-                            m.ackId,
-                            {
-                                eventName:
-                                    m.message.attributes.STRONTIUM_EVENT_NAME,
-                                message: m.message.data,
-                            },
-                            container
+                messages.map(async (m) => {
+                    if (m.message.attributes === undefined) {
+                      if (this.logger) {
+                        this.logger.info(
+                          `[GCPS - TASK - START] Event discarded due to corrupted attributes.`
                         )
-                )
+                      }
+
+                      return this.ack(m.ackId)
+                    }
+
+                    return this.executeTask(
+                        m.ackId,
+                        {
+                            eventName: m.message.attributes.STRONTIUM_EVENT_NAME,
+                            message: m.message.data,
+                        },
+                        container
+                    )
+                })
             )
         }
     }
