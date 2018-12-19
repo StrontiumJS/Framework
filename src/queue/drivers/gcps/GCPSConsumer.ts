@@ -41,6 +41,10 @@ export class GCPSConsumer implements Process {
         // Start the process
         this.isEnabled = true
 
+        if (container.isBound(Logger)) {
+            this.logger = container.get(Logger)
+        }
+
         // Fetch the subscription configuration
         let subscription = await this.client.getSubscriptionData(
             this.subscriptionName
@@ -130,9 +134,6 @@ export class GCPSConsumer implements Process {
         })
 
         requestContainer.parent = applicationContainer
-        if (requestContainer.isBound(Logger)) {
-            this.logger = requestContainer.get(Logger)
-        }
 
         // Spawn a handler for the Task type
         let handlerType = this.taskHandlers[task.eventName]
