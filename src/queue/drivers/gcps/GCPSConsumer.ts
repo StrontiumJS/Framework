@@ -20,9 +20,7 @@ export class GCPSConsumer implements Process {
         keyId: string,
         privateKey: string,
         public subscriptionName: string,
-        public taskHandlers: {
-            [eventName: string]: ConstructorOf<QueueHandler<any>>
-        },
+        public taskHandler: ConstructorOf<QueueHandler<any>>,
         public prefetchCount: number = 15
     ) {
         this.client = new GCPSClient(serviceAccountEmail, keyId, privateKey)
@@ -98,21 +96,9 @@ export class GCPSConsumer implements Process {
 
             await Promise.all(
                 messages.map(async (m) => {
-                    if (m.message.attributes === undefined) {
-                        if (this.logger) {
-                            this.logger.info(
-                                `[GCPS - TASK - START] Event discarded due to corrupted attributes.`
-                            )
-                        }
-
-                        return this.ack(m.ackId)
-                    }
-
                     return this.executeTask(
                         m.ackId,
                         {
-                            eventName:
-                                m.message.attributes.STRONTIUM_EVENT_NAME,
                             message: m.message.data,
                         },
                         container
@@ -136,21 +122,23 @@ export class GCPSConsumer implements Process {
         requestContainer.parent = applicationContainer
 
         // Spawn a handler for the Task type
-        let handlerType = this.taskHandlers[task.eventName]
+        let handlerType = this.taskHandler
         if (this.logger) {
             this.logger.info(
-                `[GCPS - TASK - START] Event of type ${
-                    task.eventName
-                } received by Consumer.`
+                `[GCPS - TASK - START] Event received by Consumer for topic.`,
+                {
+                    subscription: this.subscriptionName
+                }
             )
         }
 
         if (handlerType === undefined) {
             if (this.logger) {
                 this.logger.error(
-                    `[GCPS - TASK - NO_IMPLEMENTATION_FAIL] No implementation found for event ${
-                        task.eventName
-                    }`
+                    `[GCPS - TASK - NO_IMPLEMENTATION_FAIL] No implementation found for topic.`,
+                    {
+                        subscription: this.subscriptionName
+                    }
                 )
             }
             await this.nack(ackId)
@@ -176,9 +164,10 @@ export class GCPSConsumer implements Process {
             await this.ack(ackId)
             if (this.logger) {
                 this.logger.info(
-                    `[GCPS - TASK - SUCCESS] Event of type ${
-                        task.eventName
-                    } successfully completed by Consumer.`
+                    `[GCPS - TASK - SUCCESS] Event successfully completed by Consumer.`,
+                    {
+                        subscription: this.subscriptionName
+                    }
                 )
             }
         } catch (e) {
