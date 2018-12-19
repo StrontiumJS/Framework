@@ -127,7 +127,7 @@ export class GCPSConsumer implements Process {
             this.logger.info(
                 `[GCPS - TASK - START] Event received by Consumer for topic.`,
                 {
-                    subscription: this.subscriptionName
+                    subscription: this.subscriptionName,
                 }
             )
         }
@@ -137,7 +137,7 @@ export class GCPSConsumer implements Process {
                 this.logger.error(
                     `[GCPS - TASK - NO_IMPLEMENTATION_FAIL] No implementation found for topic.`,
                     {
-                        subscription: this.subscriptionName
+                        subscription: this.subscriptionName,
                     }
                 )
             }
@@ -166,7 +166,7 @@ export class GCPSConsumer implements Process {
                 this.logger.info(
                     `[GCPS - TASK - SUCCESS] Event successfully completed by Consumer.`,
                     {
-                        subscription: this.subscriptionName
+                        subscription: this.subscriptionName,
                     }
                 )
             }
