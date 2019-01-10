@@ -105,8 +105,8 @@ export class FastifyServer implements Process {
         this.server.decorateRequest("container", container)
 
         let plugins = this.getPlugins(container)
-        for (let m of plugins) {
-            this.server.register(m)
+        for (let p of plugins) {
+            this.server.register(p)
         }
 
         let middleware = this.getMiddleware(container)
