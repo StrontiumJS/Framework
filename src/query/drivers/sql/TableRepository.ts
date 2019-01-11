@@ -1,6 +1,11 @@
 import { pgQueryPostProcessor } from "../pg/PGQueryPostProcessor"
 import { Repository } from "../../abstract/Repository"
-import { MySQLStore, PGStore, SQLStore } from "../../../datastore"
+import {
+    MySQLStore,
+    MySQLTransaction,
+    PGStore,
+    SQLStore,
+} from "../../../datastore"
 import { injectable } from "inversify"
 import { isUndefined, omitBy } from "lodash"
 
@@ -46,7 +51,10 @@ export abstract class TableRepository<
         // Filter the payload for any undefined keys
         let filteredPayload = (omitBy(payload, isUndefined) as unknown) as T
 
-        if (connection instanceof MySQLStore) {
+        if (
+            connection instanceof MySQLStore ||
+            connection instanceof MySQLTransaction
+        ) {
             let insertQuery = `
                 INSERT INTO
                     ??
