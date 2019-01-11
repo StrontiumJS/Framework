@@ -135,9 +135,9 @@ export class FastifyServer implements Process {
     }
 
     protected getPlugins(
-      container: Container
+        container: Container
     ): Array<Fastify.Plugin<any, any, any, any>> {
-      return []
+        return []
     }
 
     protected getRequestMetadata = (
