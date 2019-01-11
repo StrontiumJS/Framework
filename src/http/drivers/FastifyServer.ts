@@ -104,6 +104,11 @@ export class FastifyServer implements Process {
         // Attach the container to the server
         this.server.decorateRequest("container", container)
 
+        let plugins = this.getPlugins(container)
+        for (let p of plugins) {
+            this.server.register(p)
+        }
+
         let middleware = this.getMiddleware(container)
         for (let m of middleware) {
             this.server.use(m)
@@ -127,6 +132,12 @@ export class FastifyServer implements Process {
         container: Container
     ): Array<Fastify.Middleware<any, any, any>> {
         return []
+    }
+
+    protected getPlugins(
+      container: Container
+    ): Array<Fastify.Plugin<any, any, any, any>> {
+      return []
     }
 
     protected getRequestMetadata = (
