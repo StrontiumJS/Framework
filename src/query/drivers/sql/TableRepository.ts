@@ -116,13 +116,13 @@ export abstract class TableRepository<
         connection: SQLStore = this.store
     ): Promise<Array<T>> {
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
-        let parameters = [...filterParameters]
+        let parameters = [this.tableName, ...filterParameters]
 
         let lookupQuery = `	
             SELECT
                 ${this.queryFields.join(", ")}	
             FROM
-                "${this.tableName}"
+                ??
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
@@ -165,11 +165,11 @@ export abstract class TableRepository<
 
         let lookupQuery = `	
             UPDATE
-                "${this.tableName}"
+                ??
             SET
                 ${Object.keys(filteredPayload).map(() => "?? = ?")}
             ${filterQuery !== "" ? "WHERE" : ""}	
-                ${filterQuery}	
+                ${filterQuery}
         `
 
         let payloadParameters: Array<any> = []
@@ -180,7 +180,7 @@ export abstract class TableRepository<
 
         let [processedQuery, processedParameters] = this.postProcessor(
             lookupQuery,
-            [...payloadParameters, ...filterParameters]
+            [this.tableName, ...payloadParameters, ...filterParameters]
         )
         await connection.query(processedQuery, processedParameters)
     }
@@ -190,11 +190,11 @@ export abstract class TableRepository<
         connection: SQLStore = this.store
     ): Promise<void> {
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
-        let parameters = [...filterParameters]
+        let parameters = [this.tableName, ...filterParameters]
 
         let lookupQuery = `	
             DELETE FROM	
-                "${this.tableName}"
+                ??
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
