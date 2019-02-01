@@ -37,6 +37,7 @@ export abstract class TableRepository<
 
         if (store instanceof PGStore) {
             this.postProcessor = pgQueryPostProcessor
+            this.tableName = `"${this.tableName}"`
         }
     }
 
