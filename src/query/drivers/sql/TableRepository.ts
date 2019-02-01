@@ -73,17 +73,13 @@ export abstract class TableRepository<
         } else {
             let query = `
                 INSERT INTO
-                    ?? (${Object.keys(filteredPayload).map(
-                () => "??"
-            )})
+                    ?? (${Object.keys(filteredPayload).map(() => "??")})
                 VALUES
                     (${Object.keys(filteredPayload).map(() => "?")})
                 RETURNING ??
             `
 
-            let parameters: Array<any> = [
-              this.tableName
-            ]
+            let parameters: Array<any> = [this.tableName]
 
             Object.keys(filteredPayload).forEach((k: string) => {
                 parameters.push(k)
