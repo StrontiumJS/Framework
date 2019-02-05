@@ -1,5 +1,5 @@
-import { InvalidSignatureError } from "../../../errors/InvalidSignatureError";
 import { AsymmetricSigner } from "../../abstract/AsymmetricSigner"
+import { InvalidSignatureError } from "../../../errors/InvalidSignatureError"
 
 // Typescript Types not available for JWT - Proceed with caution
 // @ts-ignore
