@@ -1,3 +1,4 @@
+import { InvalidSignatureError } from "../../../errors/InvalidSignatureError";
 import { AsymmetricSigner } from "../../abstract/AsymmetricSigner"
 
 // Typescript Types not available for JWT - Proceed with caution
@@ -12,6 +13,13 @@ export class RSASHA256Signer extends AsymmetricSigner {
     }
 
     public async verify(plaintext: Buffer, signature: Buffer): Promise<Buffer> {
-        return RS256.verify(plaintext, signature, this.publicKey)
+        let isValid = await RS256.verify(plaintext, signature, this.publicKey)
+
+        if (!isValid) {
+            throw new InvalidSignatureError()
+        }
+
+        // Spawn an empty buffer to fulfill the return type
+        return Buffer.from([])
     }
 }
