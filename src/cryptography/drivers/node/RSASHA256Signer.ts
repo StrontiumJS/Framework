@@ -13,7 +13,11 @@ export class RSASHA256Signer extends AsymmetricSigner {
     }
 
     public async verify(plaintext: Buffer, signature: Buffer): Promise<Buffer> {
-        let isValid = await RS256.verify(plaintext, signature, this.publicKey)
+        let isValid = await RS256.verify(
+            plaintext,
+            signature.toString(),
+            this.publicKey
+        )
 
         if (!isValid) {
             throw new InvalidSignatureError()
