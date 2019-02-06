@@ -5,15 +5,23 @@ import { InvalidSignatureError } from "../../../errors/InvalidSignatureError"
 // @ts-ignore
 import * as JWA from "jwa"
 
-const RS256 = JWA("RS256")
-
 export class RSASHA256Signer extends AsymmetricSigner {
+    private signer = JWA(this.algorithm)
+
+    constructor(
+        public publicKey: Buffer,
+        public privateKey?: Buffer,
+        private algorithm: "RS256" | "PS256" = "RS256"
+    ) {
+        super(publicKey, privateKey)
+    }
+
     public async sign(plaintext: Buffer): Promise<Buffer> {
-        return RS256.sign(plaintext, this.privateKey)
+        return this.signer.sign(plaintext, this.privateKey)
     }
 
     public async verify(plaintext: Buffer, signature: Buffer): Promise<Buffer> {
-        let isValid = await RS256.verify(
+        let isValid = await this.signer.verify(
             plaintext,
             signature.toString(),
             this.publicKey
