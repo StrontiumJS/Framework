@@ -1,4 +1,4 @@
-import { Digest } from "./Digest";
+import { Digest } from "./Digest"
 /**
  * A HMAC ( commonly referred to as a Hash ) (hash-based message authentication
  * code) is a type of message authentication code (MAC) that uses a
@@ -13,12 +13,12 @@ import { Digest } from "./Digest";
  * will vary based on the implementing class.
  */
 export abstract class HMAC extends Digest {
-  /**
-   * Create a new HMAC Encrypter.
-   *
-   * @param secretKey - The shared secret to use for encryption.
-   */
-  constructor(protected secretKey: Buffer) {
-    super()
-  }
+    /**
+     * Create a new HMAC Encrypter.
+     *
+     * @param secretKey - The shared secret to use for encryption.
+     */
+    constructor(protected secretKey: Buffer) {
+        super()
+    }
 }

@@ -9,10 +9,10 @@ import { createHmac } from "crypto"
  * on the build flags of the underlying runtime.
  */
 export class SHA1HMAC extends HMAC {
-  public async calculate(input: Buffer): Promise<Buffer> {
-    let hmacBuilder = createHmac("sha1", this.secretKey)
-    hmacBuilder.update(input)
+    public async calculate(input: Buffer): Promise<Buffer> {
+        let hmacBuilder = createHmac("sha1", this.secretKey)
+        hmacBuilder.update(input)
 
-    return hmacBuilder.digest()
-  }
+        return hmacBuilder.digest()
+    }
 }
