@@ -1,6 +1,11 @@
 import { pgQueryPostProcessor } from "../pg/PGQueryPostProcessor"
 import { Repository } from "../../abstract/Repository"
-import { MySQLStore, PGStore, SQLStore } from "../../../datastore"
+import {
+    MySQLStore,
+    MySQLTransaction,
+    PGStore,
+    SQLStore,
+} from "../../../datastore"
 import { injectable } from "inversify"
 import { isUndefined, omitBy } from "lodash"
 
@@ -32,6 +37,7 @@ export abstract class TableRepository<
 
         if (store instanceof PGStore) {
             this.postProcessor = pgQueryPostProcessor
+            this.tableName = `"${this.tableName}"`
         }
     }
 
@@ -46,7 +52,10 @@ export abstract class TableRepository<
         // Filter the payload for any undefined keys
         let filteredPayload = (omitBy(payload, isUndefined) as unknown) as T
 
-        if (connection instanceof MySQLStore) {
+        if (
+            connection instanceof MySQLStore ||
+            connection instanceof MySQLTransaction
+        ) {
             let insertQuery = `
                 INSERT INTO
                     ??
@@ -64,15 +73,13 @@ export abstract class TableRepository<
         } else {
             let query = `
                 INSERT INTO
-                    "${this.tableName}" (${Object.keys(filteredPayload).map(
-                () => "??"
-            )})
+                    ?? (${Object.keys(filteredPayload).map(() => "??")})
                 VALUES
                     (${Object.keys(filteredPayload).map(() => "?")})
                 RETURNING ??
             `
 
-            let parameters: Array<any> = []
+            let parameters: Array<any> = [this.tableName]
 
             Object.keys(filteredPayload).forEach((k: string) => {
                 parameters.push(k)
@@ -108,13 +115,13 @@ export abstract class TableRepository<
         connection: SQLStore = this.store
     ): Promise<Array<T>> {
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
-        let parameters = [...filterParameters]
+        let parameters = [this.tableName, ...filterParameters]
 
         let lookupQuery = `	
             SELECT
                 ${this.queryFields.join(", ")}	
             FROM
-                "${this.tableName}"
+                ??
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `
@@ -157,11 +164,11 @@ export abstract class TableRepository<
 
         let lookupQuery = `	
             UPDATE
-                "${this.tableName}"
+                ??
             SET
                 ${Object.keys(filteredPayload).map(() => "?? = ?")}
             ${filterQuery !== "" ? "WHERE" : ""}	
-                ${filterQuery}	
+                ${filterQuery}
         `
 
         let payloadParameters: Array<any> = []
@@ -172,7 +179,7 @@ export abstract class TableRepository<
 
         let [processedQuery, processedParameters] = this.postProcessor(
             lookupQuery,
-            [...payloadParameters, ...filterParameters]
+            [this.tableName, ...payloadParameters, ...filterParameters]
         )
         await connection.query(processedQuery, processedParameters)
     }
@@ -182,11 +189,11 @@ export abstract class TableRepository<
         connection: SQLStore = this.store
     ): Promise<void> {
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
-        let parameters = [...filterParameters]
+        let parameters = [this.tableName, ...filterParameters]
 
         let lookupQuery = `	
             DELETE FROM	
-                "${this.tableName}"
+                ??
             ${filterQuery !== "" ? "WHERE" : ""}	
                 ${filterQuery}	
         `

@@ -99,5 +99,22 @@ describe("AsymmetricJWTSigner", () => {
                 admin: true,
             })
         })
+
+        it("Should throw if the JWT is invalid", async () => {
+            try {
+                await jwtSigner.verify(
+                    "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9" +
+                        "." +
+                        "eyJuYW1lIjoiSGVsbG8gV29ybGQiLCJhZG1pbiI6dHJ1ZX0" +
+                        "." +
+                        "abcdefg"
+                )
+                expect(true).to.equal(false)
+            } catch (e) {
+                expect(e.message).to.equal(
+                    "The signature provided was not valid."
+                )
+            }
+        })
     })
 })

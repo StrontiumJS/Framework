@@ -55,13 +55,12 @@ export class AsymmetricJWTSigner extends JWTSigner {
         }
 
         let claimBody = claimComponents[1]
-
-        let decodedSignature = new Buffer(decode(claimComponents[2]))
+        let claimSignature = claimComponents[2]
 
         // Delegate validation of the signature to the signer
         await this.signer.verify(
             new Buffer(`${claimHeader}.${claimBody}`),
-            decodedSignature
+            new Buffer(claimSignature)
         )
 
         // If no error occurred then the token is valid. Parse the claim and return
