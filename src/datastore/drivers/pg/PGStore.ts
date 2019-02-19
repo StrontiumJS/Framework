@@ -1,4 +1,6 @@
+import { PGIsolationLevel } from "../../abstract/PGIsolationLevel"
 import { PGTransaction } from "./PGTransaction"
+import { PGTransactionOptions } from "../../abstract/PGTransactionOptions"
 import { SQLStore } from "../../abstract/SQLStore"
 import { Container } from "inversify"
 import { Logger } from "../../../logging"
@@ -34,7 +36,9 @@ export class PGStore implements Process, SQLStore {
         }
     }
 
-    public async createTransaction(): Promise<PGTransaction> {
+    public async createTransaction(
+        options?: Partial<PGTransactionOptions>
+    ): Promise<PGTransaction> {
         if (this.connection === undefined) {
             throw new Error(
                 "PGStore cannot open a transaction on a closed Pool. This usually happens from forgetting to call startup."
@@ -42,7 +46,20 @@ export class PGStore implements Process, SQLStore {
         }
 
         let connection = await this.connection.connect()
-        await connection.query("BEGIN")
+        let query = "BEGIN"
+        if (options !== undefined && options.isolation_level !== undefined) {
+            switch (options.isolation_level) {
+                case PGIsolationLevel.SERIALIZABLE:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE"
+                case PGIsolationLevel.REPEATABLE_READ:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE_READ"
+                case PGIsolationLevel.READ_COMMITED:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED"
+                case PGIsolationLevel.READ_UNCOMMITED:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITED"
+            }
+        }
+        await connection.query(query)
 
         return new PGTransaction(connection, this.logger)
     }

@@ -1,6 +1,6 @@
 import { Digest } from "./Digest"
 /**
- * A HMAC ( commonly referred to as a Hash ) (hash-based message authentication
+ * A HMAC (hash-based message authentication
  * code) is a type of message authentication code (MAC) that uses a
  * cryptographic hash function and a secret key. It may be used to verify data
  * integrity and authentication of a message.
