@@ -52,7 +52,7 @@ export class PGStore implements Process, SQLStore {
                 case PGIsolationLevel.SERIALIZABLE:
                     query = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE"
                 case PGIsolationLevel.REPEATABLE_READ:
-                    query = "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE_READ"
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ"
                 case PGIsolationLevel.READ_COMMITED:
                     query = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED"
                 case PGIsolationLevel.READ_UNCOMMITED:
