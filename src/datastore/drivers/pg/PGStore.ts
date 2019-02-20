@@ -1,6 +1,5 @@
 import { PGIsolationLevel } from "../../abstract/PGIsolationLevel"
 import { PGTransaction } from "./PGTransaction"
-import { PGTransactionOptions } from "../../abstract/PGTransactionOptions"
 import { SQLStore } from "../../abstract/SQLStore"
 import { Container } from "inversify"
 import { Logger } from "../../../logging"
@@ -37,7 +36,9 @@ export class PGStore implements Process, SQLStore {
     }
 
     public async createTransaction(
-        options?: Partial<PGTransactionOptions>
+        options?: {
+            isolation_level?: PGIsolationLevel
+        }
     ): Promise<PGTransaction> {
         if (this.connection === undefined) {
             throw new Error(
