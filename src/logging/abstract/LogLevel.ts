@@ -1,5 +1,5 @@
 /**
- * The standarized levels used across all Logger integrations
+ * The standardize levels used across all Logger integrations
  */
 export enum LogLevel {
     /**

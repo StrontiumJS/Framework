@@ -36,9 +36,7 @@ export class PGStore implements Process, SQLStore {
     }
 
     public async createTransaction(
-        options?: {
-            isolation_level?: PGIsolationLevel
-        }
+        isolationLevel?: PGIsolationLevel
     ): Promise<PGTransaction> {
         if (this.connection === undefined) {
             throw new Error(
@@ -47,9 +45,11 @@ export class PGStore implements Process, SQLStore {
         }
 
         let connection = await this.connection.connect()
+
+        // By default, use PostgreSQL default isolation level (READ COMMITTED)
         let query = "BEGIN"
-        if (options !== undefined && options.isolation_level !== undefined) {
-            switch (options.isolation_level) {
+        if (isolationLevel !== undefined) {
+            switch (isolationLevel) {
                 case PGIsolationLevel.SERIALIZABLE:
                     query = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE"
                     break
