@@ -46,24 +46,26 @@ export class PGStore implements Process, SQLStore {
 
         let connection = await this.connection.connect()
 
-        // By default, use PostgreSQL default isolation level (READ COMMITTED)
-        let query = "BEGIN"
-        if (isolationLevel !== undefined) {
-            switch (isolationLevel) {
-                case PGIsolationLevel.SERIALIZABLE:
-                    query = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE"
-                    break
-                case PGIsolationLevel.REPEATABLE_READ:
-                    query = "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ"
-                    break
-                case PGIsolationLevel.READ_COMMITED:
-                    query = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED"
-                    break
-                case PGIsolationLevel.READ_UNCOMMITTED:
-                    query = "BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITTED"
-                    break
-            }
+        // By default, use PostgreSQL default isolation level (READ COMMITTED out of the box)
+        let query: string
+        switch (isolationLevel) {
+            case PGIsolationLevel.SERIALIZABLE:
+                query = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE"
+                break
+            case PGIsolationLevel.REPEATABLE_READ:
+                query = "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ"
+                break
+            case PGIsolationLevel.READ_COMMITED:
+                query = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED"
+                break
+            case PGIsolationLevel.READ_UNCOMMITTED:
+                query = "BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITTED"
+                break
+            default:
+                query = "BEGIN"
+                break
         }
+
         await connection.query(query)
 
         return new PGTransaction(connection, this.logger)
