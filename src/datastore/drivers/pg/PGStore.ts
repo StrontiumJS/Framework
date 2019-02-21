@@ -1,3 +1,4 @@
+import { PGIsolationLevel } from "../../abstract/PGIsolationLevel"
 import { PGTransaction } from "./PGTransaction"
 import { SQLStore } from "../../abstract/SQLStore"
 import { Container } from "inversify"
@@ -34,7 +35,9 @@ export class PGStore implements Process, SQLStore {
         }
     }
 
-    public async createTransaction(): Promise<PGTransaction> {
+    public async createTransaction(
+        isolationLevel?: PGIsolationLevel
+    ): Promise<PGTransaction> {
         if (this.connection === undefined) {
             throw new Error(
                 "PGStore cannot open a transaction on a closed Pool. This usually happens from forgetting to call startup."
@@ -42,7 +45,26 @@ export class PGStore implements Process, SQLStore {
         }
 
         let connection = await this.connection.connect()
-        await connection.query("BEGIN")
+
+        // By default, use PostgreSQL default isolation level (READ COMMITTED)
+        let query = "BEGIN"
+        if (isolationLevel !== undefined) {
+            switch (isolationLevel) {
+                case PGIsolationLevel.SERIALIZABLE:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL SERIALIZABLE"
+                    break
+                case PGIsolationLevel.REPEATABLE_READ:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ"
+                    break
+                case PGIsolationLevel.READ_COMMITED:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL READ COMMITTED"
+                    break
+                case PGIsolationLevel.READ_UNCOMMITTED:
+                    query = "BEGIN TRANSACTION ISOLATION LEVEL READ UNCOMMITTED"
+                    break
+            }
+        }
+        await connection.query(query)
 
         return new PGTransaction(connection, this.logger)
     }

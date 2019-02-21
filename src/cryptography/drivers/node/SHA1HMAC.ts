@@ -2,7 +2,7 @@ import { HMAC } from "../../abstract/HMAC"
 import { createHmac } from "crypto"
 
 /**
- * The SHA1HMAC provides a HMAC implementation using SHA1 based on Node's
+ * The SHA1HMAC class provides a HMAC implementation using SHA1 based on Node's
  * OpenSSL.
  *
  * This implementation relies on the node crypto implementation and may vary based
