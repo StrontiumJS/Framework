@@ -7,7 +7,9 @@ export class Environment<O extends ObjectValidator> implements Process {
 
     constructor(private validator: O) {}
 
-    public getKey<K extends keyof ValidatedObject<O>>(key: K): O[K] {
+    public getKey<K extends keyof ValidatedObject<O>>(
+        key: K
+    ): ValidatedObject<O>[K] {
         if (this.validatedEnvironment !== undefined) {
             return this.validatedEnvironment[key]
         } else {
