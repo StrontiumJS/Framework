@@ -1,5 +1,5 @@
 import { Container } from "inversify"
-import { Logger } from "../../logging";
+import { Logger } from "../../logging"
 import { Process } from "../../runtime"
 import { ObjectValidator, ValidatedObject, isObject } from "../../validation"
 
@@ -28,7 +28,9 @@ export class Environment<O extends ObjectValidator> implements Process {
         container.bind(Environment).toConstantValue(this)
 
         try {
-            this.validatedEnvironment = await isObject(this.validator)(process.env)
+            this.validatedEnvironment = await isObject(this.validator)(
+                process.env
+            )
         } catch (e) {
             if (container.isBound(Logger)) {
                 container.get(Logger).error("Environment validation failed!", e)
