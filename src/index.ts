@@ -1,3 +1,4 @@
+export * from "./bootstrap"
 export * from "./cryptography"
 export * from "./datastore"
 export * from "./errors"
