@@ -22,16 +22,16 @@ export abstract class TableRepository<
     T extends any,
     K extends keyof T
 > extends Repository<T, K> {
-    private postProcessor: (
+    protected postProcessor: (
         query: string,
         parameters: Array<any>
     ) => [string, Array<any>] = (q, p) => [q, p]
 
     constructor(
-        private store: SQLStore,
-        private tableName: string,
-        private queryFields: Array<keyof T>,
-        private primaryKeyField: K
+        protected store: SQLStore,
+        protected tableName: string,
+        protected queryFields: Array<keyof T>,
+        protected primaryKeyField: K
     ) {
         super()
 
