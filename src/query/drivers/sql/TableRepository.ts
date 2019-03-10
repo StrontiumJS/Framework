@@ -119,10 +119,10 @@ export abstract class TableRepository<
 
         let lookupQuery = `	
             SELECT
-                ${this.queryFields.join(", ")}	
+                ${this.queryFields.map((f) => `"${f}"`).join(", ")}	
             FROM
                 ??
-            ${filterQuery !== "" ? "WHERE" : ""}	
+            ${filterQuery !== "" ? "WHERE" : ""}
                 ${filterQuery}	
         `
 
