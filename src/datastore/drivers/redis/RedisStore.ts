@@ -67,7 +67,7 @@ export class RedisStore implements Process {
 
             await promisify(this.client.quit.bind(this.client))()
 
-            // Dereference the pool
+            // Dereference the client
             this.client = undefined
             this.healthyState = false
         }

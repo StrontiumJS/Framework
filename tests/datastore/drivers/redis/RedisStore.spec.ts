@@ -48,7 +48,7 @@ describe("RedisStore", () => {
     describe("eval", () => {
         it("should execute lua scripts and get the results", async () => {
             let luaScript1 = 'return redis.call("set", KEYS[1], ARGV[1])'
-            let setResult1 = await testStore.eval<string | null>(luaScript1, [
+            let setResult1 = await testStore.eval<string>(luaScript1, [
                 1,
                 key,
                 value,
