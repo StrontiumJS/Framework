@@ -86,4 +86,18 @@ export class RedisStore implements Process {
 
         return result
     }
+
+    public async eval<A, B>(script: string, args: Array<A>): Promise<B> {
+        if (this.client === undefined) {
+            throw new Error(
+                "RedisStore cannot send a command on a closed connection. This usually happens from forgetting to call startup."
+            )
+        }
+
+        let result: B = await await promisify(
+            this.client.eval.bind(this.client)
+        )(script, ...args)
+
+        return result
+    }
 }
