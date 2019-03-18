@@ -43,6 +43,21 @@ describe("RedisStore", () => {
 
             expect(setResult).to.equal("OK")
         })
+
+        it("should throw errors", async () => {
+            let hasThrown = false
+            try {
+                await testStore.sendCommand<string | null>("wrong command", [
+                    key,
+                    value,
+                ])
+
+                expect(false).to.equal(true)
+            } catch (e) {
+                hasThrown = true
+            }
+            expect(hasThrown).to.equal(true)
+        })
     })
 
     describe("eval", () => {
@@ -62,4 +77,6 @@ describe("RedisStore", () => {
             expect(setResult2).to.deep.equal([1, 2, 3])
         })
     })
+
+
 })
