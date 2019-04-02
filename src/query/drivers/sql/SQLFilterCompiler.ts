@@ -39,7 +39,9 @@ export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
 
         let subquery = filter[field]
 
-        if (subquery === null) {
+        if (subquery === undefined) {
+            continue
+        } else if (subquery === null) {
             queries.push(["?? IS NULL", [field]])
         } else if (subquery.$in !== undefined) {
             if (subquery.$in.length === 0) {
