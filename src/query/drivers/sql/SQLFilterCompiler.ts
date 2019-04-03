@@ -78,6 +78,8 @@ export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
             queries.push(["?? < ?", [field, subquery.$lt]])
         } else if (subquery.$lte !== undefined) {
             queries.push(["?? <= ?", [field, subquery.$lte]])
+        } else if (subquery.$contains !== undefined) {
+            queries.push(["?? LIKE ?", [field, `%${subquery.$contains}%`]])
         } else if (subquery.$eq !== undefined) {
             queries.push(["?? = ?", [field, subquery.$eq]])
         } else {
