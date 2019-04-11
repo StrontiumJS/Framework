@@ -5,4 +5,5 @@ export type RouterMap = Array<{
     method: "GET" | "POST" | "PATCH" | "PUT" | "DELETE" | "OPTIONS"
     route: string
     endpointController: ConstructorOf<EndpointController>
+    metadata?: { [key: string]: any }
 }>
