@@ -8,6 +8,7 @@ import {
 } from "../../../datastore"
 import { injectable } from "inversify"
 import { isUndefined, omitBy } from "lodash"
+import { Logger } from "../../../logging"
 
 import { Filter, compileSQLFilter } from "../.."
 
@@ -31,7 +32,8 @@ export abstract class TableRepository<
         protected store: SQLStore,
         protected tableName: string,
         protected queryFields: Array<keyof T>,
-        protected primaryKeyField: K
+        protected primaryKeyField: K,
+        protected logger?: Logger
     ) {
         super()
 
@@ -114,6 +116,7 @@ export abstract class TableRepository<
         } = {},
         connection: SQLStore = this.store
     ): Promise<Array<T>> {
+        let startTime = process.hrtime()
         let [filterQuery, filterParameters] = compileSQLFilter(filter)
         let parameters = [this.tableName, ...filterParameters]
 
@@ -150,6 +153,8 @@ export abstract class TableRepository<
             processedQuery,
             processedParameters
         )
+
+        this.recordQueryTime(processedQuery, startTime)
         return results
     }
 
@@ -207,5 +212,26 @@ export abstract class TableRepository<
 
     async generateID(): Promise<any> {
         return undefined
+    }
+
+    protected recordQueryTime(
+        queryString: string,
+        startTime: [number, number]
+    ): void {
+        if (this.logger !== undefined) {
+            let runtime = process.hrtime(startTime)
+
+            this.logger.debug(
+                `[REPOSITORY - QUERY - DIAGNOSTICS] ${
+                    this.tableName
+                } query complete - ${runtime[0]} s and ${runtime[1] /
+                    1000000} ms`,
+                {
+                    query: queryString,
+                    seconds: runtime[0],
+                    milliseconds: runtime[1] / 1000000,
+                }
+            )
+        }
     }
 }

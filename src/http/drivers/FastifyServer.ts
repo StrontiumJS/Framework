@@ -21,7 +21,13 @@ export class FastifyServer implements Process {
         private port: number = 8080,
         private host: string = "127.0.0.1"
     ) {
-        for (let route of routes) {
+        /*
+            To handle limitations in Find My Way (Fastify's internal routing library)
+            Strontium provides a preprocess format for routes to prevent certain conflicts.
+         */
+        let processedRoutes = FastifyServer.preProcessRoutes(routes)
+
+        for (let route of processedRoutes) {
             switch (route.method) {
                 case "GET":
                     this.server.get(
@@ -29,7 +35,8 @@ export class FastifyServer implements Process {
                         this.requestHandler(
                             route.endpointController,
                             route.route,
-                            "GET"
+                            "GET",
+                            route.metadata
                         )
                     )
                     break
@@ -39,7 +46,8 @@ export class FastifyServer implements Process {
                         this.requestHandler(
                             route.endpointController,
                             route.route,
-                            "POST"
+                            "POST",
+                            route.metadata
                         )
                     )
                     break
@@ -49,7 +57,8 @@ export class FastifyServer implements Process {
                         this.requestHandler(
                             route.endpointController,
                             route.route,
-                            "PATCH"
+                            "PATCH",
+                            route.metadata
                         )
                     )
                     break
@@ -59,7 +68,8 @@ export class FastifyServer implements Process {
                         this.requestHandler(
                             route.endpointController,
                             route.route,
-                            "PUT"
+                            "PUT",
+                            route.metadata
                         )
                     )
                     break
@@ -69,7 +79,8 @@ export class FastifyServer implements Process {
                         this.requestHandler(
                             route.endpointController,
                             route.route,
-                            "DELETE"
+                            "DELETE",
+                            route.metadata
                         )
                     )
                     break
@@ -79,12 +90,98 @@ export class FastifyServer implements Process {
                         this.requestHandler(
                             route.endpointController,
                             route.route,
-                            "OPTIONS"
+                            "OPTIONS",
+                            route.metadata
                         )
                     )
                     break
             }
         }
+    }
+
+    public static preProcessRoutes(routes: RouterMap): RouterMap {
+        let processedRoutes: RouterMap = []
+        for (let route of routes) {
+            // Check if there are any enum param blocks
+            let enumeratedBlocks = route.route.match(
+                /{([a-zA-Z0-9_-]*)\|([a-zA-Z0-9_,-]*)}/g
+            )
+
+            if (enumeratedBlocks === null) {
+                processedRoutes.push(route)
+            } else {
+                const generatePermutations = (
+                    index: number
+                ): Array<Array<string>> => {
+                    // Typescript correctly identifies this function may run when enumeratedBlocks is null
+                    // however within this context that is not possible - so ! to overcome
+                    let currentBlock = enumeratedBlocks![index]
+
+                    let childPermutations: Array<Array<string>> = []
+                    if (index < enumeratedBlocks!.length - 1) {
+                        childPermutations = generatePermutations(index + 1)
+                    }
+
+                    let permutations: Array<Array<string>> = []
+
+                    // Use a more direct method because the absence of "matchAll" in Node would make the RegEx method uglier
+                    let fieldContents = currentBlock
+                        .replace("{", "")
+                        .replace("}", "")
+
+                    let [
+                        fieldName,
+                        serializedFieldValues,
+                    ] = fieldContents.split("|")
+                    let fieldValues = serializedFieldValues.split(",")
+
+                    for (let value of fieldValues) {
+                        if (childPermutations.length === 0) {
+                            permutations.push([value])
+                        } else {
+                            for (let childPermutation of childPermutations) {
+                                permutations.push([value, ...childPermutation])
+                            }
+                        }
+                    }
+
+                    return permutations
+                }
+
+                let routePermutations = generatePermutations(0)
+
+                for (let permutation of routePermutations) {
+                    let pathPermutation = route.route
+                    let parameters: { [key: string]: string } = {
+                        ...(route.metadata || {}),
+                    }
+
+                    for (let i = 0; i < enumeratedBlocks.length; i++) {
+                        let currentBlock = enumeratedBlocks[i]
+                        let fieldContents = currentBlock
+                            .replace("{", "")
+                            .replace("}", "")
+                        let [fieldName] = fieldContents.split("|")
+
+                        parameters[fieldName] = permutation[i]
+
+                        pathPermutation = pathPermutation.replace(
+                            currentBlock,
+                            permutation[i]
+                        )
+                    }
+
+                    processedRoutes.push({
+                        endpointController: route.endpointController,
+                        method: route.method,
+                        route: pathPermutation,
+                        metadata: parameters,
+                    })
+                }
+            }
+        }
+
+        return processedRoutes
     }
 
     public isHealthy(): boolean {
@@ -147,7 +244,8 @@ export class FastifyServer implements Process {
     protected requestHandler(
         controller: ConstructorOf<EndpointController>,
         path: string,
-        method: string
+        method: string,
+        routeMetadata: { [key: string]: any } = {}
     ): (
         request: Fastify.FastifyRequest<any, any, any, any, any>,
         response: Fastify.FastifyReply<any>
@@ -197,7 +295,10 @@ export class FastifyServer implements Process {
                     headers: request.headers,
                     query: request.query,
                     params: request.params,
-                    meta: this.getRequestMetadata(request),
+                    meta: {
+                        ...routeMetadata,
+                        ...this.getRequestMetadata(request),
+                    },
                 })
 
                 rawResponse = await endpointController.handle(validatedInput)

@@ -4,11 +4,14 @@ export type FieldFilter<P extends keyof T, T> =
     | {
           $in?: Array<T[P]>
           $nin?: Array<T[P]>
+          $eq?: T[P]
+          // TODO: Review if the null type on $neq is necessary
           $neq?: T[P] | null
           $gt?: T[P]
           $gte?: T[P]
           $lt?: T[P]
           $lte?: T[P]
+          $contains?: T[P]
       }
     | T[P]
 

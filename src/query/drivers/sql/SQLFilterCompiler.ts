@@ -39,7 +39,9 @@ export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
 
         let subquery = filter[field]
 
-        if (subquery === null) {
+        if (subquery === undefined) {
+            continue
+        } else if (subquery === null) {
             queries.push(["?? IS NULL", [field]])
         } else if (subquery.$in !== undefined) {
             if (subquery.$in.length === 0) {
@@ -76,6 +78,10 @@ export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
             queries.push(["?? < ?", [field, subquery.$lt]])
         } else if (subquery.$lte !== undefined) {
             queries.push(["?? <= ?", [field, subquery.$lte]])
+        } else if (subquery.$contains !== undefined) {
+            queries.push(["?? LIKE ?", [field, `%${subquery.$contains}%`]])
+        } else if (subquery.$eq !== undefined) {
+            queries.push(["?? = ?", [field, subquery.$eq]])
         } else {
             queries.push(["?? = ?", [field, subquery]])
         }
