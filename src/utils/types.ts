@@ -3,3 +3,5 @@ export type ConstructorOf<T> = {
 }
 
 export type UUID = string
+
+export type Nullable<T> = T | null
