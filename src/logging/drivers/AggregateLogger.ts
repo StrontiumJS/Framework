@@ -20,7 +20,7 @@ export class AggregateLogger extends Logger implements Process {
             } else {
                 return memo
             }
-        }, true)
+        }, true as boolean)
     }
 
     public async shutdown(container: Container): Promise<void> {
