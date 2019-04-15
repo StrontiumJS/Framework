@@ -25,11 +25,8 @@ export class MySQLStore implements Process, SQLStore {
             try {
                 // @ts-ignore
                 let queryResult = await promisify(
-                  this.connection.query.bind(this.connection)
-                )(
-                    queryString,
-                    parameters
-                )
+                    this.connection.query.bind(this.connection)
+                )(queryString, parameters)
                 return queryResult.results
             } catch (e) {
                 if (e.fatal) {
