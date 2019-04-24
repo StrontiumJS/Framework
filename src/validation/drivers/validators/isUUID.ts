@@ -3,8 +3,8 @@ import { UUID } from "../../../utils/types"
 
 import { isUUID as uuidValidator } from "validator"
 
-export const isUUID = (i: string): UUID => {
-    if (uuidValidator(i)) {
+export const isUUID = (i: unknown): UUID => {
+    if (typeof i === "string" && uuidValidator(i)) {
         return i
     }
 
