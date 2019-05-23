@@ -64,7 +64,7 @@
     "@types/pg": "^7.4.11",
     "@types/redis": "^2.8.11",
     "@types/uuid": "^3.4.4",
-    "@types/validator": "^9.4.2",
+    "@types/validator": "^10.11.0",
     "axios": "^0.18.0",
     "base64url": "^3.0.0",
     "fastify": "^2.2.0",
@@ -75,7 +75,7 @@
     "pg": "^7.5.0",
     "redis": "^2.8.0",
     "uuid": "^3.3.2",
-    "validator": "^10.8.0"
+    "validator": "^10.11.0"
   },
   "nyc": {
     "include": [
