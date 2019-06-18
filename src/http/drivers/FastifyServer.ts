@@ -13,8 +13,8 @@ import { isObject } from "../../validation"
 import { EndpointController } from ".."
 
 export class FastifyServer implements Process {
-    private server: Fastify.FastifyInstance = Fastify()
-    private isAlive: boolean = false
+    protected server: Fastify.FastifyInstance = Fastify()
+    protected isAlive: boolean = false
 
     constructor(
         public routes: RouterMap,
