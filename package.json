@@ -1,6 +1,6 @@
 {
   "name": "strontium",
-  "version": "2.9.6",
+  "version": "2.9.7",
   "description": "Strontium is a TypeScript toolkit for High Performance API servers built for Production not Projects.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
