@@ -12,7 +12,7 @@ export type FieldFilter<P extends keyof T, T> =
           $lt?: T[P]
           $lte?: T[P]
           $contains?: T[P]
-          $arr_contains?: Array<T[P]>
+          $arr_contains?: T[P] // Could be made conditional so it only appears where T[P] is an Array
       }
     | T[P]
 

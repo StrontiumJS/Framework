@@ -46,6 +46,6 @@ const isFieldSelector = (keyValidator: ValidatorFunction<any, any>) =>
             $lt: either(isUndefined, keyValidator),
             $lte: either(isUndefined, keyValidator),
             $contains: either(isUndefined, keyValidator),
-            $arr_contains: either(isUndefined, isArray(keyValidator)),
+            $arr_contains: either(isUndefined, keyValidator),
         })
     )
