@@ -81,6 +81,7 @@ export class GCPSClient {
                         "https://pubsub.googleapis.com/google.pubsub.v1.Publisher"
                     )}`,
                 },
+                maxContentLength: 10 * 1024 * 1024, // 10 MB in Bytes
             }
         )
     }
