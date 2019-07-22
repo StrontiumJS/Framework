@@ -21,5 +21,5 @@ are suitable for production use out of the box and have been battle tested.
 
 Alexander Christie - Head of Engineering @ [Fundstack](https://fundstack.com)
 
-Jamie Davies - Software Engineer @ [Yieldify](https://yieldify.com)
+Jamie Davies - Software Engineer @ [Intercom](https://intercom.io)
 
