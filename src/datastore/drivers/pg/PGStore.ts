@@ -1,4 +1,4 @@
-import { PGIsolationLevel } from "../../abstract/PGIsolationLevel"
+import { PGIsolationLevel } from "./PGIsolationLevel"
 import { PGTransaction } from "./PGTransaction"
 import { SQLStore } from "../../abstract/SQLStore"
 import { Container } from "inversify"
@@ -76,10 +76,13 @@ export class PGStore implements Process, SQLStore {
             this.connection = new Pool(this.connectionOptions)
             this.healthyState = true
 
+            if (container.isBound(Logger)) {
+                this.logger = container.get(Logger)
+            }
+
             // Handle errors and mark the connection as unhealthy
             this.connection.on("error", (err) => {
-                if (container.isBound(Logger)) {
-                    this.logger = container.get(Logger)
+                if (this.logger) {
                     this.logger.error("PGStore encountered an error", err)
                 }
 
