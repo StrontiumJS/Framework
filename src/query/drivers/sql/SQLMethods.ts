@@ -1,7 +1,8 @@
-export interface SQLTable<R> {
+import { DataSource } from "../../abstract/Query"
+
+export interface SQLTable<R> extends DataSource<R> {
   name: string
   alias: string
-  tableStructure?: R
 }
 
 export class SQL {

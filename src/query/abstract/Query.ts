@@ -1,24 +1,45 @@
-import { SQLTable } from "../drivers/sql/SQLMethods";
 import { Filter } from "./Filter";
 
-export interface Query<R> {
+export interface DataSource<R> {
+  responseType?: R
+}
+
+export interface Query<R> extends DataSource<R> {
   selector: Array<string> | {
     [alias: string]: string
   }
-  from: SQLTable<any> | Query<any>
+  from: DataSource<any>
   where: Filter<any>
   groupBy: Array<string>
   having: Filter<any>
   orderBy: Array<{
     key: string
-    direction: "ASC" | "DESC"
-    nulls?: "FIRST" | "LAST"
+    direction: SortDirection
+    nulls?: NullsOrder
   }>
   limit: number
   offset: number
+}
 
-  // Typescript meta tag - never used at runtime
+export interface JoinQuery<R> extends DataSource<R> {
+  selector: {
+    baseTable: {
+      [alias: string]: string
+    }
+    joinTable: {
+      [alias: string]: string
+    }
+  }
+  baseTable: DataSource<any>
+  joinTable: DataSource<any>
+  joinType: JoinType
+  onClause: JoinFilter<any, any>
+
   responseType?: R
+}
+
+export interface UnionQuery<R> extends DataSource<R> {
+  tables: Array<DataSource<any>>
 }
 
 /**
@@ -26,14 +47,18 @@ export interface Query<R> {
  *
  * The output is an object with the correct type mapping for the source data.
  */
-export type DataSource<D> = D extends Query<infer Q> ? Q : D extends SQLTable<infer T> ? T : never
+export type DataSourceOutput<D> = D extends DataSource<infer Q> ? Q : never
 
 /**
  * This type represents the SELECT field of a query
  */
 export type QuerySelector<D> = Array<keyof D> | {
-  [alias: string]: keyof D
+  [alias: string]: keyof D | SQLTransform<keyof D, any>
 }
+
+export type SortDirection = "DESC" | "ASC"
+
+export type NullsOrder = "FIRST" | "LAST"
 
 /**
  * This type represents the final output of a query based on mapping the types specified in the Selector
@@ -72,23 +97,9 @@ export type JoinFilter<Q, P> = {
   }
 }
 
-export interface JoinQuery<R> {
-  selector: {
-    baseTable: {
-      [alias: string]: string
-    }
-    joinTable: {
-      [alias: string]: string
-    }
-  }
-  baseTable: SQLTable<any> | Query<any>
-  joinTable: SQLTable<any> | Query<any>
-  joinType: JoinType
-  onClause: JoinFilter<any, any>
-
+export type SQLTransform<I, R> = {
+  queryText: string
+  parameters: Array<any>
+  inputType?: I
   responseType?: R
-}
-
-export interface UnionQuery<R> {
-  table: Array<SQLTable<any> | Query<any>>
 }
