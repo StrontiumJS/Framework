@@ -1,24 +1,29 @@
+import { Filter } from "../..";
+import { UUID } from "../../../utils/types";
 import {
   DataSource,
-  DataSourceOutput, NullsOrder,
+  DataSourceOutput,
+  NullsOrder,
   Query,
   QuerySelectedOutput,
   QuerySelector,
-  SortDirection, SQLTransform
+  SortDirection,
+  SQLTransform
 } from "../../abstract/Query";
 import { SQL } from "./SQLMethods";
-import { UUID } from "../../../utils/types";
 
-import { Filter } from "../..";
-
-export const createQuery = <P extends DataSource<any>, S extends QuerySelector<DataSourceOutput<P>>>(queryParameters: {
+export const createQuery = <
+  P extends DataSource<any, any>,
+  S extends QuerySelector<DataSourceOutput<P>>,
+  G extends QuerySelector<DataSourceOutput<P>>,
+>(queryParameters: {
   selector: S
   from: P
   where?: Filter<DataSourceOutput<P>>
-  groupBy?: S
+  groupBy?: G
   having?: Filter<QuerySelectedOutput<DataSourceOutput<P>, S>>
   orderBy?: Array<{
-    key: S
+    key: keyof DataSourceOutput<P> | SQLTransform<Partial<DataSourceOutput<P>>, any>
     direction: SortDirection
     nulls: NullsOrder
   }>
@@ -33,13 +38,62 @@ export const LOWER = <T>(column: keyof T): SQLTransform<T, string> => ({
   parameters: [column]
 })
 
-let test = createQuery((sql) => ({
+export const COUNT = <T>(column: keyof T): SQLTransform<T, number> => ({
+  queryText: `COUNT(??)`,
+  parameters: [column]
+})
+
+export const AVG = <T>(column: keyof T): SQLTransform<T, number> => ({
+  queryText: `AVG(??)`,
+  parameters: [column]
+})
+
+export const LEVENSHTEIN = <T>(column: keyof T, candidate: keyof T, insCost: number, delCost: number): SQLTransform<T, number> => ({
+  queryText: `LEVENSHTEIN(??)`,
+  parameters: [column]
+})
+
+export const MINUS = <T>(columnA: keyof T, columnB: keyof T): SQLTransform<T, number> => ({
+  queryText: `MINUS(??, ??)`,
+  parameters: [columnA, columnB]
+})
+
+export const LITERAL = <R>(value: R): SQLTransform<any, R> => ({
+  queryText: `?`,
+  parameters: [value]
+})
+
+let test = createQuery({
   selector: {
-    "my_random_shit": "thing",
-    "test_shit": sql.LOWER("wrong")
+    "my_alias": "thing",
+    "test_shit": LOWER("test"),
+    "my_aggregate_shit": COUNT("thing")
   },
   from: SQL.Table<{test: UUID, thing: Date}>("test"),
-}))
+})
+
+let innerQuery = createQuery({
+  selector: {
+    "average": AVG("nameDistance"),
+    "calced": MINUS("nameDistance", "my_literal_value")
+  },
+  from: createQuery({
+    selector: {
+      "nameDistance": LEVENSHTEIN("name", "organization_id", 1, 2),
+      "organization_id": "organization_id",
+      "my_literal_value": LITERAL(new Date())
+    },
+    from: SQL.Table<{name: string, organization_id: UUID}>("company"),
+    groupBy: ["organization_id"]
+  }),
+  groupBy: ["organization_id"],
+  orderBy: [{
+    key: LOWER("nameDistance"),
+    direction: SortDirection.DESC,
+    nulls: NullsOrder.FIRST
+  }]
+})
+
 
 const execQuery = <R>(query: Query<R>): R => {
   return {}
@@ -47,6 +101,9 @@ const execQuery = <R>(query: Query<R>): R => {
 
 let testResult = execQuery(test)
 
-testResult.thing.getFullYear()
-testResult.test.big()
-testResult.my_random_shit.bold()
+testResult.my_alias.getDate()
+testResult.my_aggregate_shit.toPrecision(3)
+testResult.my_aggregate_shit.toFixed()
+
+let aggregateResult = execQuery(innerQuery)
+aggregateResult.average.toPrecision(3)

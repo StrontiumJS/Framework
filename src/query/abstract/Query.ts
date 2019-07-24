@@ -1,45 +1,45 @@
 import { Filter } from "./Filter";
 
-export interface DataSource<R> {
-  responseType?: R
+export enum DataSourceType {
+  PLAIN_QUERY = "PLAIN_QUERY",
+  JOIN_QUERY = "JOIN_QUERY",
+  UNION_QUERY = "UNION_QUERY",
+  TABLE = "TABLE"
 }
 
-export interface Query<R> extends DataSource<R> {
-  selector: Array<string> | {
-    [alias: string]: string
-  }
-  from: DataSource<any>
-  where: Filter<any>
-  groupBy: Array<string>
-  having: Filter<any>
-  orderBy: Array<{
+export interface DataSource<Response, Type extends DataSourceType> {
+  sourceType: Type
+  responseType?: Response
+}
+
+export interface Query<R> extends DataSource<R, DataSourceType.PLAIN_QUERY> {
+  selector: QuerySelector<any>
+  from: DataSource<any, any>
+  where?: Filter<any>
+  groupBy?: Array<string>
+  having?: Filter<any>
+  orderBy?: Array<{
     key: string
     direction: SortDirection
     nulls?: NullsOrder
   }>
-  limit: number
-  offset: number
+  limit?: number
+  offset?: number
 }
 
-export interface JoinQuery<R> extends DataSource<R> {
+export interface JoinQuery<R> extends DataSource<R, DataSourceType.JOIN_QUERY> {
   selector: {
-    baseTable: {
-      [alias: string]: string
-    }
-    joinTable: {
-      [alias: string]: string
-    }
+    baseTable: QuerySelector<any>
+    joinTable: QuerySelector<any>
   }
-  baseTable: DataSource<any>
-  joinTable: DataSource<any>
+  baseTable: DataSource<any, DataSourceType>
+  joinTable: DataSource<any, DataSourceType>
   joinType: JoinType
   onClause: JoinFilter<any, any>
-
-  responseType?: R
 }
 
-export interface UnionQuery<R> extends DataSource<R> {
-  tables: Array<DataSource<any>>
+export interface UnionQuery<R> extends DataSource<R, DataSourceType.UNION_QUERY> {
+  tables: Array<DataSource<any, any>>
 }
 
 /**
@@ -47,18 +47,24 @@ export interface UnionQuery<R> extends DataSource<R> {
  *
  * The output is an object with the correct type mapping for the source data.
  */
-export type DataSourceOutput<D> = D extends DataSource<infer Q> ? Q : never
+export type DataSourceOutput<D> = D extends DataSource<infer Q, any> ? Q : never
 
 /**
  * This type represents the SELECT field of a query
  */
 export type QuerySelector<D> = Array<keyof D> | {
-  [alias: string]: keyof D | SQLTransform<keyof D, any>
+  [alias: string]: keyof D | SQLTransform<Partial<D>, any>
 }
 
-export type SortDirection = "DESC" | "ASC"
+export enum SortDirection {
+  DESC = "DESC",
+  ASC = "ASC"
+}
 
-export type NullsOrder = "FIRST" | "LAST"
+export enum NullsOrder {
+  FIRST = "FIRST",
+  LAST = "LAST"
+}
 
 /**
  * This type represents the final output of a query based on mapping the types specified in the Selector
@@ -75,7 +81,7 @@ export type QuerySelectedOutput<D, S extends QuerySelector<D>> = S extends Array
   [K in T]:
     K extends keyof D ? D[K] : never
 } : {
-  [K in keyof S]: S[K] extends keyof D ? D[S[K]] : never
+  [K in keyof S]: S[K] extends keyof D ? D[S[K]] : S[K] extends SQLTransform<any, infer R> ? R : never
 }
 
 export enum JoinType {
@@ -97,9 +103,10 @@ export type JoinFilter<Q, P> = {
   }
 }
 
-export type SQLTransform<I, R> = {
+export type SQLTransform<T, R> = {
   queryText: string
   parameters: Array<any>
-  inputType?: I
+  operatingSet?: T
+  inputKey?: keyof T
   responseType?: R
 }
