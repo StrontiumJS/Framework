@@ -4,6 +4,7 @@ import {
     MySQLStore,
     MySQLTransaction,
     PGStore,
+    PGTransaction,
     SQLStore,
 } from "../../../datastore"
 import { injectable } from "inversify"
@@ -37,7 +38,7 @@ export abstract class TableRepository<
     ) {
         super()
 
-        if (store instanceof PGStore) {
+        if (store instanceof PGStore || store instanceof PGTransaction) {
             this.postProcessor = pgQueryPostProcessor
             this.tableName = `"${this.tableName}"`
         }
