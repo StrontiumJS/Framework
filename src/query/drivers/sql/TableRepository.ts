@@ -76,7 +76,7 @@ export abstract class TableRepository<
         } else {
             let query = `
                 INSERT INTO
-                    ?? (${Object.keys(filteredPayload).map(() => "??")})
+                    ?? (${Object.keys(filteredPayload).map(() => `"??"`)})
                 VALUES
                     (${Object.keys(filteredPayload).map(() => "?")})
                 RETURNING ??
