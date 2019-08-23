@@ -30,7 +30,7 @@ export class MySQLTransaction implements SQLStore {
                 this.connection.query.bind(this.connection)
             )(queryString, parameters)
 
-            return queryResult.results
+            return queryResult
         } catch (e) {
             if (e.fatal) {
                 if (this.logger) {
