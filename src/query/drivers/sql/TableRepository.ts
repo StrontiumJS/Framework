@@ -40,7 +40,6 @@ export abstract class TableRepository<
 
         if (store instanceof PGStore || store instanceof PGTransaction) {
             this.postProcessor = pgQueryPostProcessor
-            this.tableName = `"${this.tableName}"`
         }
     }
 
@@ -76,7 +75,7 @@ export abstract class TableRepository<
         } else {
             let query = `
                 INSERT INTO
-                    ?? (${Object.keys(filteredPayload).map(() => `"??"`)})
+                    ?? (${Object.keys(filteredPayload).map(() => `??`)})
                 VALUES
                     (${Object.keys(filteredPayload).map(() => "?")})
                 RETURNING ??
