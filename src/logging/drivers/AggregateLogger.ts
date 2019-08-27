@@ -14,13 +14,16 @@ export class AggregateLogger extends Logger implements Process {
     }
 
     public isHealthy(): boolean {
-        return this.loggers.reduce((memo, l) => {
-            if (isProcess(l)) {
-                return memo && l.isHealthy()
-            } else {
-                return memo
-            }
-        }, true)
+        return this.loggers.reduce(
+            (memo, l) => {
+                if (isProcess(l)) {
+                    return memo && l.isHealthy()
+                } else {
+                    return memo
+                }
+            },
+            true as boolean
+        )
     }
 
     public async shutdown(container: Container): Promise<void> {

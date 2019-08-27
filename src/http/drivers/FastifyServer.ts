@@ -2,6 +2,7 @@ import { RouterMap } from "../abstract/RouterMap"
 import { HTTPError } from "../../errors"
 import { InvalidControllerError } from "../../errors"
 import { InternalServerError } from "../../errors"
+import { ServerOptions } from "fastify"
 import * as Fastify from "fastify"
 import { Container } from "inversify"
 import { Logger } from "../../logging"
@@ -13,13 +14,14 @@ import { isObject } from "../../validation"
 import { EndpointController } from ".."
 
 export class FastifyServer implements Process {
-    private server: Fastify.FastifyInstance = Fastify()
-    private isAlive: boolean = false
+    protected server: Fastify.FastifyInstance = Fastify(this.fastifyOptions)
+    protected isAlive: boolean = false
 
     constructor(
         public routes: RouterMap,
         private port: number = 8080,
-        private host: string = "127.0.0.1"
+        private host: string = "127.0.0.1",
+        private fastifyOptions?: ServerOptions
     ) {
         /*
             To handle limitations in Find My Way (Fastify's internal routing library)

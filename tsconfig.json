@@ -16,6 +16,7 @@
     /* Strict Type-Checking Options */
     "strict": true,                            /* Enable all strict type-checking options. */
     "strictFunctionTypes": true,           /* Disable the new bidirectional covariance check in TS 2.6 */
+    "strictBindCallApply": false,          /* Disable the strict bind from TS 3.2 as it can't handle overloads correctly. */
     "noImplicitThis": true,                /* Raise error on 'this' expressions with an implied 'any' type. */
     "alwaysStrict": true,                  /* Parse in strict mode and emit "use strict" for each source file. */
 
@@ -24,8 +25,8 @@
     "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
 
     "lib": [
-      "ES6",
-      "dom"
+      "es6",
+      "es2017.object"
     ],
 
     "typeRoots": [

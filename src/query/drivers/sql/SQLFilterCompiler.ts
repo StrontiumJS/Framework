@@ -80,6 +80,9 @@ export const compileSQLFilter: FilterCompiler<[string, Array<any>]> = (
             queries.push(["?? <= ?", [field, subquery.$lte]])
         } else if (subquery.$contains !== undefined) {
             queries.push(["?? LIKE ?", [field, `%${subquery.$contains}%`]])
+        } else if (subquery.$arr_contains !== undefined) {
+            // This implementation is currently unique to PostgreSQL - We should consider how to add similar functionality to MySQL
+            queries.push(["?? @> ?", [field, subquery.$arr_contains]])
         } else if (subquery.$eq !== undefined) {
             queries.push(["?? = ?", [field, subquery.$eq]])
         } else {

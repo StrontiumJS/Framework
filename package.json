@@ -1,6 +1,6 @@
 {
   "name": "strontium",
-  "version": "2.8.0",
+  "version": "2.9.11",
   "description": "Strontium is a TypeScript toolkit for High Performance API servers built for Production not Projects.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -44,18 +44,18 @@
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
     "coveralls": "^3.0.2",
-    "dotenv": "^6.1.0",
+    "dotenv": "^6.2.0",
     "lint-staged": "^7.3.0",
     "mocha": "^5.2.0",
     "mock-express-request": "^0.2.2",
     "mock-express-response": "^0.2.2",
-    "nyc": "^13.0.1",
+    "nyc": "^13.3.0",
     "prettier": "^1.14.3",
     "reflect-metadata": "^0.1.12",
     "sinon": "^6.3.4",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.1.1"
+    "typescript": "^3.4.3"
   },
   "dependencies": {
     "@types/lodash": "^4.14.117",
@@ -64,10 +64,10 @@
     "@types/pg": "^7.4.11",
     "@types/redis": "^2.8.11",
     "@types/uuid": "^3.4.4",
-    "@types/validator": "^9.4.2",
+    "@types/validator": "^10.11.0",
     "axios": "^0.18.0",
     "base64url": "^3.0.0",
-    "fastify": "^1.12.1",
+    "fastify": "^2.2.0",
     "inversify": "^5.0.1",
     "jwa": "^1.2.0",
     "lodash": "^4.17.11",
@@ -75,7 +75,7 @@
     "pg": "^7.5.0",
     "redis": "^2.8.0",
     "uuid": "^3.3.2",
-    "validator": "^10.8.0"
+    "validator": "^10.11.0"
   },
   "nyc": {
     "include": [

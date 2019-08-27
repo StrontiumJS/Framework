@@ -100,9 +100,10 @@ export class RedisStore implements Process {
             )
         }
 
-        let result: R = await promisify(
-            this.client.eval.bind(this.client)
-        )(script, ...args)
+        let result: R = await promisify(this.client.eval.bind(this.client))(
+            script,
+            ...args
+        )
 
         return result
     }

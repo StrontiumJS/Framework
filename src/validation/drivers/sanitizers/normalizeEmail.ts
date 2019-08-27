@@ -6,7 +6,9 @@ export const normalizeEmail = (options?: NormalizeEmailOptions) => <I>(
     input: I
 ): string => {
     let normalizedEmail = Validator.normalizeEmail(String(input), options)
-    let isValid = Validator.isEmail(String(normalizedEmail))
+    let isValid = Validator.isEmail(String(normalizedEmail), {
+        ignore_max_length: true,
+    } as any)
 
     if (isValid && typeof normalizedEmail === "string") {
         return normalizedEmail

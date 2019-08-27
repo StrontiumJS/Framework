@@ -26,7 +26,7 @@ describe("RedisStore", () => {
     })
 
     describe("shutdown", () => {
-        it("should unregister the PG Driver implementation with the container", async () => {
+        it("should unregister the RedisStore implementation with the container", async () => {
             await testStore.shutdown(container)
 
             expect(container.isBound(RedisStore)).to.equal(false)
@@ -77,6 +77,4 @@ describe("RedisStore", () => {
             expect(setResult2).to.deep.equal([1, 2, 3])
         })
     })
-
-
 })

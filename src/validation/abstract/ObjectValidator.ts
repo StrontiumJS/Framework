@@ -5,5 +5,5 @@ export type ObjectValidator = {
 } & Object
 
 export type ValidatedObject<O extends ObjectValidator> = {
-    [P in keyof O]: ValidatorOutput<unknown, O[P]>
+    [P in keyof O]: ValidatorOutput<any, O[P]>
 }
