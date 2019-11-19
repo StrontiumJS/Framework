@@ -64,7 +64,7 @@
     "@types/pg": "^7.4.11",
     "@types/redis": "^2.8.11",
     "@types/uuid": "^3.4.4",
-    "@types/validator": "^10.11.0",
+    "@types/validator": "^12.0.0",
     "axios": "^0.18.0",
     "base64url": "^3.0.0",
     "fastify": "^2.2.0",
