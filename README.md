@@ -19,7 +19,7 @@ are suitable for production use out of the box and have been battle tested.
 
 ## Maintainers
 
-Alexander Christie - Head of Engineering @ [Fundstack](https://fundstack.com)
+Alexander Christie - Head of Engineering @ [Attio](https://attio.com)
 
 Jamie Davies - Software Engineer @ [Intercom](https://intercom.io)
 
