@@ -12,7 +12,7 @@ export const pgQueryPostProcessor = (
             if (tokenizedQuery[i + 1] === "?") {
                 // If the MySQL style "??" is used then pass the parameter in directly as
                 // PostgreSQL doesn't support column parameter injection
-                outputQuery += queryParameters[parameterCount]
+                outputQuery += `"${queryParameters[parameterCount]}"`
                 parameterCount++
                 i = i + 1
             } else {
