@@ -67,7 +67,7 @@
     "@types/validator": "^10.11.0",
     "axios": "^0.18.0",
     "base64url": "^3.0.0",
-    "fastify": "^2.2.0",
+    "fastify": "^2.14.0",
     "inversify": "^5.0.1",
     "jwa": "^1.2.0",
     "lodash": "^4.17.11",
