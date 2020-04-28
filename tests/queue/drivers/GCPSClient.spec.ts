@@ -1,7 +1,7 @@
 import { expect } from "chai"
 import { GCPSClient } from "../../../src/queue"
 
-describe("GCPSClient", () => {
+describe.skip("GCPSClient", () => {
     const client = new GCPSClient(
         process.env.GCPS_SERVICE_ACCOUNT_EMAIL!,
         process.env.GCPS_SERVICE_ACCOUNT_KEY_ID!,

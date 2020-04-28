@@ -222,7 +222,9 @@ export class FastifyServer implements Process {
                 `Fastify HTTP Server started on port ${
                     (this.server.server.address() as AddressInfo).port
                 }`,
-                this.server.server.address()
+                {
+                    address: this.server.server.address(),
+                }
             )
         }
     }

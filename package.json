@@ -1,6 +1,6 @@
 {
   "name": "strontium",
-  "version": "2.9.11",
+  "version": "2.9.12",
   "description": "Strontium is a TypeScript toolkit for High Performance API servers built for Production not Projects.",
   "main": "lib/src/index.js",
   "types": "lib/src/index.d.ts",
@@ -55,24 +55,24 @@
     "sinon": "^6.3.4",
     "ts-node": "^7.0.1",
     "tslint": "^5.11.0",
-    "typescript": "^3.4.3"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@types/lodash": "^4.14.117",
     "@types/mysql": "^2.15.5",
-    "@types/node": "^10.11.3",
-    "@types/pg": "^7.4.11",
+    "@types/node": "^13.13.4",
+    "@types/pg": "^7.14.3",
     "@types/redis": "^2.8.11",
     "@types/uuid": "^3.4.4",
     "@types/validator": "^10.11.0",
     "axios": "^0.18.0",
     "base64url": "^3.0.0",
-    "fastify": "^2.2.0",
+    "fastify": "^2.14.0",
     "inversify": "^5.0.1",
     "jwa": "^1.2.0",
     "lodash": "^4.17.11",
     "mysql": "^2.16.0",
-    "pg": "^7.5.0",
+    "pg": "^8.0.3",
     "redis": "^2.8.0",
     "uuid": "^3.3.2",
     "validator": "^10.11.0"
